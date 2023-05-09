@@ -46,7 +46,7 @@ jobs:
         uses: garygrossgarten/github-action-scp@release
         with:
             local: .env
-            remote: ~/stand/.end
+            remote: ~/${{ github.ref_name }}/.end
             host: ${{ secrets.SSH_HOST }}
             port: 23
             username: ${{ secrets.SSH_USER }}
@@ -58,7 +58,7 @@ jobs:
         uses: garygrossgarten/github-action-scp@release
         with:
             local: docker-compose.yml
-            remote: ~/stand/docker-compose.yml
+            remote: ~/${{ github.ref_name }}/docker-compose.yml
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USER }}
             password: ${{ secrets.SSH_PASSWORD }}
@@ -73,4 +73,4 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             passphrase: ${{ secrets.SSH_KEYPASS }}
             script: |
-                cd stand && sed -i "s/BRANCH=.*/BRANCH=${{ github.ref_name }}/g" .env && docker-compose pull && docker-compose up -d
+                cd ${{ github.ref_name }} && sed -i "s/BRANCH=.*/BRANCH=${{ github.ref_name }}/g" .env && docker-compose pull && docker-compose up -d
