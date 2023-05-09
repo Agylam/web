@@ -25,7 +25,6 @@ dist/*
 
 build/*
 .vscode
-*.db
 dataDB/*
 /back/node_modules/
 /front/node_modules/
