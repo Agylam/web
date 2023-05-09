@@ -39,12 +39,14 @@ jobs:
       - build
     steps:
       - uses: actions/checkout@v3
+
       - name: Copy .env to stand
         uses: garygrossgarten/github-action-scp@release
         with:
             local: .env
             remote: ~/stand/.end
             host: ${{ secrets.SSH_HOST }}
+            port: 23
             username: ${{ secrets.SSH_USER }}
             privateKey: ${{ secrets.SSH_KEY }}
             passphrase: ${{ secrets.SSH_KEYPASS }}
