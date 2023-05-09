@@ -32,14 +32,17 @@ jobs:
           context: ${{ matrix.modules }}
           push: true
           tags: agylam/${{ matrix.modules }}:${{ github.ref_name }}
+
   deploy:
     runs-on: ubuntu-latest
+    needs:
+      - build
     steps:
       - name: Copy .env to stand
         uses: garygrossgarten/github-action-scp@release
         with:
-            local: .env
-            remote: stand/.end
+            local: ./.env
+            remote: ~/stand/.end
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USER }}
             privateKey: ${{ secrets.SSH_KEY }}
@@ -48,8 +51,8 @@ jobs:
       - name: Copy .env to stand
         uses: garygrossgarten/github-action-scp@release
         with:
-            local: docker-compose.yml
-            remote: stand/docker-compose.yml
+            local: ./docker-compose.yml
+            remote: ~/stand/docker-compose.yml
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USER }}
             privateKey: ${{ secrets.SSH_KEY }}
