@@ -41,17 +41,17 @@ jobs:
       - name: Copy .env to stand
         uses: garygrossgarten/github-action-scp@release
         with:
-            local: ./.env
+            local: .env
             remote: ~/stand/.end
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USER }}
             privateKey: ${{ secrets.SSH_KEY }}
             passphrase: ${{ secrets.SSH_KEYPASS }}
 
-      - name: Copy .env to stand
+      - name: Copy docker-compose.yml to stand
         uses: garygrossgarten/github-action-scp@release
         with:
-            local: ./docker-compose.yml
+            local: docker-compose.yml
             remote: ~/stand/docker-compose.yml
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USER }}
