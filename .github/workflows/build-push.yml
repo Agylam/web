@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./back
-          dockerfile: /docker/Dockerfile
+          file: /docker/Dockerfile
           push: true
           tags: agylam/back:${{ github.ref_name }}
 
@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./front
-          dockerfile: /docker/Dockerfile
+          file: /docker/Dockerfile
           push: true
           tags: agylam/front:${{ github.ref_name }}
 
