@@ -46,7 +46,7 @@ jobs:
         uses: garygrossgarten/github-action-scp@release
         with:
             local: .env
-            remote: ${{ github.ref_name }}/.end
+            remote: ${{ github.ref_name }}/.env
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USER }}
             password: ${{ secrets.SSH_PASSWORD }}
