@@ -1,0 +1,53 @@
+{
+  "name": "agylamwebfront",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npx vite",
+    "build": "npm run lint:fix && npx vite build",
+    "preview": "npx vite preview",
+    "lint": "npx eslint \"src/**/*.{js,jsx,ts,tsx}\"",
+    "lint:fix": "npx eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"
+  },
+  "dependencies": {
+    "moment": "^2.29.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-jwt": "^1.1.8",
+    "react-router-dom": "^6.8.1",
+    "react-toastify": "^9.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/react-toastify": "^4.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
+    "@vitejs/plugin-react": "^3.1.0",
+    "eslint": "^8.36.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-semistandard": "^17.0.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0"
+  },
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mimbol228/agylamwebfront.git"
+  },
+  "author": "MIMBOL228",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/mimbol228/agylamwebfront/issues"
+  },
+  "homepage": "https://github.com/mimbol228/agylamwebfront#readme",
+  "description": ""
+}

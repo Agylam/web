@@ -1,0 +1,25 @@
+name: Back Push
+
+on:
+  push:
+    branches:
+      - '*'
+    tags:
+      - '*'
+
+jobs:
+  build_push:
+    uses: ./.github/workflows/build-push.yml
+  docker_pull:
+    runs-on: ubuntu-latest
+    needs: build_push
+    steps:
+      - name: Docker Push & Up
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_KEYPASS }}
+          script: |
+            cd stand && docker-compose pull && docker-compose up -d
