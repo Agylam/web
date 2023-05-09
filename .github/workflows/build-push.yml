@@ -6,8 +6,6 @@ on:
       - '*'
     tags:
       - '*'
-    workflow_call:
-      - '*'
 
 jobs:
   build:
