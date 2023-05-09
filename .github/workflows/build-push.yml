@@ -26,16 +26,16 @@ jobs:
       - name: BackEnd Build and push
         uses: docker/build-push-action@v4
         with:
-          file: docker/Dockerfile
-          context: back
+          context: ./back
+          dockerfile: /docker/Dockerfile
           push: true
           tags: agylam/back:${{ github.ref_name }}
 
       - name: FrontEnd Build and push
         uses: docker/build-push-action@v4
         with:
-          file: docker/Dockerfile
-          context: front
+          context: ./front
+          dockerfile: /docker/Dockerfile
           push: true
           tags: agylam/front:${{ github.ref_name }}
 
