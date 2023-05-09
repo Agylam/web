@@ -1,8 +1,9 @@
-name: Dev
+name: Build & Deploy
 
 on:
   push:
-    branches: [ "cicd-test" ]
+    branches:
+      - '*'
     tags:
       - '*'
 
@@ -35,6 +36,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'stage' || github.ref_name == 'dev' }}
     needs:
       - build
     steps:
