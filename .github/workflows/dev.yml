@@ -38,6 +38,7 @@ jobs:
     needs:
       - build
     steps:
+      - uses: actions/checkout@v3
       - name: Copy .env to stand
         uses: garygrossgarten/github-action-scp@release
         with:
