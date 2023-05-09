@@ -48,7 +48,6 @@ jobs:
             local: .env
             remote: ~/${{ github.ref_name }}/.end
             host: ${{ secrets.SSH_HOST }}
-            port: 23
             username: ${{ secrets.SSH_USER }}
             password: ${{ secrets.SSH_PASSWORD }}
             privateKey: ${{ secrets.SSH_KEY }}
