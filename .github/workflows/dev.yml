@@ -32,3 +32,35 @@ jobs:
           context: ${{ matrix.modules }}
           push: true
           tags: agylam/${{ matrix.modules }}:${{ github.ref_name }}
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copy .env to stand
+        uses: garygrossgarten/github-action-scp@release
+        with:
+            local: .env
+            remote: stand/.end
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USER }}
+            privateKey: ${{ secrets.SSH_KEY }}
+            passphrase: ${{ secrets.SSH_KEYPASS }}
+
+      - name: Copy .env to stand
+        uses: garygrossgarten/github-action-scp@release
+        with:
+            local: docker-compose.yml
+            remote: stand/docker-compose.yml
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USER }}
+            privateKey: ${{ secrets.SSH_KEY }}
+            passphrase: ${{ secrets.SSH_KEYPASS }}
+
+      - name: Restart stand
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USER }}
+            key: ${{ secrets.SSH_KEY }}
+            passphrase: ${{ secrets.SSH_KEYPASS }}
+            script: |
+                cd stand && sed -i "s/BRANCH=.*/BRANCH=${{ github.ref_name }}/g" .env && docker-compose pull && docker-compose up -d
