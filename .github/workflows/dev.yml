@@ -48,6 +48,7 @@ jobs:
             host: ${{ secrets.SSH_HOST }}
             port: 23
             username: ${{ secrets.SSH_USER }}
+            password: ${{ secrets.SSH_PASSWORD }}
             privateKey: ${{ secrets.SSH_KEY }}
             passphrase: ${{ secrets.SSH_KEYPASS }}
 
@@ -58,6 +59,7 @@ jobs:
             remote: ~/stand/docker-compose.yml
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USER }}
+            password: ${{ secrets.SSH_PASSWORD }}
             privateKey: ${{ secrets.SSH_KEY }}
             passphrase: ${{ secrets.SSH_KEYPASS }}
 
