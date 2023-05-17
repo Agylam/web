@@ -1,0 +1,52 @@
+version: "3.9"
+services:
+    postgres:
+        image: postgres:13.3
+        environment:
+            POSTGRES_DB: ${PGDATABASE}
+            POSTGRES_USER: ${PGUSER}
+            POSTGRES_PASSWORD: ${PGPASSWORD}
+            POSTGRES_PORT: ${PGPORT}
+            POSTGRES_DATA: ${PGDATA}
+        volumes:
+            - ./initDB:/docker-entrypoint-initdb.d
+            - ./dataDB:/var/lib/postgresql/data
+        restart: always
+    backend:
+        image: agylam/back:${BRANCH}
+        environment:
+            PORT: ${BACKEND_PORT}
+            SESSION_TIME: ${SESSION_TIME}
+            JWT_SECRET: ${JWT_SECRET}
+            JWT_EXPIRESIN: ${JWT_EXPIRESIN}
+            CORS_ORIGIN: ${CORS_ORIGIN}
+            CORS_METHODS: ${CORS_METHODS}
+            CORS_ALLOWEDHEADERS: ${CORS_ALLOWEDHEADERS}
+            DB_PATH: ${DB_PATH}
+            PGDATABASE: ${PGDATABASE}
+            PGUSER: ${PGUSER}
+            PGPASSWORD: ${PGPASSWORD}
+            PGPORT: ${PGPORT}
+            PGHOSTADDR: postgres
+        volumes:
+            - ./back/src:/app/src
+        build:
+            context: ./back
+            dockerfile: /docker/dev.Dockerfile
+        depends_on:
+            - "postgres"
+    frontend:
+        image: agylam/front:${BRANCH}
+        environment:
+            BURL: "http://backend:${BACKEND_PORT}"
+        links:
+            - postgres
+        ports:
+            - "${FRONTEND_PORT}:80"
+        volumes:
+            - ./front:/app
+        build:
+            context: ./front
+            dockerfile: /docker/dev.Dockerfile
+        depends_on:
+            - "backend"
