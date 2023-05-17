@@ -36,7 +36,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'stage' || github.ref_name == 'dev' }}
+    if: ${{ github.ref_name == 'stage'}}
     needs:
       - build
     steps:
