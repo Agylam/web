@@ -4,4 +4,4 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY src  ./src
 COPY tsconfig.json ./
-RUN npm run dev
+CMD npm run dev

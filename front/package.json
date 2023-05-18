@@ -3,13 +3,14 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "dev": "npx vite",
+    "dev": "npx vite --host",
     "build": "npm run lint:fix && npx vite build",
     "preview": "npx vite preview",
     "lint": "npx eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "npx eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"
   },
   "dependencies": {
+    "@esbuild/linux-x64": "^0.17.19",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

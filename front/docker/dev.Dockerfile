@@ -4,4 +4,4 @@ COPY package.json package-lock.json ./
 RUN npm ci
 COPY src  ./src
 COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.json ./
-RUN npm run dev
+CMD npm run dev
