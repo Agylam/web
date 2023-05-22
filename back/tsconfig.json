@@ -1,19 +1,32 @@
 {
-  "compilerOptions": {
-      "target": "ES2022",
-      "module": "ES2022",
-      "esModuleInterop": false,
-      "forceConsistentCasingInFileNames": true,
-      "strict": true,
-      "moduleResolution": "node16",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "strictPropertyInitialization": false,
-      "skipLibCheck": true,
-      "outDir": "build",
-      "sourceMap": true
-  },
-  "include": [
-    "src"
-  ]
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "ES2022",
+        "esModuleInterop": false,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "moduleResolution": "node16",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "strictPropertyInitialization": false,
+        "skipLibCheck": true,
+        "outDir": "build",
+        "sourceMap": true
+    },
+    "include": [
+        "src"
+    ],
+    "watchOptions": {
+        "watchFile": "fixedPollingInterval",
+        "watchDirectory": "fixedPollingInterval",
+        "fallbackPolling": "dynamicPriority",
+        "synchronousWatchDirectory": true,
+        "excludeDirectories": [
+            "**/node_modules",
+            "build"
+        ],
+        "excludeFiles": [
+            "build/fileWhichChangesOften.ts"
+        ]
+    }
 }
