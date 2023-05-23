@@ -28,12 +28,14 @@ services:
       PGPASSWORD: ${PGPASSWORD}
       PGPORT: ${PGPORT}
       PGHOSTADDR: postgres
+    restart: always
     depends_on:
       - "postgres"
   frontend:
     image: agylam/front:${BRANCH}
     environment:
       BURL: "http://backend:${BACKEND_PORT}"
+    restart: always
     links:
       - postgres
     ports:
