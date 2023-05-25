@@ -3,6 +3,7 @@ services:
     postgres:
         image: postgres:13.3
         environment:
+            POSTGRES_HOST: postgres
             POSTGRES_DB: ${PGDATABASE}
             POSTGRES_USER: ${PGUSER}
             POSTGRES_PASSWORD: ${PGPASSWORD}
@@ -42,7 +43,7 @@ services:
         links:
             - postgres
         ports:
-            - "${FRONTEND_PORT}:5173"
+            - "80:5173"
         volumes:
             - ./front:/app
         build:
@@ -52,3 +53,17 @@ services:
             - "backend"
         stdin_open: true
         tty: true
+    pgadmin:
+        image: dpage/pgadmin4
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@admin.ru
+            PGADMIN_DEFAULT_PASSWORD: admin
+            POSTGRES_DB: ${PGDATABASE}
+            POSTGRES_USER: ${PGUSER}
+            POSTGRES_PASSWORD: ${PGPASSWORD}
+            POSTGRES_PORT: ${PGPORT}
+        ports:
+            - "8080:80"
+        depends_on:
+            - postgres
