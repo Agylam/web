@@ -9,6 +9,8 @@ services:
             POSTGRES_PASSWORD: ${PGPASSWORD}
             POSTGRES_PORT: ${PGPORT}
             POSTGRES_DATA: ${PGDATA}
+        ports:
+            - "${PGPORT}:${PGPORT}"
         volumes:
             - ./initDB:/docker-entrypoint-initdb.d
             - ./dataDB:/var/lib/postgresql/data
