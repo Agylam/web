@@ -1,0 +1,71 @@
+version: "3.9"
+services:
+    postgres:
+        image: postgres:13.3
+        environment:
+            POSTGRES_HOST: postgres
+            POSTGRES_DB: ${PGDATABASE}
+            POSTGRES_USER: ${PGUSER}
+            POSTGRES_PASSWORD: ${PGPASSWORD}
+            POSTGRES_PORT: ${PGPORT}
+            POSTGRES_DATA: ${PGDATA}
+        ports:
+            - "${PGPORT}:${PGPORT}"
+        volumes:
+            - ./initDB:/docker-entrypoint-initdb.d
+            - ./dataDB:/var/lib/postgresql/data
+        restart: always
+    backend:
+        image: agylam/back:${BRANCH}
+        environment:
+            PORT: ${BACKEND_PORT}
+            SESSION_TIME: ${SESSION_TIME}
+            JWT_SECRET: ${JWT_SECRET}
+            JWT_EXPIRESIN: ${JWT_EXPIRESIN}
+            CORS_ORIGIN: ${CORS_ORIGIN}
+            CORS_METHODS: ${CORS_METHODS}
+            CORS_ALLOWEDHEADERS: ${CORS_ALLOWEDHEADERS}
+            DB_PATH: ${DB_PATH}
+            PGDATABASE: ${PGDATABASE}
+            PGUSER: ${PGUSER}
+            PGPASSWORD: ${PGPASSWORD}
+            PGPORT: ${PGPORT}
+            PGHOSTADDR: postgres
+        volumes:
+            - ./back/src:/app/src
+        build:
+            context: ./back
+            dockerfile: /docker/dev.Dockerfile
+        depends_on:
+            - "postgres"
+    frontend:
+        image: agylam/front:${BRANCH}
+        environment:
+            BURL: "http://backend:${BACKEND_PORT}"
+        links:
+            - postgres
+        ports:
+            - "80:5173"
+        volumes:
+            - ./front:/app
+        build:
+            context: ./front
+            dockerfile: /docker/dev.Dockerfile
+        depends_on:
+            - "backend"
+        stdin_open: true
+        tty: true
+    pgadmin:
+        image: dpage/pgadmin4
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@admin.ru
+            PGADMIN_DEFAULT_PASSWORD: admin
+            POSTGRES_DB: ${PGDATABASE}
+            POSTGRES_USER: ${PGUSER}
+            POSTGRES_PASSWORD: ${PGPASSWORD}
+            POSTGRES_PORT: ${PGPORT}
+        ports:
+            - "8080:80"
+        depends_on:
+            - postgres
