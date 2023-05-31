@@ -2,6 +2,7 @@ version: "3.9"
 services:
     postgres:
         image: postgres:13.3
+        platform: linux/amd64
         environment:
             POSTGRES_HOST: postgres
             POSTGRES_DB: ${PGDATABASE}
@@ -17,6 +18,7 @@ services:
         restart: always
     backend:
         image: agylam/back:${BRANCH}
+        platform: linux/amd64
         environment:
             PORT: ${BACKEND_PORT}
             SESSION_TIME: ${SESSION_TIME}
@@ -35,11 +37,12 @@ services:
             - ./back/src:/app/src
         build:
             context: ./back
-            dockerfile: /docker/dev.Dockerfile
+            dockerfile: ./docker/dev.Dockerfile
         depends_on:
             - "postgres"
     frontend:
         image: agylam/front:${BRANCH}
+        platform: linux/amd64
         environment:
             BURL: "http://backend:${BACKEND_PORT}"
         links:
@@ -50,7 +53,7 @@ services:
             - ./front:/app
         build:
             context: ./front
-            dockerfile: /docker/dev.Dockerfile
+            dockerfile: ./docker/dev.Dockerfile
         depends_on:
             - "backend"
         stdin_open: true
@@ -58,6 +61,7 @@ services:
     pgadmin:
         image: dpage/pgadmin4
         restart: always
+        platform: linux/amd64
         environment:
             PGADMIN_DEFAULT_EMAIL: admin@admin.ru
             PGADMIN_DEFAULT_PASSWORD: admin
