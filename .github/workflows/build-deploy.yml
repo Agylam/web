@@ -32,11 +32,13 @@ jobs:
           file: ${{ matrix.modules }}/docker/Dockerfile
           context: ${{ matrix.modules }}
           push: true
+          build-args: |
+            ARG_BUILD_VERSION=${{ github.ref_name }}
           tags: agylam/${{ matrix.modules }}:${{ github.ref_name }}
 
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'stage'}}
+    if: ${{ github.ref_name == 'stage' }}
     needs:
       - build
     steps:
