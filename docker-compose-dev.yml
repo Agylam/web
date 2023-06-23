@@ -21,18 +21,13 @@ services:
         platform: linux/amd64
         environment:
             PORT: ${BACKEND_PORT}
-            SESSION_TIME: ${SESSION_TIME}
             JWT_SECRET: ${JWT_SECRET}
             JWT_EXPIRESIN: ${JWT_EXPIRESIN}
-            CORS_ORIGIN: ${CORS_ORIGIN}
-            CORS_METHODS: ${CORS_METHODS}
-            CORS_ALLOWEDHEADERS: ${CORS_ALLOWEDHEADERS}
-            DB_PATH: ${DB_PATH}
             PGDATABASE: ${PGDATABASE}
             PGUSER: ${PGUSER}
             PGPASSWORD: ${PGPASSWORD}
             PGPORT: ${PGPORT}
-            PGHOSTADDR: postgres
+            PGHOST: postgres
         volumes:
             - ./back/src:/app/src
         build:
