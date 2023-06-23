@@ -50,7 +50,7 @@ services:
         ports:
             - "80:5173"
         volumes:
-            - ./front:/app
+            - ./front/src:/app/src
         build:
             context: ./front
             dockerfile: ./docker/dev.Dockerfile
