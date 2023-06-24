@@ -10,8 +10,6 @@ export default (fastify: FastifyInstance) => {
 		handler: async (request: FastifyRequest, reply: FastifyReply) => {
 			const {Users} = fastify.db.models;
 			const userParams = request.body as UserAttributes;
-			userParams.password = await genSalt(10)
-				.then((salt) => hash(userParams.password, salt));
 			const userExists = await Users.findOne({
 				where: {
 					[Op.or]: [

@@ -20,7 +20,7 @@ services:
         image: agylam/back:${BRANCH}
         platform: linux/amd64
         environment:
-            PORT: ${BACKEND_PORT}
+            BACKEND_PORT: ${BACKEND_PORT}
             JWT_SECRET: ${JWT_SECRET}
             JWT_EXPIRESIN: ${JWT_EXPIRESIN}
             PGDATABASE: ${PGDATABASE}
