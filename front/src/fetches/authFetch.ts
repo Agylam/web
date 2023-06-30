@@ -1,5 +1,5 @@
 export default async function authFetch(email: string, password: string): Promise<string> | never {
-    const resp: Response = await fetch("/api/auth/login", {
+    const resp: Response = await fetch("/api/user/auth", {
         method: "post",
         headers: {
             Accept: "application/json",
