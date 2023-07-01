@@ -3,7 +3,7 @@ services:
     postgres:
         image: postgres:13.3
         environment:
-            POSTGRES_HOST: postgres
+            POSTGRES_HOST: ${PGHOST}
             POSTGRES_DB: ${PGDATABASE}
             POSTGRES_USER: ${PGUSER}
             POSTGRES_PASSWORD: ${PGPASSWORD}
@@ -17,13 +17,9 @@ services:
         image: agylam/back:${BRANCH}
         environment:
             PORT: ${BACKEND_PORT}
-            SESSION_TIME: ${SESSION_TIME}
             JWT_SECRET: ${JWT_SECRET}
             JWT_EXPIRESIN: ${JWT_EXPIRESIN}
-            CORS_ORIGIN: ${CORS_ORIGIN}
-            CORS_METHODS: ${CORS_METHODS}
-            CORS_ALLOWEDHEADERS: ${CORS_ALLOWEDHEADERS}
-            DB_PATH: ${DB_PATH}
+            PGHOST: ${PGHOST}
             PGDATABASE: ${PGDATABASE}
             PGUSER: ${PGUSER}
             PGPASSWORD: ${PGPASSWORD}
