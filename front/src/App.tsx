@@ -6,9 +6,10 @@
 
 import React from "react";
 import {Route, Routes} from "react-router-dom";
-import "./css/color-light.css";
 
+import "./css/color-light.css";
 import "./css/main.css";
+
 import IndexPage from "./pages/IndexPage";
 import SchedulePage from "./pages/SchedulePage";
 import AnnouncementPage from "./pages/AnnouncementPage";

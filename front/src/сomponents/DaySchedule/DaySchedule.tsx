@@ -1,6 +1,8 @@
 import React, { useLayoutEffect, useState } from "react";
+
 import plusImg from "../../assets/plus.svg";
 import removeImg from "../../assets/remove.svg";
+
 import dayFetch from "../../fetches/dayFetch";
 import setDayFetch from "../../fetches/setDayFetch";
 import ILesson from "../../interfaces/ILesson";
@@ -21,8 +23,10 @@ const weekDays = [
     "Суббота",
     "Воскресенье",
 ];
+
 export default function DaySchedule({ dow, weekDates }: IDayParams) {
     const [lessons, setLessons] = useState<ILesson[] | null>([]);
+
     useLayoutEffect(() => {
         const dayFetcher = async () => {
             try {
@@ -35,6 +39,7 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
 
         dayFetcher();
     }, [dow]);
+
     const pushToBack = async (less: ILesson[]) => {
         try {
             const resp: string = await setDayFetch(
@@ -48,13 +53,8 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
             console.log("err" + dow, resp);
         }
     };
-    //useEffect(pushToBack, [lessons]);
 
     const changeTime = async (order: number, type: boolean, time: string) => {
-    // i would make the changing in db as higher priority than changing in UI
-    // but for saving the initial logic (UI update -> db update)
-    // if the db update would throw an error than UI will have irrelevant data
-
         const awaitedState = await new Promise<ILesson[]>((resolve) => {
             setLessons((prevState: ILesson[] | null) => {
                 let updatedState: ILesson[] = [];
@@ -71,7 +71,6 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
                         }
                     });
                 }
-
                 resolve(updatedState);
                 return updatedState;
             });
@@ -80,8 +79,8 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
         await pushToBack(awaitedState);
         console.log(lessons);
     };
+
     const addLesson = async () => {
-    // if the db update would throw an error than UI will have irrelevant data
         const awaitedState = await new Promise<ILesson[]>((resolve) => {
             setLessons((prevState: ILesson[] | null) => {
                 const updatedState = prevState == null ? [] : [...prevState];
@@ -89,18 +88,15 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
                     start: "10:00",
                     end: "11:00",
                 });
-
                 resolve(updatedState);
                 return updatedState;
             });
         });
-
         await pushToBack(awaitedState);
         console.log(lessons);
     };
-    const removeLesson = async (order: number) => {
-    // if the db update would throw an error than UI will have irrelevant data
 
+    const removeLesson = async (order: number) => {
         const awaitedState = await new Promise<ILesson[]>((resolve) => {
             setLessons((prevState: ILesson[] | null) => {
                 const updatedState =
