@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { useJwt } from "react-jwt";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
-import logoImg from "../assets/logo.svg";
 import "../css/index.css";
+
+import logoImg from "../assets/logo.svg";
 
 import IUser from "../interfaces/IUser";
 import ThemeSwitcher from "../сomponents/ThemeSwitcher/ThemeSwitcher";
@@ -20,7 +22,6 @@ export default function IndexPage() {
         try {
             // need to change email of users in database for email-like (qwerty@qwerty.com) format
             const token: string = await authFetch(email, password);
-
             localStorage.setItem("jwt", token);
             toast.success("Успешно!", {
                 position: toast.POSITION.BOTTOM_LEFT,
@@ -38,9 +39,8 @@ export default function IndexPage() {
     };
 
     const { isExpired } = useJwt<IUser>(localStorage.getItem("jwt") as string);
-    if (!isExpired) {
-        navigate("/schedule");
-    }
+    if (!isExpired) navigate("/schedule");
+
     return (
         <div className="wrapper">
             <ToastContainer limit={3} />

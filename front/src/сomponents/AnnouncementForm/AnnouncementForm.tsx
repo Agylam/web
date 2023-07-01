@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import "./AnnouncementForm.css";
 
-type AnnouncementFormProps = {
-    clickHandler: (text: string) => Promise<void>;
-};
+interface IAnnouncementFormProps {
+    clickHandler: (text: string) => void;
+}
 
-export default function AnnouncementForm({ clickHandler }: AnnouncementFormProps) {
+export default function AnnouncementForm({ clickHandler }: IAnnouncementFormProps) {
     const [textAreaValue, setTextAreaValue] = useState("");
 
     const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -15,6 +15,7 @@ export default function AnnouncementForm({ clickHandler }: AnnouncementFormProps
         e.preventDefault();
         clickHandler(textAreaValue);
     };
+
     return (
         <div className="announcement_wrapper">
             <form className="announcement_form" onSubmit={submit}>

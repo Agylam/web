@@ -1,6 +1,8 @@
 import React from "react"
 import {useNavigate} from "react-router-dom";
+
 import logoImg from "../../assets/logo.svg";
+
 import IUser from "../../interfaces/IUser";
 
 import "./Navbar.css";
@@ -15,6 +17,7 @@ export default function Navbar({userInfo}: INavbarParams) {
         localStorage.removeItem("jwt");
         navigate("/");
     };
+
     return (
         <div className="nav_wrapper">
             <div className="left_nav">
