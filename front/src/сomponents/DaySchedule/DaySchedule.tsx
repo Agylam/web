@@ -5,7 +5,7 @@ import dayFetch from "../../fetches/dayFetch";
 import setDayFetch from "../../fetches/setDayFetch";
 import ILesson from "../../interfaces/ILesson";
 
-import "./DaySchedule.css";
+import cl from "./DaySchedule.module.css";
 
 interface IDayParams {
     dow: number;
@@ -40,7 +40,7 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
             const resp: string = await setDayFetch(
                 dow,
                 less,
-        localStorage.getItem("jwt") as string
+                localStorage.getItem("jwt") as string
             );
 
             console.log("sus" + dow, resp);
@@ -51,9 +51,9 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
     //useEffect(pushToBack, [lessons]);
 
     const changeTime = async (order: number, type: boolean, time: string) => {
-    // i would make the changing in db as higher priority than changing in UI
-    // but for saving the initial logic (UI update -> db update)
-    // if the db update would throw an error than UI will have irrelevant data
+        // i would make the changing in db as higher priority than changing in UI
+        // but for saving the initial logic (UI update -> db update)
+        // if the db update would throw an error than UI will have irrelevant data
 
         const awaitedState = await new Promise<ILesson[]>((resolve) => {
             setLessons((prevState: ILesson[] | null) => {
@@ -81,7 +81,7 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
         console.log(lessons);
     };
     const addLesson = async () => {
-    // if the db update would throw an error than UI will have irrelevant data
+        // if the db update would throw an error than UI will have irrelevant data
         const awaitedState = await new Promise<ILesson[]>((resolve) => {
             setLessons((prevState: ILesson[] | null) => {
                 const updatedState = prevState == null ? [] : [...prevState];
@@ -99,14 +99,14 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
         console.log(lessons);
     };
     const removeLesson = async (order: number) => {
-    // if the db update would throw an error than UI will have irrelevant data
+        // if the db update would throw an error than UI will have irrelevant data
 
         const awaitedState = await new Promise<ILesson[]>((resolve) => {
             setLessons((prevState: ILesson[] | null) => {
                 const updatedState =
-          prevState == null
-              ? []
-              : prevState.filter((_, index) => index !== order);
+                    prevState == null
+                        ? []
+                        : prevState.filter((_, index) => index !== order);
 
                 resolve(updatedState);
                 return updatedState;
@@ -118,48 +118,48 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
     };
 
     return (
-        <div className="daySchedule" id="first-day">
-            <div className="daySchedule_top">
-                <p className="static">Расписание</p>
-                <p className="name">
+        <div className={cl.daySchedule} id="first-day">
+            <div className={cl.daySchedule_top}>
+                <p className={cl.static}>Расписание</p>
+                <p className={cl.name}>
                     <span>{weekDays[dow]}</span>
                     <span>{weekDates[dow]}</span>
                 </p>
             </div>
-            <div className="daySchedule_items_wrapper">
+            <div className={cl.daySchedule_items_wrapper}>
                 {lessons?.map((obj: ILesson, key) => {
                     return (
-                        <div className="lesson" key={key}>
-                            <div className="left">
-                                <p className="number">{key + 1}-й</p>
+                        <div className={cl.lesson} key={key}>
+                            <div className={cl.left}>
+                                <p className={cl.number}>{key + 1}-й</p>
                             </div>
-                            <div className="right">
-                                <div className="time">
+                            <div className={cl.right}>
+                                <div className={cl.time}>
                                     <input
                                         type="time"
-                                        className="les_time les_time_left"
+                                        className={[cl.les_time, cl.les_time_left].join(' ')}
                                         value={lessons[key].start}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                             changeTime(key, false, event.target.value)
                                         }
                                     />
-                                    <p className="wall">:</p>
+                                    <p className={cl.wall}>:</p>
                                     <input
                                         type="time"
-                                        className="les_time les_time_right"
+                                        className={[cl.les_time, cl.les_time_right].join(' ')}
                                         value={lessons[key].end}
                                         onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                                             changeTime(key, true, event.target.value)
                                         }
                                     />
                                 </div>
-                                <div className="remove">
+                                <div className={cl.remove}>
                                     <button
                                         onClick={() => {
                                             removeLesson(key);
                                         }}
                                     >
-                                        <img className="remove" src={removeImg} alt="img" />
+                                        <img className={cl.remove} src={removeImg} alt="img" />
                                     </button>
                                 </div>
                             </div>
@@ -167,9 +167,9 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
                     );
                 })}
             </div>
-            <div className="add">
+            <div className={cl.add}>
                 <button onClick={addLesson}>
-                    <img src={plusImg} className="add" alt="img" />
+                    <img src={plusImg} className={cl.add} alt="img" />
                 </button>
             </div>
         </div>

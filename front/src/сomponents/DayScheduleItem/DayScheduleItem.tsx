@@ -3,7 +3,7 @@ import removeImg from "../../assets/remove.svg";
 import ILesson from "../../interfaces/ILesson";
 import TimeRangeComponent from "../TimeRange/TimeRange";
 
-import "./DayScheduleItem.css";
+import cl from "./DayScheduleItem.module.css";
 
 interface LessonComponentParams {
     index: number;
@@ -14,22 +14,22 @@ interface LessonComponentParams {
     }
 }
 
-export default function DayScheduleItem({index, lesson, timeManage}: LessonComponentParams) {
+export default function DayScheduleItem({ index, lesson, timeManage }: LessonComponentParams) {
     return (
-        <div className="dayScheduleItem" key={index}>
-            <div className="left">
-                <p className="number">{index + 1}-й</p>
+        <div className={cl.dayScheduleItem} key={index}>
+            <div className={cl.left}>
+                <p className={cl.number}>{index + 1}-й</p>
             </div>
-            <div className="right">
+            <div className={cl.right}>
                 <TimeRangeComponent changeTime={(type, time) => {
                     timeManage.set(index, type, time)
                 }} timeRange={lesson}/>
-                <div className="remove">
+                <div className={cl.remove}>
                     <button
                         onClick={() => timeManage.remove(index)}
                     >
                         <img
-                            className="remove"
+                            className={cl.remove}
                             src={removeImg}
                             alt="img"
                         />

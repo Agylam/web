@@ -1,14 +1,14 @@
 import React from "react"
 
-import "./ThemeSwitcher.css";
+import cl from "./ThemeSwitcher.module.css";
 
 export default function ThemeSwitcher() {
     return (
-        <div className="theme_switcher">
+        <div className={cl.theme_switcher}>
             <input
                 id="theme_switch_input"
                 type="checkbox"
-                className="theme"
+                className={cl.theme}
             />
             <label htmlFor="theme_switch_input">
                 <svg

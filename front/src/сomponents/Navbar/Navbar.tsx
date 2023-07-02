@@ -1,9 +1,9 @@
 import React from "react"
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logoImg from "../../assets/logo.svg";
 import IUser from "../../interfaces/IUser";
 
-import "./Navbar.css";
+import cl from "./Navbar.module.css";
 
 interface INavbarParams {
     userInfo: IUser | null;
@@ -16,8 +16,8 @@ export default function Navbar({userInfo}: INavbarParams) {
         navigate("/");
     };
     return (
-        <div className="nav_wrapper">
-            <div className="left_nav">
+        <div className={cl.nav_wrapper}>
+            <div className={cl.left_nav}>
                 <img
                     src={logoImg}
                     alt=""
@@ -25,15 +25,15 @@ export default function Navbar({userInfo}: INavbarParams) {
                 />
                 <nav>
                     <ul>
-                        <li className="nav_item active">Расписание</li>
-                        <li className="nav_item">Объявления</li>
-                        <li className="nav_item">Пользователи</li>
-                        <li className="nav_item">Файл</li>
+                        <li className={[cl.nav_item, cl.active].join(' ')}>Расписание</li>
+                        <li className={cl.nav_item}>Объявления</li>
+                        <li className={cl.nav_item}>Пользователи</li>
+                        <li className={cl.nav_item}>Файл</li>
                     </ul>
                 </nav>
             </div>
-            <div className="right_nav">
-                <p className="name">{userInfo?.fullName}</p>
+            <div className={cl.right_nav}>
+                <p className={cl.name}>{userInfo?.fullName}</p>
                 <button
                     id="exit"
                     onClick={exit}>

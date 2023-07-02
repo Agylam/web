@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./TimeInput.css";
+import cl from "./TimeInput.module.css";
 
 interface TimeInputComponentParams {
     value: string;
@@ -11,7 +11,7 @@ export default function TimeInput({value, onChange}: TimeInputComponentParams) {
     return (
         <input
             type="time"
-            className="time_input"
+            className={cl.time_input}
             value={value}
             onChange={onChange}
         />
