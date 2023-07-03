@@ -1,5 +1,7 @@
 import React from "react";
+
 import removeImg from "../../assets/remove.svg";
+
 import ILesson from "../../interfaces/ILesson";
 import TimeRangeComponent from "../TimeRange/TimeRange";
 
