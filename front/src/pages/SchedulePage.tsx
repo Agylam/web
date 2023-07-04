@@ -10,6 +10,7 @@ import NavbarComponent from "../сomponents/Navbar/Navbar";
 import { useWeekDates } from "./hooks/useWeekDates";
 
 export default function SchedulePage() {
+    //fixme выглядит, как костыль
     const [days] = useState([[], [], [], [], [], [], []]);
     const weekDates = useWeekDates();
     const {decodedToken, isExpired} = useJwt<IUser>(
@@ -23,6 +24,7 @@ export default function SchedulePage() {
     if (isExpired) {
         exit();
     }
+    //fixme а зачем?
     const userInfo = decodedToken;
 
     return (
