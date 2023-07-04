@@ -1,5 +1,5 @@
 import moment from "moment";
-
+//fixme кастомные хуки нужны, чтобы подцепится к фичам React-а. А тут вроде всё нативно, можно просто функцию создать
 export const useWeekDates = () => {
     const currentDate = moment();
     const weekStart = currentDate.clone().startOf("isoWeek");

@@ -16,7 +16,7 @@ export default function IndexPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-
+    //fixme лучше такие штуки выносить из компонентов, много места занимают
     const auth = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -39,8 +39,9 @@ export default function IndexPage() {
     };
 
     const { isExpired } = useJwt<IUser>(localStorage.getItem("jwt") as string);
+    //fixme лучше никогда не писать if без {}
     if (!isExpired) navigate("/schedule");
-
+    //fixme выглядит так, что это можно разделить на компоненты сильнее
     return (
         <div className="wrapper">
             <ToastContainer limit={3} />
