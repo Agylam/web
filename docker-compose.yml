@@ -16,7 +16,7 @@ services:
     backend:
         image: agylam/back:${BRANCH}
         environment:
-            PORT: ${BACKEND_PORT}
+            BACKEND_PORT: ${BACKEND_PORT}
             JWT_SECRET: ${JWT_SECRET}
             JWT_EXPIRESIN: ${JWT_EXPIRESIN}
             PGHOST: postgres
