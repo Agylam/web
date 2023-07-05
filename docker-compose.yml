@@ -1,9 +1,9 @@
-version: "3.9"
+version: "3.3"
 services:
     postgres:
         image: postgres:13.3
         environment:
-            POSTGRES_HOST: ${PGHOST}
+            POSTGRES_HOST: postgres
             POSTGRES_DB: ${PGDATABASE}
             POSTGRES_USER: ${PGUSER}
             POSTGRES_PASSWORD: ${PGPASSWORD}
