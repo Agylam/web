@@ -19,7 +19,7 @@ services:
             PORT: ${BACKEND_PORT}
             JWT_SECRET: ${JWT_SECRET}
             JWT_EXPIRESIN: ${JWT_EXPIRESIN}
-            PGHOST: ${PGHOST}
+            PGHOST: postgres
             PGDATABASE: ${PGDATABASE}
             PGUSER: ${PGUSER}
             PGPASSWORD: ${PGPASSWORD}
