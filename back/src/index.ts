@@ -1,6 +1,8 @@
 // Libs
 import "dotenv/config";
 import Fastify from "fastify";
+import type { FastifyCookieOptions } from "@fastify/cookie"
+import cookie from "@fastify/cookie"
 import { Sequelize } from "sequelize";
 import modelsInit from "./modelsInit.js";
 import databaseInit from "./databaseInit.js";
@@ -14,6 +16,12 @@ declare module "fastify" {
 
 const init = async () => {
 	const fastify = Fastify();
+
+    fastify.register(cookie, {
+        secret: "12345", // for cookies signature
+        parseOptions: {}     // options for parsing cookies
+    } as FastifyCookieOptions);
+
 	await databaseInit(fastify);
 	await modelsInit(fastify);
 	await routesInit(fastify);
