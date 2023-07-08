@@ -4,22 +4,30 @@
  * Facebook, продукт компании Meta, которая признана экстремистской организацией в России
  */
 
-import React from "react";
-import {Route, Routes} from "react-router-dom";
+import React, { Suspense, lazy } from "react";
+import { Route, Routes } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
 
 import "./css/color-light.css";
 import "./css/main.css";
 
-import IndexPage from "./pages/IndexPage";
-import SchedulePage from "./pages/SchedulePage";
-import AnnouncementPage from "./pages/AnnouncementPage";
+const IndexPage = lazy(() => import("./pages/IndexPage"));
+const SchedulePage = lazy(() => import("./pages/SchedulePage"));
+const AnnouncementPage = lazy(() => import("./pages/AnnouncementPage"));
+
+import { Loader } from "./сomponents/Elements/Loader/Loader";
+import { Error } from "./сomponents/Elements/Error/Error";
 
 export default function App() {
     return (
-        <Routes>
-            <Route path="/" element={<IndexPage/>}/>
-            <Route path="/schedule" element={<SchedulePage/>}/>
-            <Route path="/announcement" element={<AnnouncementPage/>}/>
-        </Routes>
+        <ErrorBoundary fallback={<Error />}>
+            <Suspense fallback={<Loader />}>
+                <Routes>
+                    <Route path="/" element={<IndexPage />} />
+                    <Route path="/schedule" element={<SchedulePage />} />
+                    <Route path="/announcement" element={<AnnouncementPage />} />
+                </Routes>
+            </Suspense>
+        </ErrorBoundary>
     );
 }

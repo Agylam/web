@@ -17,7 +17,7 @@
     "react-jwt": "^1.1.8",
     "react-router-dom": "^6.8.1",
     "react-toastify": "^9.1.1"
-  },
+},
   "devDependencies": {
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",

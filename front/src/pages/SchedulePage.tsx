@@ -1,6 +1,6 @@
-import React, {useState} from "react";
-import {useJwt} from "react-jwt";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { useJwt } from "react-jwt";
+import { useNavigate } from "react-router-dom";
 
 import "../css/schedule.css";
 
@@ -13,7 +13,7 @@ export default function SchedulePage() {
     //fixme выглядит, как костыль
     const [days] = useState([[], [], [], [], [], [], []]);
     const weekDates = useWeekDates();
-    const {decodedToken, isExpired} = useJwt<IUser>(
+    const { decodedToken, isExpired } = useJwt<IUser>(
         localStorage.getItem("jwt") as string
     );
     const navigate = useNavigate();
@@ -32,9 +32,9 @@ export default function SchedulePage() {
             <NavbarComponent
                 userInfo={userInfo}
             />
-            <div className="days_wrapper" style={{overflow: "auto"}}>
+            <div className="days_wrapper" style={{ overflow: "auto" }}>
                 {days.map(
-                    (e, k) =><DaySchedule key={k} dow={k} weekDates={weekDates} />
+                    (e, k) => <DaySchedule key={k} dow={k} weekDates={weekDates} />
                 )}
             </div>
         </>
