@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest, HTTPMethods } from "fastify";
 import type { UserAttributes } from "../interfaces/user";
-import { genSalt, hash } from "bcrypt-ts";
 import { Op } from "sequelize";
 
 export default (fastify: FastifyInstance) => {
