@@ -32,11 +32,13 @@ jobs:
           file: ${{ matrix.modules }}/docker/Dockerfile
           context: ${{ matrix.modules }}
           push: true
+          build-args: |
+            ARG_BUILD_VERSION=${{ github.ref_name }}
           tags: agylam/${{ matrix.modules }}:${{ github.ref_name }}
 
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.ref_name == 'stage' || github.ref_name == 'dev' }}
+    if: ${{ github.ref_name == 'stage' }}
     needs:
       - build
     steps:
@@ -46,9 +48,8 @@ jobs:
         uses: garygrossgarten/github-action-scp@release
         with:
             local: .env
-            remote: ~/${{ github.ref_name }}/.end
+            remote: ${{ github.ref_name }}/.env
             host: ${{ secrets.SSH_HOST }}
-            port: 23
             username: ${{ secrets.SSH_USER }}
             password: ${{ secrets.SSH_PASSWORD }}
             privateKey: ${{ secrets.SSH_KEY }}
@@ -57,8 +58,8 @@ jobs:
       - name: Copy docker-compose.yml to stand
         uses: garygrossgarten/github-action-scp@release
         with:
-            local: docker-compose.yml
-            remote: ~/${{ github.ref_name }}/docker-compose.yml
+            local: docker-compose-cicd.yml
+            remote: ${{ github.ref_name }}/docker-compose.yml
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USER }}
             password: ${{ secrets.SSH_PASSWORD }}

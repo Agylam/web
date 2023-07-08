@@ -10,7 +10,7 @@ export default async function announcementFetch(announcement: string, jwt: strin
             time: new Date(),
         }),
     });
-
+    //fixme обычно пишут response, либо сокращают до res
     if (resp.ok) {
         const respObj = await resp.json();
 

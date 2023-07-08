@@ -1,0 +1,25 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+    eslint:
+        strategy:
+            matrix:
+                module: [ front, back ]
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: actions/setup-node@v3
+                with:
+                    node-version: 18
+            -   run: npm ci
+                working-directory: ./${{ matrix.module }}
+            -   run: npm run lint
+                working-directory: ./${{ matrix.module }}
+#      - uses: sibiraj-s/action-eslint@v2
+#        with:
+#          github-token: ${{ secrets.TOKEN }}
+#          eslint-args: '--quiet'
+#          extensions: 'js,jsx,ts,tsx'
+#          annotations: true
