@@ -36,7 +36,7 @@ export default function Navbar({userInfo}: INavbarParams) {
                 </nav>
             </div>
             <div className="right_nav">
-                <p className="name">{userInfo?.fullName}</p>
+                <p className="name">{userInfo?.fullname}</p>
                 <button
                     id="exit"
                     onClick={exit}>

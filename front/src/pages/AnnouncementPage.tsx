@@ -1,27 +1,14 @@
 import React, { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { useJwt } from "react-jwt";
-
-import IUser from "../interfaces/IUser";
 
 import NavbarComponent from "../сomponents/Navbar/Navbar";
 import AnnouncementForm from "../сomponents/AnnouncementForm/AnnouncementForm";
 import announcementFetch from "../fetches/announcementFetch";
 
 import { ToastContainer, toast } from "react-toastify";
+import { useUserInfo } from "../hooks/useUserInfo";
 
 export default function AnnouncementPage() {
-    const navigate = useNavigate();
-
-    const { decodedToken, isExpired } = useJwt<IUser>(localStorage.getItem("jwt") as string);
-    const exit = () => {
-        localStorage.removeItem("jwt");
-        navigate("/");
-    };
-    if (isExpired) {
-        exit();
-    }
-    const userInfo = decodedToken;
+    const userInfo = useUserInfo();
 
     const sendAnnouncement = useCallback((text: string) => {
         try {

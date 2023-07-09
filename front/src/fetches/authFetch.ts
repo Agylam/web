@@ -1,4 +1,6 @@
-export default async function authFetch(email: string, password: string): Promise<string> | never {
+import { JWT } from '../hooks/useJwtStorage';
+
+export default async function authFetch(email: string, password: string): Promise<JWT> | never {
     const resp: Response = await fetch("/api/user/auth", {
         method: "post",
         headers: {
@@ -13,8 +15,14 @@ export default async function authFetch(email: string, password: string): Promis
 
     if (resp.ok) {
         const respObj = await resp.json();
+        if (
+          typeof respObj.accessToken !== 'string' &&
+          typeof respObj.refreshToken !== 'string'
+        ) {
+          throw new Error('Invalid response in auth request');
+        }
 
-        return respObj.token as string;
+        return respObj;
     }
 
     throw resp;

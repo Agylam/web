@@ -11,23 +11,26 @@ import logoImg from "../assets/logo.svg";
 import IUser from "../interfaces/IUser";
 import ThemeSwitcher from "../сomponents/ThemeSwitcher/ThemeSwitcher";
 import authFetch from "../fetches/authFetch";
+import { useJwtStorage } from "../hooks/useJwtStorage";
+import { PagePath } from "../constants";
 
 export default function IndexPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const jwtStorage = useJwtStorage();
 
     const auth = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             // need to change email of users in database for email-like (qwerty@qwerty.com) format
-            const token: string = await authFetch(email, password);
-            localStorage.setItem("jwt", token);
+            const jwt = await authFetch(email, password);
+            jwtStorage.setJwt(jwt);
             toast.success("Успешно!", {
                 position: toast.POSITION.BOTTOM_LEFT,
                 autoClose: 1000,
                 onClose: () => {
-                    navigate("/schedule");
+                    navigate(PagePath.schedule);
                 },
             });
         } catch (e) {
@@ -39,7 +42,7 @@ export default function IndexPage() {
     };
 
     const { isExpired } = useJwt<IUser>(localStorage.getItem("jwt") as string);
-    if (!isExpired) navigate("/schedule");
+    if (!isExpired) navigate(PagePath.schedule);
 
     return (
         <div className="wrapper">
