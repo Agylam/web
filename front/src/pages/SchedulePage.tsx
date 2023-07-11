@@ -8,6 +8,7 @@ import { useWeekDates } from "./hooks/useWeekDates";
 import { useUserInfo } from "../hooks/useUserInfo";
 
 export default function SchedulePage() {
+    //fixme выглядит, как костыль
     const [days] = useState([[], [], [], [], [], [], []]);
     const weekDates = useWeekDates();
     const userInfo = useUserInfo();

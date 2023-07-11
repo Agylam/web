@@ -20,6 +20,7 @@ export default function IndexPage() {
     const navigate = useNavigate();
     const jwtStorage = useJwtStorage();
 
+    //fixme лучше такие штуки выносить из компонентов, много места занимают
     const auth = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -42,8 +43,10 @@ export default function IndexPage() {
     };
 
     const { isExpired } = useJwt<IUser>(localStorage.getItem("jwt") as string);
-    if (!isExpired) navigate(PagePath.schedule);
 
+    //fixme лучше никогда не писать if без {}
+    if (!isExpired) navigate(PagePath.schedule);
+    //fixme выглядит так, что это можно разделить на компоненты сильнее
     return (
         <div className="wrapper">
             <ToastContainer limit={3} />
