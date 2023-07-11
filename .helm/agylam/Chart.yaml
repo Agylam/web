@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 0.0.1
+name: agylam-helm
+icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-220x234.png
+version: 0.0.1
+dependencies:
+  - name: postgresql
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 12.6.4
+    condition: postgres.enabled
