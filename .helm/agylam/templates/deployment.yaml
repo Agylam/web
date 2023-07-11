@@ -1,0 +1,33 @@
+{{ define "deployment_app" }}
+{{- $ := index . 0 -}}
+{{- $container := index . 1 -}}
+{{- $containerSpec := get $.Values $container -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Values.global.project }}-{{ $container }}
+  labels:
+    app: {{ $.Values.global.project }}-{{ $container }}
+spec:
+  replicas: {{ $containerSpec.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $.Values.global.project }}-{{ $container }}
+  template:
+    metadata:
+      labels:
+        app: {{ $.Values.global.project }}-{{ $container }}
+    spec:
+      containers:
+      - name: {{ $.Values.global.project }}-{{ $container }}
+        image: {{ $.Values.global.registry }}{{ $containerSpec.image }}:{{ $.Values.global.ref }}
+        envFrom:
+          - configMapRef:
+              name: {{ $.Values.global.project }}-configmap
+        ports:
+        - containerPort: {{ $containerSpec.port }}
+{{ end }}
+
+{{ include "deployment_app" (list $ "backend") }}
+---
+{{ include "deployment_app" (list $ "frontend") }}

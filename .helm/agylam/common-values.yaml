@@ -1,0 +1,44 @@
+global:
+  project: agylam
+  ref: "dev"
+  isTag: false
+  registry: ""
+
+backend:
+  image: agylam/back
+  replicas: 2
+  port: 81
+
+frontend:
+  image: agylam/front
+  replicas: 2
+  port: 80
+
+ingress:
+  baseDomain: agylam.ru
+  toService: frontend
+  
+
+ENV:
+  BURL: http://backend:81
+  FRONTEND_PORT: 80
+  PGPORT: "5432"
+  PGDATABASE: agylam
+  PGUSER: agylam
+  PGPASSWORD: agylam
+  PGHOST: postgres
+  BACKEND_PORT: "81"
+  SESSION_TIME: 1d
+  JWT_SECRET: "*BMgamPGgA&WbpDWwG%3BUng5KRaNrder@53N2Y2TRdajJPuxBme5J2ujVtCcg5J"
+  JWT_EXPIRESIN: 1h
+
+postgresql:
+  enabled: true
+  fullnameOverride: postgres
+  auth:
+    postgresPassword: agylam 
+    username: agylam 
+    password: agylam 
+    database: agylam
+
+SECRETS: {}
