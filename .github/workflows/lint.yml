@@ -26,9 +26,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@master
-        - uses: mirzakhany/install-helm-action@v1
+        - uses: none0nfg/install-helm-action@v0.0.1
           with:
-            k8s_config: PT09cXdlcXdlPT09
             helm_version: v3.12.0
             kubectl_version: v1.27.3
         
