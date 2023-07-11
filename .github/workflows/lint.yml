@@ -28,6 +28,7 @@ jobs:
         - uses: actions/checkout@master
         - uses: mirzakhany/install-helm-action@v1
           with:
+            k8s_config: c3Vjaw==
             helm_version: v3.12.0
             kubectl_version: v1.27.3
         
