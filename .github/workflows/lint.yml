@@ -32,4 +32,4 @@ jobs:
             kubectl_version: v1.27.3
         
         - name: Helm lint ${{ matrix.staging }}
-          run: helm lint .helm/agylam/ -f .helm/agylam/common-values.yaml -f .helm/agylam/${{ matrix.staging }}-values.yaml
+          run: helm dependency update .helm/agylam/ && update helm lint .helm/agylam/ -f .helm/agylam/common-values.yaml -f .helm/agylam/${{ matrix.staging }}-values.yaml
