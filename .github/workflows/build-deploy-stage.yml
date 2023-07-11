@@ -3,7 +3,7 @@ name: Build & Deploy
 on:
   push:
     branches:
-      - 'dev'
+      - 'stage'
 
 jobs:
   build:
@@ -59,4 +59,4 @@ jobs:
       - name: Deploy dev
         run: |
           helm dependency update .helm/agylam/
-          helm upgrade agylam-dev .helm/agylam/ --install -n agylam-${{ github.ref_name }} --create-namespace --timeout 60s --atomic --wait --cleanup-on-fail -f .helm/agylam/common-values.yaml -f .helm/agylam/dev-values.yaml --set global.ref=${{ github.ref_name }}
+          helm upgrade agylam-stage .helm/agylam/ --install -n agylam-${{ github.ref_name }} --create-namespace --timeout 60s --atomic --wait --cleanup-on-fail -f .helm/agylam/common-values.yaml -f .helm/agylam/stage-values.yaml --set global.ref=${{ github.ref_name }}
