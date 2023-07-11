@@ -1,4 +1,4 @@
-import { JWT } from '../hooks/useJwtStorage';
+import { JWT } from "../hooks/useJwtStorage";
 
 export default async function refreshFetch(refresh_token: string): Promise<JWT> | never {
     const resp: Response = await fetch(`/api/user/refresh_token/${refresh_token}`, {
@@ -13,10 +13,10 @@ export default async function refreshFetch(refresh_token: string): Promise<JWT> 
     if (resp.ok) {
         const respObj = await resp.json();
         if (
-          typeof respObj.accessToken !== 'string' &&
-          typeof respObj.refreshToken !== 'string'
+            typeof respObj.accessToken !== "string" &&
+          typeof respObj.refreshToken !== "string"
         ) {
-          throw new Error('Invalid response in auth request');
+            throw new Error("Invalid response in auth request");
         }
 
         return respObj;
