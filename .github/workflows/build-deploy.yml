@@ -36,6 +36,7 @@ jobs:
             ARG_BUILD_VERSION=${{ github.ref_name }}
           tags: agylam/${{ matrix.modules }}:${{ github.ref_name }}
 
+          
   deploy:
     runs-on: ubuntu-latest
     if: ${{ github.ref_name == 'stage' }}
