@@ -42,11 +42,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: set up kube_config
-        run: |
-          mkdir ~/.kube
-          echo -n ${{ secrets.CICD_B64CONFIG }} | base64 -d > ~/.kube/config
-
       - name: set up ssh tunel
         run: |
           mkdir ~/.ssh
@@ -59,9 +54,9 @@ jobs:
         with:
             helm_version: v3.12.0
             kubectl_version: v1.27.3
+            k8s_config: ${{ secrets.CICD_B64CONFIG }}
 
       - name: Deploy dev
         run: |
-          grep "server:" ~/.kube/config
           helm dependency update .helm/agylam/
           helm upgrade agylam-dev .helm/agylam/ --install --timeout 60s --atomic --wait --cleanup-on-fail -f .helm/agylam/common-values.yaml -f .helm/agylam/dev-values.yaml --set global.ref=${{ github.ref_name }}
