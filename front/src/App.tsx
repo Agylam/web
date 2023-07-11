@@ -40,7 +40,7 @@ export default function App() {
     return (
         <BrowserRouter>
             <React.StrictMode>
-                <AppRoutes hasProtectedAcess={validToken} />
+                <AppRoutes hasProtectedAccess={validToken} />
             </React.StrictMode>
         </BrowserRouter>
     );

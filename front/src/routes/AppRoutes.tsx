@@ -7,25 +7,25 @@ import AnnouncementPage from '../pages/AnnouncementPage';
 import { PagePath } from '../constants';
 
 interface AppRoutesProps {
-  hasProtectedAcess: boolean;
+  hasProtectedAccess: boolean;
 }
 
 export const AppRoutes: FunctionComponent<AppRoutesProps> = ({
-  hasProtectedAcess,
+  hasProtectedAccess,
 }) => {
   return (
     <Routes>
       <Route path={PagePath.home} element={<IndexPage />} />
       <Route path={PagePath.schedule}
         element={
-          <ProtectedRoute allowed={hasProtectedAcess}>
+          <ProtectedRoute allowed={hasProtectedAccess}>
             <SchedulePage />
           </ProtectedRoute>
         }
       />
       <Route path={PagePath.announcement}
         element={
-          <ProtectedRoute allowed={hasProtectedAcess}>
+          <ProtectedRoute allowed={hasProtectedAccess}>
             <AnnouncementPage />
           </ProtectedRoute>
         }
