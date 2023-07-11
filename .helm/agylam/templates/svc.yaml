@@ -1,0 +1,22 @@
+{{ define "service_app" }}
+{{- $ := index . 0 -}}
+{{- $container := index . 1 -}}
+{{- $containerSpec := get $.Values $container -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $container }}
+spec:
+  ports:
+  - name: http
+    port: {{ $containerSpec.port }}
+    protocol: TCP
+    targetPort: {{ $containerSpec.port }}
+  selector:
+    app: {{ $.Values.global.project }}-{{ $container }}
+  type: ClusterIP
+{{ end }}
+
+{{ include "service_app" (list $ "backend") }}
+---
+{{ include "service_app" (list $ "frontend") }}

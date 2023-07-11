@@ -17,9 +17,20 @@ jobs:
                 working-directory: ./${{ matrix.module }}
             -   run: npm run lint
                 working-directory: ./${{ matrix.module }}
-#      - uses: sibiraj-s/action-eslint@v2
-#        with:
-#          github-token: ${{ secrets.TOKEN }}
-#          eslint-args: '--quiet'
-#          extensions: 'js,jsx,ts,tsx'
-#          annotations: true
+
+
+    helm-check:
+        strategy:
+            matrix:
+                staging: [ dev, stage, prod ]
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@master
+        - uses: mirzakhany/helm-install-action@v1
+          with:
+            helm_version: v3.12.0
+            kubectl_version: v1.27.3
+            k8s_config: ${{ secrets.K8S_CONFIG_B64 }}
+        
+        - name: Helm lint ${{ matrix.staging }}
+          run: helm lint .helm/agylam/ -f .helm/agylam/common-values.yaml -f .helm/agylam/${{ matrix.staging }}-values.yaml
