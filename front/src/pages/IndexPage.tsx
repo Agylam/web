@@ -43,38 +43,40 @@ export default function IndexPage() {
     if (!isExpired) navigate("/schedule");
     //fixme выглядит так, что это можно разделить на компоненты сильнее
     return (
-        <div className="wrapper">
-            <ToastContainer limit={3} />
-            <form id="auth" onSubmit={auth}>
-                <img src={logoImg} alt="" id="logo" />
-                <div id="auth_inputs">
-                    <input
-                        type="email"
-                        id="email"
-                        className="auth_inp"
-                        required
-                        placeholder="Почта"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                    />
-                    <input
-                        type="password"
-                        id="password"
-                        className="auth_inp"
-                        required
-                        placeholder="Пароль"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                    />
-                    <button id="button" type="submit">
-                        Войти
-                    </button>
-                </div>
-                <p id="rem_pass">
-                    Для смены пароля свяжитесь с <span className="mimbol">@mimbol</span>
-                </p>
-                <ThemeSwitcher/>
-            </form>
+        <div className="auth_container">
+            <div className="wrapper">
+                <ToastContainer limit={3} />
+                <form id="auth" onSubmit={auth}>
+                    <img src={logoImg} alt="" id="logo" />
+                    <div id="auth_inputs">
+                        <input
+                            type="email"
+                            id="email"
+                            className="auth_inp"
+                            required
+                            placeholder="Почта"
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                        />
+                        <input
+                            type="password"
+                            id="password"
+                            className="auth_inp"
+                            required
+                            placeholder="Пароль"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                        />
+                        <button id="button" type="submit">
+                            Войти
+                        </button>
+                    </div>
+                    <p id="rem_pass">
+                        Для смены пароля свяжитесь с <span className="mimbol">@mimbol</span>
+                    </p>
+                    <ThemeSwitcher/>
+                </form>
+            </div>
         </div>
     );
 }
