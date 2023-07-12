@@ -54,6 +54,9 @@ jobs:
           token: '${{ github.token }}'
           atomic: true
           secrets: ${{ toJSON(secrets) }}
+          values: |
+            global:
+              ref: ${{ github.ref_name }}
           value-files: >-
             [
               ".helm/agylam/common-values.yaml", 
