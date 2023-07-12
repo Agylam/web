@@ -1,5 +1,6 @@
 global:
   tier: "stage"
+  ref: "stage"
 
 ENV:
   BURL: http://backend:81
