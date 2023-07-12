@@ -24,6 +24,8 @@ spec:
         envFrom:
           - configMapRef:
               name: {{ $.Values.global.project }}-configmap
+          - secretRef:
+              name: {{ $.Values.global.project }}-secret
         ports:
         - containerPort: {{ $containerSpec.port }}
 {{ end }}

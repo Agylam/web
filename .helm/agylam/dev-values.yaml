@@ -1,2 +1,24 @@
 global:
   tier: "dev"
+
+ENV:
+  BURL: http://backend:81
+  FRONTEND_PORT: 80
+  PGPORT: "5432"
+  PGDATABASE: agylam
+  PGHOST: postgres
+  BACKEND_PORT: "81"
+  SESSION_TIME: 1d
+  JWT_EXPIRESIN: 1h
+
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "${{ secrets.DEV_PGPASSWORD }}"
+    username: "${{ secrets.DEV_PGUSER }}"
+    password: "${{ secrets.DEV_PGPASSWORD }}"
+
+SECRETS:
+  JWT_SECRET: "${{ secrets.DEV_JWT_SECRET }}"
+  PGUSER: "${{ secrets.DEV_PGUSER }}"
+  PGPASSWORD: "${{ secrets.DEV_PGPASSWORD }}"

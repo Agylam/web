@@ -2,8 +2,8 @@ name: Build & Deploy
 
 on:
   push:
-    branches:
-      - 'dev'
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -36,8 +36,7 @@ jobs:
 
 
   deploy:
-    runs-on: self-hosted
-    environment: dev
+    runs-on: ubuntu-latest
     needs:
       - build
     steps:
@@ -48,8 +47,8 @@ jobs:
       - name: Helm Deploy
         uses: vimeda/helm@v1.7.0
         with:
-          release: 'agylam-dev'
-          namespace: 'agylam-dev'
+          release: 'agylam-prod'
+          namespace: 'agylam-prod'
           chart: '.helm/agylam'
           token: '${{ github.token }}'
           atomic: true
@@ -57,7 +56,7 @@ jobs:
           value-files: >-
             [
               ".helm/agylam/common-values.yaml", 
-              ".helm/agylam/dev-values.yaml"
+              ".helm/agylam/prod-values.yaml"
             ]
         env:
           KUBECONFIG_FILE: '${{ secrets.KUBE_CONFIG }}'

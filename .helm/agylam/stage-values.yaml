@@ -1,2 +1,14 @@
 global:
   tier: "stage"
+
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "${{ secrets.STAGE_PGPASSWORD }}"
+    username: "${{ secrets.STAGE_PGUSER }}"
+    password: "${{ secrets.STAGE_PGPASSWORD }}"
+
+SECRETS:
+  JWT_SECRET: "${{ secrets.STAGE_JWT_SECRET }}"
+  PGUSER: "${{ secrets.STAGE_PGUSER }}"
+  PGPASSWORD: "${{ secrets.STAGE_PGPASSWORD }}"

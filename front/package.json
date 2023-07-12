@@ -10,7 +10,6 @@
     "lint:fix": "npx eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"
   },
   "dependencies": {
-    "@esbuild/linux-x64": "^0.17.19",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -37,7 +36,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "typescript": "^4.9.3",
-    "vite": "^4.1.5"
+    "vite": "^4.4.3"
   },
   "main": "src/index.js",
   "repository": {

@@ -42,21 +42,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: set up ssh tunel
-        run: |
-          mkdir ~/.ssh
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          eval `ssh-agent -s`
-          ssh-add - <<< "${{ secrets.SSH_KEY }}"
-          ssh -fN -v -L 8443:192.168.49.2:8443 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+      - run: helm dependency update .helm/agylam
 
-      - uses: none0nfg/install-helm-action@v0.0.1
+      - name: Helm Deploy
+        uses: vimeda/helm@v1.7.0
         with:
-            helm_version: v3.12.0
-            kubectl_version: v1.27.3
-            k8s_config: ${{ secrets.CICD_B64CONFIG }}
-
-      - name: Deploy dev
-        run: |
-          helm dependency update .helm/agylam/
-          helm upgrade agylam-stage .helm/agylam/ --install -n agylam-${{ github.ref_name }} --create-namespace --timeout 60s --atomic --wait --cleanup-on-fail -f .helm/agylam/common-values.yaml -f .helm/agylam/stage-values.yaml --set global.ref=${{ github.ref_name }}
+          release: 'agylam-stage'
+          namespace: 'agylam-stage'
+          chart: '.helm/agylam'
+          token: '${{ github.token }}'
+          atomic: true
+          secrets: ${{ toJSON(secrets) }}
+          value-files: >-
+            [
+              ".helm/agylam/common-values.yaml", 
+              ".helm/agylam/stage-values.yaml"
+            ]
+        env:
+          KUBECONFIG_FILE: '${{ secrets.KUBE_CONFIG }}'
