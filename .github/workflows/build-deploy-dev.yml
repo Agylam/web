@@ -51,6 +51,8 @@ jobs:
       #     ssh-add - <<< "${{ secrets.SSH_KEY }}"
       #     ssh -fN -v -L 8443:192.168.49.2:8443 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
 
+      - run: helm dependency update .helm/agylam
+
       - name: Helm Deploy
         uses: vimeda/helm@v1.7.0
         with:
