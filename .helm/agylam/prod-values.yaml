@@ -1,6 +1,6 @@
 global:
   tier: "prod"
-  ref: ""
+  ref: "tag"
   isTag: true
 
 ENV:
