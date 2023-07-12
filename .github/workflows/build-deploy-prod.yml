@@ -2,8 +2,8 @@ name: Build & Deploy
 
 on:
   push:
-    branches:
-      - 'dev'
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -37,7 +37,6 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    environment: dev
     needs:
       - build
     steps:
@@ -57,25 +56,7 @@ jobs:
             kubectl_version: v1.27.3
             k8s_config: ${{ secrets.CICD_B64CONFIG }}
 
-      - name: Helm Deploy
-        uses: vimeda/helm@v1.7.0
-        with:
-          release: 'agylam-dev'
-          namespace: 'agylam-dev'
-          chart: '.helm/agylam'
-          token: '${{ github.token }}'
-          atomic: true
-          secrets: ${{ secrets }}
-          value-files: >-
-            [
-              ".helm/agylam/common-values.yaml", 
-              ".helm/agylam/dev-values.yaml"
-            ]
-
-      # - name: Deploy dev
-      #   run: |
-      #     helm dependency update .helm/agylam/
-      #     helm upgrade agylam-dev .helm/agylam/ --install -n agylam-${{ github.ref_name }} --create-namespace \
-      #     --timeout 60s --atomic --wait --cleanup-on-fail \
-      #     -f .helm/agylam/common-values.yaml -f .helm/agylam/dev-values.yaml \
-      #     --set global.ref=${{ github.ref_name }}
+      - name: Deploy dev
+        run: |
+          helm dependency update .helm/agylam/
+          helm upgrade agylam-stage .helm/agylam/ --install -n agylam-prod --create-namespace --timeout 60s --atomic --wait --cleanup-on-fail -f .helm/agylam/common-values.yaml -f .helm/agylam/prod-values.yaml --set global.ref=${{ github.ref_name }}

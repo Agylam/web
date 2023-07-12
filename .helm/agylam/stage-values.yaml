@@ -1,2 +1,7 @@
 global:
   tier: "stage"
+
+SECRETS:
+  JWT_SECRET: {{ STAGE_JWT_SECRET }}
+  PGUSER: {{ STAGE_PGUSER }}
+  PGPASSWORD: {{ STAGE_PGPASSWORD }}
