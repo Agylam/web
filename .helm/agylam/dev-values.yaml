@@ -11,6 +11,13 @@ ENV:
   SESSION_TIME: 1d
   JWT_EXPIRESIN: 1h
 
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "${{ secrets.DEV_PGPASSWORD }}"
+    username: "${{ secrets.DEV_PGUSER }}"
+    password: "${{ secrets.DEV_PGPASSWORD }}"
+
 SECRETS:
   JWT_SECRET: "${{ secrets.DEV_JWT_SECRET }}"
   PGUSER: "${{ secrets.DEV_PGUSER }}"

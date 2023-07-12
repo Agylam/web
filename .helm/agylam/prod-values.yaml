@@ -6,6 +6,6 @@ postgresql:
   enabled: false
 
 SECRETS:
-  JWT_SECRET: "{{PROD_JWT_SECRET}}"
-  PGUSER: "{{PROD_PGUSER}}"
-  PGPASSWORD: "{{PROD_PGPASSWORD}}"
+  JWT_SECRET: "${{ secrets.PROD_JWT_SECRET }}"
+  PGUSER: "${{ secrets.PROD_PGUSER }}"
+  PGPASSWORD: "${{ secrets.PROD_PGPASSWORD }}"

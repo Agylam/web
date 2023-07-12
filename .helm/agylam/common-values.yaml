@@ -22,9 +22,6 @@ postgresql:
   enabled: true
   fullnameOverride: postgres
   auth:
-    postgresPassword: agylam 
-    username: agylam 
-    password: agylam 
     database: agylam
 
 ENV: {}
