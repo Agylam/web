@@ -43,13 +43,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: set up ssh tunel
-        run: |
-          mkdir ~/.ssh
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          eval `ssh-agent -s`
-          ssh-add - <<< "${{ secrets.SSH_KEY }}"
-          ssh -fN -v -L 8443:192.168.49.2:8443 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+      # - name: set up ssh tunel
+      #   run: |
+      #     mkdir ~/.ssh
+      #     ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      #     eval `ssh-agent -s`
+      #     ssh-add - <<< "${{ secrets.SSH_KEY }}"
+      #     ssh -fN -v -L 8443:192.168.49.2:8443 ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
 
       - name: Helm Deploy
         uses: vimeda/helm@v1.7.0
