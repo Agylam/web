@@ -19,3 +19,4 @@ SECRETS:
   JWT_SECRET: "${{ secrets.PROD_JWT_SECRET }}"
   PGUSER: "${{ secrets.PROD_PGUSER }}"
   PGPASSWORD: "${{ secrets.PROD_PGPASSWORD }}"
+  PGHOST: "${{ secrets.PROD_PGHOST }}"
