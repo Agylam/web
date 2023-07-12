@@ -36,7 +36,7 @@ jobs:
 
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: dev
     needs:
       - build
@@ -67,12 +67,3 @@ jobs:
             ]
         env:
           KUBECONFIG_FILE: '${{ secrets.KUBE_CONFIG }}'
-            
-
-      # - name: Deploy dev
-      #   run: |
-      #     helm dependency update .helm/agylam/
-      #     helm upgrade agylam-dev .helm/agylam/ --install -n agylam-${{ github.ref_name }} --create-namespace \
-      #     --timeout 60s --atomic --wait --cleanup-on-fail \
-      #     -f .helm/agylam/common-values.yaml -f .helm/agylam/dev-values.yaml \
-      #     --set global.ref=${{ github.ref_name }}
