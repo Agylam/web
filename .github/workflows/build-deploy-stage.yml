@@ -36,7 +36,8 @@ jobs:
 
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    environment: stage
     needs:
       - build
     steps:
