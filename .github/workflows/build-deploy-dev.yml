@@ -61,7 +61,6 @@ jobs:
           chart: '.helm/agylam'
           token: '${{ github.token }}'
           atomic: true
-          timeout: 60s
           secrets: ${{ toJSON(secrets) }}
           value-files: >-
             [
