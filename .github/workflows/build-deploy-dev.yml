@@ -24,7 +24,7 @@ jobs:
             . $(werf ci-env github --as-file)
             werf converge --debug --values .helm/agylam/common-values.yaml --values .helm/agylam/dev-values.yaml --repo none0nfg/agylam 
           env:
-            WERF_KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
+            WERF_KUBECONFIG_BASE64: ${{ secrets.KUBE_CONFIG_64 }}
             WERF_ENV: ${{ github.action.converge.environment }}
             WERF_REPO_DOCKER_HUB_TOKEN: ${{ secrets.IGHOR_DK_TOKEN }}
             WERF_REPO_DOCKER_HUB_USERNAME: none0nfg
