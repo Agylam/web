@@ -1,31 +1,17 @@
 import React, {useState} from "react";
-import {useJwt} from "react-jwt";
-import {useNavigate} from "react-router-dom";
 
 import "../css/schedule.css";
 
-import IUser from "../interfaces/IUser";
 import DaySchedule from "../сomponents/DaySchedule/DaySchedule";
 import NavbarComponent from "../сomponents/Navbar/Navbar";
 import { useWeekDates } from "./hooks/useWeekDates";
+import { useUserInfo } from "../hooks/useUserInfo";
 
 export default function SchedulePage() {
     //fixme выглядит, как костыль
     const [days] = useState([[], [], [], [], [], [], []]);
     const weekDates = useWeekDates();
-    const {decodedToken, isExpired} = useJwt<IUser>(
-        localStorage.getItem("jwt") as string
-    );
-    const navigate = useNavigate();
-    const exit = () => {
-        localStorage.removeItem("jwt");
-        navigate("/");
-    };
-    if (isExpired) {
-        exit();
-    }
-    //fixme а зачем?
-    const userInfo = decodedToken;
+    const userInfo = useUserInfo();
 
     return (
         <>

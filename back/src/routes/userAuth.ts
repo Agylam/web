@@ -69,6 +69,11 @@ export default (fastify: FastifyInstance): RouteOptions => {
 			}, process.env.JWT_SECRET as string, {expiresIn: process.env.JWT_EXPIRESIN});
 			const refreshToken = await generateRefreshToken(userExists);
 
+            reply.setCookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                signed: true
+            })
+
 			reply.code(200).send({accessToken, refreshToken});
 		}
 	};
