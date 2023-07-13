@@ -1,0 +1,24 @@
+project: agylam 
+configVersion: 1
+
+build:
+  platform: [ 'linux/amd64' ]
+
+deploy:
+  helmChartDir: .helm/agylam
+  helmRelease: agylam
+  helmReleaseSlug: true
+  namespace: agylam
+  namespaceSlug: true
+
+---
+image: agylam/backend
+dockerfile: docker/Dockerfile
+context: back
+platform: [ 'linux/amd64' ]
+
+---
+image: agylam/frontend
+dockerfile: docker/Dockerfile
+context: front
+platform: [ 'linux/amd64' ]

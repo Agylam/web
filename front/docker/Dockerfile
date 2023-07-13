@@ -5,7 +5,7 @@ COPY src  ./src
 COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.json ./
 RUN npx vite build
 
-FROM nginx:1.24-alpine
+FROM nginx:1.24-alpine as frontend
 WORKDIR /app
 
 ARG ARG_BUILD_VERSION

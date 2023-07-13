@@ -8,7 +8,7 @@ RUN npm ci && npm run build
 
 
 
-FROM node:18-alpine
+FROM node:18-alpine as backend
 WORKDIR /app
 USER node
 ARG ARG_BUILD_VERSION

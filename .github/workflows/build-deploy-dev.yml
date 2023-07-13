@@ -3,61 +3,83 @@ name: Build & Deploy
 on:
   push:
     branches:
-      - 'dev'
+      - 'qwe'
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        modules: [front, back]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ vars.DK_USERNAME }}
-          password: ${{ secrets.DK_TOKEN }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          file: ${{ matrix.modules }}/docker/Dockerfile
-          context: ${{ matrix.modules }}
-          push: true
-          build-args: |
-            ARG_BUILD_VERSION=${{ github.ref_name }}
-          tags: agylam/${{ matrix.modules }}:${{ github.ref_name }}
-
-
-  deploy:
+  converge:
+    name: converge
     runs-on: self-hosted
     environment: dev
-    needs:
-      - build
     steps:
-      - uses: actions/checkout@v3
+        - name: Checkout code
+          uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+        
+        - name: Install werf
+          uses: werf/actions/install@v1.2
+          
+        - name: Run script
+          run: |
+            . $(werf ci-env github --as-file) 
+            werf converge
+          env:
+            WERF_KUBECONFIG_BASE64: ${{ secrets.KUBE_CONFIG_64 }}
+            WERF_ENV: ${{ github.action.converge.environment }}
 
-      - run: helm dependency update .helm/agylam
+# jobs:
+#   build:
+#     strategy:
+#       matrix:
+#         modules: [front, back]
+#     runs-on: ubuntu-latest
 
-      - name: Helm Deploy
-        uses: vimeda/helm@v1.7.0
-        with:
-          release: 'agylam-dev'
-          namespace: 'agylam-dev'
-          chart: '.helm/agylam'
-          token: '${{ github.token }}'
-          atomic: true
-          secrets: ${{ toJSON(secrets) }}
-          value-files: >-
-            [
-              ".helm/agylam/common-values.yaml", 
-              ".helm/agylam/dev-values.yaml"
-            ]
-        env:
-          KUBECONFIG_FILE: '${{ secrets.KUBE_CONFIG }}'
+#     steps:
+#       - uses: actions/checkout@v3
+
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v2
+
+#       - name: Login to Docker Hub
+#         uses: docker/login-action@v2
+#         with:
+#           username: ${{ vars.DK_USERNAME }}
+#           password: ${{ secrets.DK_TOKEN }}
+
+#       - name: Build and push
+#         uses: docker/build-push-action@v4
+#         with:
+#           file: ${{ matrix.modules }}/docker/Dockerfile
+#           context: ${{ matrix.modules }}
+#           push: true
+#           build-args: |
+#             ARG_BUILD_VERSION=${{ github.ref_name }}
+#           tags: agylam/${{ matrix.modules }}:${{ github.ref_name }}
+
+
+#   deploy:
+#     runs-on: self-hosted
+#     environment: dev
+#     needs:
+#       - build
+#     steps:
+#       - uses: actions/checkout@v3
+
+#       - run: helm dependency update .helm/agylam
+
+#       - name: Helm Deploy
+#         uses: vimeda/helm@v1.7.0
+#         with:
+#           release: 'agylam-dev'
+#           namespace: 'agylam-dev'
+#           chart: '.helm/agylam'
+#           token: '${{ github.token }}'
+#           atomic: true
+#           secrets: ${{ toJSON(secrets) }}
+#           value-files: >-
+#             [
+#               ".helm/agylam/common-values.yaml", 
+#               ".helm/agylam/dev-values.yaml"
+#             ]
+#         env:
+#           KUBECONFIG_FILE: '${{ secrets.KUBE_CONFIG }}'
