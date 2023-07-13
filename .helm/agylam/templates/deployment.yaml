@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: {{ $.Values.global.project }}-{{ $container }}
-        image: {{ get $.Values.werf.image (join (list "agylam" $container) "/") }}
+        image: {{ get $.Values.werf.image (join "/" (list "agylam" $container)) }}
         envFrom:
           - configMapRef:
               name: {{ $.Values.global.project }}-configmap

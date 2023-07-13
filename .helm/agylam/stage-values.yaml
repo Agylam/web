@@ -3,14 +3,15 @@ global:
   ref: "stage"
 
 ENV:
-  BURL: http://backend:81
-  FRONTEND_PORT: 80
-  PGPORT: "5432"
-  PGDATABASE: agylam
-  PGHOST: postgres
-  BACKEND_PORT: "81"
-  SESSION_TIME: 1d
-  JWT_EXPIRESIN: 1h
+  stage:
+    BURL: http://backend:81
+    FRONTEND_PORT: 80
+    PGPORT: "5432"
+    PGDATABASE: agylam
+    PGHOST: postgres
+    BACKEND_PORT: "81"
+    SESSION_TIME: 1d
+    JWT_EXPIRESIN: 1h
 
 postgresql:
   enabled: true
@@ -20,6 +21,7 @@ postgresql:
     password: "${{ secrets.STAGE_PGPASSWORD }}"
 
 SECRETS:
-  JWT_SECRET: "${{ secrets.STAGE_JWT_SECRET }}"
-  PGUSER: "${{ secrets.STAGE_PGUSER }}"
-  PGPASSWORD: "${{ secrets.STAGE_PGPASSWORD }}"
+  stage:
+    JWT_SECRET: "${{ secrets.STAGE_JWT_SECRET }}"
+    PGUSER: "${{ secrets.STAGE_PGUSER }}"
+    PGPASSWORD: "${{ secrets.STAGE_PGPASSWORD }}"

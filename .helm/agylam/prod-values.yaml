@@ -4,19 +4,21 @@ global:
   isTag: true
 
 ENV:
-  BURL: http://backend:81
-  FRONTEND_PORT: 80
-  PGPORT: "5432"
-  PGDATABASE: agylam
-  BACKEND_PORT: "81"
-  SESSION_TIME: 1d
-  JWT_EXPIRESIN: 1h
+  prod:
+    BURL: http://backend:81
+    FRONTEND_PORT: 80
+    PGPORT: "5432"
+    PGDATABASE: agylam
+    BACKEND_PORT: "81"
+    SESSION_TIME: 1d
+    JWT_EXPIRESIN: 1h
 
 postgresql:
   enabled: false
 
 SECRETS:
-  JWT_SECRET: "${{ secrets.PRODUCTION_JWT_SECRET }}"
-  PGUSER: "${{ secrets.PRODUCTION_PGUSER }}"
-  PGPASSWORD: "${{ secrets.PRODUCTION_PGPASSWORD }}"
-  PGHOST: "${{ secrets.PRODUCTION_PGHOST }}"
+  prod:
+    JWT_SECRET: "${{ secrets.PRODUCTION_JWT_SECRET }}"
+    PGUSER: "${{ secrets.PRODUCTION_PGUSER }}"
+    PGPASSWORD: "${{ secrets.PRODUCTION_PGPASSWORD }}"
+    PGHOST: "${{ secrets.PRODUCTION_PGHOST }}"

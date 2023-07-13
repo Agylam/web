@@ -12,13 +12,13 @@ deploy:
   namespaceSlug: true
 
 ---
-image: agylam/backend
+image: backend
 dockerfile: docker/Dockerfile
 context: back
 platform: [ 'linux/amd64' ]
 
 ---
-image: agylam/frontend
+image: frontend
 dockerfile: docker/Dockerfile
 context: front
 platform: [ 'linux/amd64' ]
