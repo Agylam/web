@@ -19,6 +19,7 @@ div.wrapper {
     align-items: center;
     margin: 0;
     background: var(--surface-background);
+    height: 100vh;
 }
 
 #auth {

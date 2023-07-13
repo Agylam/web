@@ -20,6 +20,7 @@ body {
 
 .days_wrapper {
     display: flex;
+    flex: 1;
 }
 
 p.static {

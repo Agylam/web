@@ -16,7 +16,7 @@ export default function AnnouncementPage() {
     const { decodedToken, isExpired } = useJwt<IUser>(localStorage.getItem("jwt") as string);
     const exit = () => {
         localStorage.removeItem("jwt");
-        navigate("/");
+        /*  navigate("/"); */
     };
     if (isExpired) {
         exit();
@@ -50,4 +50,3 @@ export default function AnnouncementPage() {
         </>
     );
 }
-

@@ -4,7 +4,7 @@
  * Facebook, продукт компании Meta, которая признана экстремистской организацией в России
  */
 
-import React, { Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 

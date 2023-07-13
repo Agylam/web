@@ -19,7 +19,7 @@ export default function SchedulePage() {
     const navigate = useNavigate();
     const exit = () => {
         localStorage.removeItem("jwt");
-        navigate("/");
+        /* navigate("/"); */
     };
     if (isExpired) {
         exit();
