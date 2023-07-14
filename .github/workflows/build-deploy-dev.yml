@@ -23,7 +23,7 @@ jobs:
               .helm/agylam/dev-values.yaml
               .helm/agylam/stage-values.yaml
               .helm/agylam/prod-values.yaml
-            secrets: ${{ toJson(secrets) }}
+            secrets: ${{ toJSON(secrets) }}
           
         - name: Install werf
           uses: werf/actions/install@v1.2
