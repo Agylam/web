@@ -1,3 +1,4 @@
 giterminismConfigVersion: 1
 helm:
-  allowUncommittedFiles: [ ".helm/agylam*-values.yaml" ]
+  allowUncommittedFiles: 
+    - ".helm/agylam/*-values.yaml"
