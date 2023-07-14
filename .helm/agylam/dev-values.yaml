@@ -19,7 +19,7 @@ postgresql:
     username: "{{ DEV_PGUSER }}"
     password: "{{ DEV_PGPASSWORD }}"
 
-
+SECRETS:
   dev:
     JWT_SECRET: "{{ DEV_JWT_SECRET }}"
     PGUSER: "{{ DEV_PGUSER }}"
