@@ -6,10 +6,6 @@ build:
 
 deploy:
   helmChartDir: .helm/agylam
-  helmRelease: agylam
-  helmReleaseSlug: true
-  namespace: agylam
-  namespaceSlug: true
 
 ---
 image: backend

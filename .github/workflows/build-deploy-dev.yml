@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: Converge DEV
 
 on:
   push:
@@ -21,8 +21,6 @@ jobs:
           with:
             inject_files: |-
               .helm/agylam/dev-values.yaml
-              .helm/agylam/stage-values.yaml
-              .helm/agylam/prod-values.yaml
             secrets: ${{ toJSON(secrets) }}
           
         - name: Install werf
