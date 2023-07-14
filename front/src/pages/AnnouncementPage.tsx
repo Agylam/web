@@ -1,28 +1,15 @@
 import React, { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { useJwt } from "react-jwt";
-
-import IUser from "../interfaces/IUser";
 
 import NavbarComponent from "../сomponents/Navbar/Navbar";
 import AnnouncementForm from "../сomponents/AnnouncementForm/AnnouncementForm";
 import announcementFetch from "../fetches/announcementFetch";
 
 import { ToastContainer, toast } from "react-toastify";
+import { useUserInfo } from "../hooks/useUserInfo";
 
 export default function AnnouncementPage() {
-    const navigate = useNavigate();
-    //fixme выглядит, как повторяющаяся логика - можно завернуть в кастомный хук
-    const { decodedToken, isExpired } = useJwt<IUser>(localStorage.getItem("jwt") as string);
-    const exit = () => {
-        localStorage.removeItem("jwt");
-        navigate("/");
-    };
-    if (isExpired) {
-        exit();
-    }
+    const userInfo = useUserInfo();
 
-    const userInfo = decodedToken;
     //fixme у useCallback одно предназначение - твой child мемоизирован, но из-за того, что ссылка на функцию нестабильна - происходит ререндер, т.к. меняются пропсы.
     //fixme и для этого ты мемоизируешь колбек стабилизируя ссылку. В данной ситуации не вижу в нем смысла. Ну и выносить надо обязательно логику из компонентов
     const sendAnnouncement = useCallback((text: string) => {

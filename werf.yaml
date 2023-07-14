@@ -1,0 +1,20 @@
+project: agylam 
+configVersion: 1
+
+build:
+  platform: [ 'linux/amd64' ]
+
+deploy:
+  helmChartDir: .helm/agylam
+
+---
+image: backend
+dockerfile: docker/Dockerfile
+context: back
+platform: [ 'linux/amd64' ]
+
+---
+image: frontend
+dockerfile: docker/Dockerfile
+context: front
+platform: [ 'linux/amd64' ]

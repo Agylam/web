@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: {{ $.Values.global.project }}-{{ $container }}
-        image: {{ $.Values.global.registry }}{{ $containerSpec.image }}:{{ $.Values.global.ref }}
+        image: {{ index $.Values.werf.image $container }}
         envFrom:
           - configMapRef:
               name: {{ $.Values.global.project }}-configmap

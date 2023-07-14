@@ -32,4 +32,3 @@ dataDB/*
 
 # Helm ignoring
 .helm/agylam/charts/
-.helm/agylam/Chart.lock
