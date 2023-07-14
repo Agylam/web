@@ -26,10 +26,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@master
-        - uses: none0nfg/install-helm-action@v0.0.1
-          with:
-            helm_version: v3.12.0
-            kubectl_version: v1.27.3
-        
+
+        - name: Install werf
+          uses: werf/actions/install@v1.2
+
         - name: Helm lint ${{ matrix.staging }}
-          run: helm dependency update .helm/agylam/ && helm lint .helm/agylam/ -f .helm/agylam/common-values.yaml -f .helm/agylam/${{ matrix.staging }}-values.yaml
+          run: werf helm dependency update .helm/agylam/ && werf helm lint .helm/agylam/ --env=${{ matrix.staging }} -f .helm/agylam/common-values.yaml -f .helm/agylam/${{ matrix.staging }}-values.yaml
