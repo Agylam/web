@@ -25,6 +25,8 @@ postgresql:
     helm.sh/hook: pre-install,pre-upgrade
   auth:
     database: agylam
+    username: changeme
+    password: changeme
 
 ENV: {}
 
