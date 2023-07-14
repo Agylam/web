@@ -4,7 +4,7 @@ global:
   isTag: true
 
 ENV:
-  prod:
+  production:
     BURL: http://backend:81
     FRONTEND_PORT: 80
     PGPORT: "5432"
@@ -17,7 +17,7 @@ postgresql:
   enabled: false
 
 SECRETS:
-  prod:
+  production:
     JWT_SECRET: "{{ PRODUCTION_JWT_SECRET }}"
     PGUSER: "{{ PRODUCTION_PGUSER }}"
     PGPASSWORD: "{{ PRODUCTION_PGPASSWORD }}"
