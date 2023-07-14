@@ -4,6 +4,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $.Values.global.project }}-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
   rules:
@@ -21,6 +23,14 @@ spec:
             name: {{ $.Values.ingress.toService }}
             port:
               number: {{ (get $.Values ($.Values.ingress.toService)).port }}
+  tls:
+  - hosts:
+    {{ if $.Values.global.isTag -}}
+    - {{ $.Values.ingress.baseDomain }}
+  {{- else -}}
+    - {{ $.Values.global.ref }}.{{ $.Values.ingress.baseDomain }}
+  {{- end }}
+    secretName: {{ $.Values.global.project }}-{{ $.Values.werf.env }}-cert
 {{ end }}
 
 {{ include "ingress_app" (list $) }}
