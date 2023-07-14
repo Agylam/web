@@ -16,12 +16,12 @@ ENV:
 postgresql:
   enabled: true
   auth:
-    postgresPassword: "${{ secrets.STAGE_PGPASSWORD }}"
-    username: "${{ secrets.STAGE_PGUSER }}"
-    password: "${{ secrets.STAGE_PGPASSWORD }}"
+    postgresPassword: "{{ STAGE_PGPASSWORD }}"
+    username: "{{ STAGE_PGUSER }}"
+    password: "{{ STAGE_PGPASSWORD }}"
 
 SECRETS:
   stage:
-    JWT_SECRET: "${{ secrets.STAGE_JWT_SECRET }}"
-    PGUSER: "${{ secrets.STAGE_PGUSER }}"
-    PGPASSWORD: "${{ secrets.STAGE_PGPASSWORD }}"
+    JWT_SECRET: "{{ STAGE_JWT_SECRET }}"
+    PGUSER: "{{ STAGE_PGUSER }}"
+    PGPASSWORD: "{{ STAGE_PGPASSWORD }}"

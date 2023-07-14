@@ -15,12 +15,12 @@ ENV:
 postgresql:
   enabled: true
   auth:
-    postgresPassword: "${{ secrets.DEV_PGPASSWORD }}"
-    username: "${{ secrets.DEV_PGUSER }}"
-    password: "${{ secrets.DEV_PGPASSWORD }}"
+    postgresPassword: "{{ DEV_PGPASSWORD }}"
+    username: "{{ DEV_PGUSER }}"
+    password: "{{ DEV_PGPASSWORD }}"
 
-SECRETS:
+
   dev:
-    JWT_SECRET: "${{ secrets.DEV_JWT_SECRET }}"
-    PGUSER: "${{ secrets.DEV_PGUSER }}"
-    PGPASSWORD: "${{ secrets.DEV_PGPASSWORD }}"
+    JWT_SECRET: "{{ DEV_JWT_SECRET }}"
+    PGUSER: "{{ DEV_PGUSER }}"
+    PGPASSWORD: "{{ DEV_PGPASSWORD }}"

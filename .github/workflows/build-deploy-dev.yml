@@ -15,7 +15,16 @@ jobs:
           uses: actions/checkout@v3
           with:
             fetch-depth: 0
-        
+
+        - name: Inject secrets to yaml files
+          uses: none0nfg/yaml-secrets-injector@v0.0.1
+          with:
+            inject_files: |-
+              .helm/agylam/dev-values.yaml
+              .helm/agylam/stage-values.yaml
+              .helm/agylam/prod-values.yaml
+            secrets: ${{ toJson(secrets) }}
+          
         - name: Install werf
           uses: werf/actions/install@v1.2
           
