@@ -2,7 +2,6 @@ version: "3.9"
 services:
     postgres:
         image: postgres:13.3
-        platform: linux/amd64
         environment:
             POSTGRES_HOST: postgres
             POSTGRES_DB: ${PGDATABASE}
@@ -13,12 +12,16 @@ services:
         ports:
             - "${PGPORT}:${PGPORT}"
         volumes:
-            - ./initDB:/docker-entrypoint-initdb.d
             - ./dataDB:/var/lib/postgresql/data
-        restart: always
+        user: root
+        healthcheck:
+            test: [ "CMD", "/usr/bin/pg_isready", "-U", "${PGUSER}" ]
+            interval: 10s
+            timeout: 1s
+            retries: 3
+            start_period: 30s
     backend:
         image: agylam/back:${BRANCH}
-        platform: linux/amd64
         environment:
             BACKEND_PORT: ${BACKEND_PORT}
             JWT_SECRET: ${JWT_SECRET}
@@ -34,16 +37,14 @@ services:
             context: ./back
             dockerfile: ./docker/dev.Dockerfile
         depends_on:
-            - "postgres"
+            postgres:
+                condition: service_healthy
     frontend:
         image: agylam/front:${BRANCH}
-        platform: linux/amd64
         environment:
             BURL: "http://backend:${BACKEND_PORT}"
-        links:
-            - postgres
         ports:
-            - "80:5173"
+            - "5173:5173"
         volumes:
             - ./front/src:/app/src
         build:
@@ -55,8 +56,6 @@ services:
         tty: true
     pgadmin:
         image: dpage/pgadmin4
-        restart: always
-        platform: linux/amd64
         environment:
             PGADMIN_DEFAULT_EMAIL: admin@admin.ru
             PGADMIN_DEFAULT_PASSWORD: admin
