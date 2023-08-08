@@ -6,6 +6,9 @@ import { Lesson } from './entities/Lesson.js';
 import { Sound } from './entities/Sound.js';
 import { ClassRange } from './entities/ClassRange.js';
 import { ConfigModule } from '@nestjs/config';
+import { User } from './entities/User.js';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -22,12 +25,13 @@ import { ConfigModule } from '@nestjs/config';
             database: process.env.PGDATABASE || 'postgres',
             synchronize: true,
             logging: false,
-            entities: [School, Lesson, Sound, ClassRange],
+            entities: [School, Lesson, Sound, ClassRange, User],
             migrations: [],
             subscribers: [],
         }),
+        AuthModule,
     ],
-    controllers: [],
+    controllers: [AuthController],
     providers: [],
 })
 export class AppModule {}

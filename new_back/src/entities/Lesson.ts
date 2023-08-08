@@ -1,10 +1,9 @@
-import {BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Sound} from "./Sound";
-import {ClassRange} from "./ClassRange";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ClassRange } from './ClassRange';
 
 @Entity()
 export class Lesson extends BaseEntity {
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryGeneratedColumn('uuid')
     uuid: string;
 
     // All time in UTC
@@ -26,14 +25,13 @@ export class Lesson extends BaseEntity {
     @JoinColumn()
     class_range: ClassRange;
 
-    static async getLessonsByStartTime(hour, minute){
+    static async getLessonsByStartTime(hour, minute) {
         return await this.findBy({ start_hour: hour, start_minute: minute });
     }
 
-    static async getLessonsByEndTime(hour, minute){
+    static async getLessonsByEndTime(hour, minute) {
         return await this.findBy({ end_hour: hour, end_minute: minute });
     }
-
 
     // static async getClassRange (uuid) {
     //     return await Lesson.createQueryBuilder("lesson")
