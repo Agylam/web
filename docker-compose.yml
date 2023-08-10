@@ -32,7 +32,7 @@ services:
             PGPORT: ${PGPORT}
             PGHOST: postgres
         volumes:
-            - ./back:/app
+            - ./back/src:/app/src
         build:
             context: ./back
             dockerfile: ./docker/dev.Dockerfile
