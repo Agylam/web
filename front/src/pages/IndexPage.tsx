@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useJwt } from "react-jwt";
+import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -8,25 +7,24 @@ import "../css/index.css";
 
 import logoImg from "../assets/logo.svg";
 
-import IUser from "../interfaces/IUser";
 import ThemeSwitcher from "../сomponents/ThemeSwitcher/ThemeSwitcher";
 import authFetch from "../fetches/authFetch";
-import { useJwtStorage } from "../hooks/useJwtStorage";
 import { PagePath } from "../constants";
+import { useJwtContext } from "../context/jwt-context";
 
 export default function IndexPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const jwtStorage = useJwtStorage();
+    const { setJwts } = useJwtContext();
 
     //fixme лучше такие штуки выносить из компонентов, много места занимают
-    const auth = async (e: React.FormEvent<HTMLFormElement>) => {
+    const auth = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             // need to change email of users in database for email-like (qwerty@qwerty.com) format
             const jwt = await authFetch(email, password);
-            jwtStorage.setJwt(jwt);
+            setJwts(jwt);
             toast.success("Успешно!", {
                 position: toast.POSITION.BOTTOM_LEFT,
                 autoClose: 1000,
@@ -40,12 +38,8 @@ export default function IndexPage() {
                 autoClose: 2000,
             });
         }
-    };
+    }, [email, password, navigate, setJwts]);
 
-    const { isExpired } = useJwt<IUser>(localStorage.getItem("jwt") as string);
-
-    //fixme лучше никогда не писать if без {}
-    if (!isExpired) navigate(PagePath.schedule);
     //fixme выглядит так, что это можно разделить на компоненты сильнее
     return (
         <div className="auth_container">
