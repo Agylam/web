@@ -21,4 +21,8 @@ export class UserService {
     async remove(uuid: number): Promise<void> {
         await this.usersRepository.delete(uuid);
     }
+
+    async getUserByEmail(email: string) {
+        return this.usersRepository.findOneBy({ email });
+    }
 }
