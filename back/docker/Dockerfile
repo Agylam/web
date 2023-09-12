@@ -18,4 +18,4 @@ COPY --from=builder  builder/package.json builder/package-lock.json builder/tsco
 COPY --from=builder builder/build/ ./build
 COPY --from=builder builder/node_modules/ ./node_modules
 
-CMD ["node","./build/index.js"]
+CMD ["node","./dist/index.js"]

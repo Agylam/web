@@ -1,32 +1,25 @@
 {
-    "compilerOptions": {
-        "target": "ES2022",
-        "module": "ES2022",
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "strict": true,
-        "moduleResolution": "node",
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "strictPropertyInitialization": false,
-        "skipLibCheck": true,
-        "outDir": "build",
-        "sourceMap": true
-    },
-    "include": [
-        "src"
-    ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false
+  },
     "watchOptions": {
-        "watchFile": "fixedPollingInterval",
-        "watchDirectory": "fixedPollingInterval",
-        "fallbackPolling": "dynamicPriority",
-        "synchronousWatchDirectory": true,
-        "excludeDirectories": [
-            "**/node_modules",
-            "build"
-        ],
-        "excludeFiles": [
-            "build/fileWhichChangesOften.ts"
-        ]
+        "watchFile": "priorityPollingInterval",
+        "watchDirectory": "fixedPollingInterval"
     }
-}
+},
