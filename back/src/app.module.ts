@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { User } from './entities/User.js';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
+import { RefreshToken } from './entities/RefreshToken.js';
 
 @Module({
     imports: [
@@ -25,7 +26,7 @@ import { AuthModule } from './auth/auth.module';
             database: process.env.PGDATABASE || 'postgres',
             synchronize: true,
             logging: false,
-            entities: [School, Lesson, Sound, ClassRange, User],
+            entities: [School, Lesson, Sound, ClassRange, User, RefreshToken],
             migrations: [],
             subscribers: [],
         }),
