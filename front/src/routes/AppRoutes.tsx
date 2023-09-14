@@ -5,14 +5,20 @@ import IndexPage from "../pages/IndexPage";
 import SchedulePage from "../pages/SchedulePage";
 import AnnouncementPage from "../pages/AnnouncementPage";
 import { PagePath } from "../constants";
+import { useJwtContext } from "../context/jwt-context";
+import { useJwtKeepAlive } from "../hooks/useJwtKeepAlive";
 
 interface AppRoutesProps {
-  hasProtectedAccess: boolean;
+//   hasProtectedAccess: boolean;
 }
 
 export const AppRoutes: FunctionComponent<AppRoutesProps> = ({
-    hasProtectedAccess,
+    // hasProtectedAccess,
 }) => {
+    // TODO: read to props (hasProtectedAccess)
+    const { jwts } = useJwtContext();
+    useJwtKeepAlive();
+    const hasProtectedAccess = Boolean(jwts.accessToken && jwts.refreshToken);
     return (
         <Routes>
             <Route path={PagePath.home} element={<IndexPage />} />

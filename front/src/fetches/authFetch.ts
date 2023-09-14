@@ -1,6 +1,6 @@
-import { JWT } from "../hooks/useJwtStorage";
+import { JWTs } from "../context/jwt-context";
 
-export default async function authFetch(email: string, password: string): Promise<JWT> | never {
+export default async function authFetch(email: string, password: string): Promise<JWTs> | never {
     const resp: Response = await fetch("/api/user/auth", {
         method: "post",
         headers: {

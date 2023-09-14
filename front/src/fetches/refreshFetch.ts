@@ -1,6 +1,6 @@
-import { JWT } from "../hooks/useJwtStorage";
+import { JWTs } from "../context/jwt-context";
 
-export default async function refreshFetch(refresh_token: string): Promise<JWT> | never {
+export default async function refreshFetch(refresh_token: string): Promise<JWTs> | never {
     const resp: Response = await fetch(`/api/user/refresh_token/${refresh_token}`, {
         // почему обновление токена идёт через GET?
         // GET должен быть идемпотентным по стандарту

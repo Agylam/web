@@ -1,11 +1,10 @@
 import { decodeToken } from "react-jwt";
-import { useJwtStorage } from "./useJwtStorage";
 import IUser from "../interfaces/IUser";
+import { useJwtContext } from "../context/jwt-context";
 
 export const useUserInfo = (): IUser | null => {
-    const { getJwt } = useJwtStorage();
-    const jwt = getJwt();
-    const decodedToken: any = decodeToken(jwt && jwt.accessToken);
+    const { jwts } = useJwtContext();
+    const decodedToken: any = decodeToken(jwts.accessToken);
     if (!decodedToken) {
         return null;
     }
