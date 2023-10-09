@@ -15,7 +15,7 @@ export default async function authFetch(email: string, password: string): Promis
 
     if (resp.ok) {
         const respObj = await resp.json();
-        if (typeof respObj.accessToken !== "string") {
+        if (typeof respObj.accessToken !== "string" || typeof respObj.refreshToken !== "string") {
             throw new Error("Invalid response in auth request");
         }
 

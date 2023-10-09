@@ -13,6 +13,6 @@ export class AuthController {
     async login(@Body() userDto: CreateUserDto, @Res({ passthrough: true }) response: Response) {
         const { accessToken, refreshToken } = await this.authService.login(userDto);
         response.cookie('refreshToken', refreshToken, { httpOnly: true });
-        return { accessToken };
+        return { accessToken, refreshToken };
     }
 }
