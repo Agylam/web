@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User.js';
 
 @Entity()
@@ -9,6 +9,9 @@ export class RefreshToken extends BaseEntity {
     @ManyToOne(() => User, (user) => user.refresh_tokens)
     user: User;
 
-    @Column()
+    @Column({ default: true })
     active: boolean;
+
+    @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
+    created_at: Date;
 }

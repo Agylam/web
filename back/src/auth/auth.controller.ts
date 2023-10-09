@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { AuthService } from './auth.service';
+import { Response } from 'express';
 
 @ApiTags('Авторизация')
 @Controller('auth')
@@ -9,7 +10,9 @@ export class AuthController {
     constructor(private authService: AuthService) {}
 
     @Post('/login')
-    login(@Body() userDto: CreateUserDto) {
-        return this.authService.login(userDto);
+    async login(@Body() userDto: CreateUserDto, @Res({ passthrough: true }) response: Response) {
+        const { accessToken, refreshToken } = await this.authService.login(userDto);
+        response.cookie('refreshToken', refreshToken, { httpOnly: true });
+        return { accessToken };
     }
 }
