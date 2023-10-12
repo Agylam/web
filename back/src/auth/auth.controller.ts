@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @ApiTags('Авторизация')
 @Controller('auth')
@@ -15,4 +16,7 @@ export class AuthController {
         response.cookie('refreshToken', refreshToken, { httpOnly: true });
         return { accessToken, refreshToken };
     }
+
+    @Post('/refresh')
+    async refresh(@Body() refreshDto: RefreshTokenDto, @Res({ passthrough: true }) response: Response) {}
 }
