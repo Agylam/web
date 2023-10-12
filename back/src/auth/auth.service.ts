@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../entities/User';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { RefreshToken } from '../entities/RefreshToken.js';
 
 @Injectable()
@@ -24,12 +24,41 @@ export class AuthService {
         return { accessToken, refreshToken };
     }
 
+    async updateRefreshToken(oldRefreshToken: string) {
+        const oldRefreshTokenObj = await this.getRefreshToken(oldRefreshToken);
+        if (oldRefreshTokenObj === null) {
+            new UnauthorizedException('Refresh token not found');
+        } else {
+            const accessToken = await this.generateToken(oldRefreshTokenObj.user);
+            const refreshToken = await this.generateRefreshToken(oldRefreshTokenObj.user);
+            return { accessToken, refreshToken };
+        }
+    }
+
+    private async getRefreshToken(refreshToken: string) {
+        return await this.refreshTokensRepository.findOne({
+            where: {
+                uuid: refreshToken,
+                created_at: MoreThan(new Date(new Date().getTime() - 86400000)),
+            },
+            relations: {
+                user: true,
+            },
+        });
+    }
+
     private async generateToken(user: User) {
         const payload = { email: user.email, uuid: user.uuid };
         return this.jwtService.sign(payload);
     }
 
     private async generateRefreshToken(user: User) {
+        await this.refreshTokensRepository
+            .createQueryBuilder('')
+            .delete()
+            .where('userUuid = :uuid', { uuid: user.uuid })
+            .execute();
+
         const refresh = new RefreshToken();
         refresh.user = user;
         await refresh.save();
