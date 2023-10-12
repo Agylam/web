@@ -10,6 +10,9 @@ import { User } from './entities/User.js';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { RefreshToken } from './entities/RefreshToken.js';
+import { UserController } from './user/user.controller.js';
+import { ScheduleModule } from './schedule/schedule.module.js';
+import { ScheduleController } from './schedule/schedule.controller.js';
 
 @Module({
     imports: [
@@ -31,8 +34,10 @@ import { RefreshToken } from './entities/RefreshToken.js';
             subscribers: [],
         }),
         AuthModule,
+        ScheduleModule,
     ],
-    controllers: [AuthController],
+
+    controllers: [AuthController, UserController, ScheduleController],
     providers: [],
 })
 export class AppModule {}
