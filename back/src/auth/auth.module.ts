@@ -12,9 +12,9 @@ import { RefreshToken } from '../entities/RefreshToken.js';
     imports: [
         forwardRef(() => UserModule),
         JwtModule.register({
-            secret: process.env.PRIVATE_KEY || 'SECRET',
+            secret: process.env.JWT_SECRET || 'SECRET',
             signOptions: {
-                expiresIn: '24h',
+                expiresIn: '10m',
             },
         }),
         TypeOrmModule.forFeature([RefreshToken]),

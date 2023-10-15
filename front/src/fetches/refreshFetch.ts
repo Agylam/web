@@ -1,6 +1,6 @@
 import { JWTs } from "../context/jwt-context";
 
-export default async function refreshFetch(refresh_token: string): Promise<JWTs> | never {
+export default async function refreshFetch(): Promise<JWTs> | never {
     const resp: Response = await fetch(`/api/auth/refresh/`, {
         method: "POST",
         headers: {

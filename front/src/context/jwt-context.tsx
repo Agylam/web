@@ -3,7 +3,6 @@ import useLocalStorage from "use-local-storage";
 
 export interface JWTs {
     accessToken: string;
-    refreshToken: string;
 }
 
 type JwtContextType = {
@@ -14,7 +13,6 @@ type JwtContextType = {
 const defaultValue = {
     jwts: {
         accessToken: "",
-        refreshToken: "",
     },
     setJwts: () => {},
 };

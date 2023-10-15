@@ -13,6 +13,7 @@ import { RefreshToken } from './entities/RefreshToken.js';
 import { UserController } from './user/user.controller.js';
 import { ScheduleModule } from './schedule/schedule.module.js';
 import { ScheduleController } from './schedule/schedule.controller.js';
+import { Role } from './entities/Role.js';
 
 @Module({
     imports: [
@@ -29,7 +30,7 @@ import { ScheduleController } from './schedule/schedule.controller.js';
             database: process.env.PGDATABASE || 'postgres',
             synchronize: true,
             logging: false,
-            entities: [School, Lesson, Sound, ClassRange, User, RefreshToken],
+            entities: [School, Lesson, Sound, ClassRange, User, RefreshToken, Role],
             migrations: [],
             subscribers: [],
         }),

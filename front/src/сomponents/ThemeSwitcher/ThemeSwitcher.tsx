@@ -1,15 +1,11 @@
-import React from "react"
+import React from "react";
 
 import "./ThemeSwitcher.css";
 
-export default function ThemeSwitcher() {
+export default function ThemeSwitcher({ onClick }: { onClick: () => void }) {
     return (
-        <div className="theme_switcher">
-            <input
-                id="theme_switch_input"
-                type="checkbox"
-                className="theme"
-            />
+        <div className="theme_switcher" onClick={() => onClick()}>
+            <input id="theme_switch_input" type="checkbox" className="theme" />
             <label htmlFor="theme_switch_input">
                 <svg
                     id="theme_icon"
@@ -17,7 +13,8 @@ export default function ThemeSwitcher() {
                     height="800px"
                     viewBox="0 0 32 32"
                     xmlns="http://www.w3.org/2000/svg"
-                    fill="none">
+                    fill="none"
+                >
                     <circle
                         cx="16"
                         cy="16"
