@@ -12,5 +12,13 @@ export class ClassRangeService {
         private refreshTokensRepository: Repository<ClassRange>,
     ) {}
 
-    getList() {}
+    async getList(schoolUUID: string) {
+        return this.refreshTokensRepository.find({
+            where: {
+                school: {
+                    uuid: schoolUUID,
+                },
+            },
+        });
+    }
 }

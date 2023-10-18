@@ -1,4 +1,5 @@
 import {
+    Body,
     CanActivate,
     ExecutionContext,
     HttpException,
@@ -10,6 +11,12 @@ import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from './roles-auth.decorator';
+import { Role } from '../entities/Role';
+import { User } from '../entities/User';
+
+export interface RolesGuardBody extends Body {
+    user: User;
+}
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -35,7 +42,8 @@ export class RolesGuard implements CanActivate {
 
             const user = this.jwtService.verify(token);
             req.user = user;
-            return user.roles.some((role) => requiredRoles.includes(role.value));
+            console.log(user.roles);
+            return user.roles.some((role: Role) => requiredRoles.includes(role.name));
         } catch (e) {
             console.log(e);
             throw new HttpException('Нет доступа', HttpStatus.FORBIDDEN);

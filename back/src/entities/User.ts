@@ -27,6 +27,7 @@ export class User extends BaseEntity {
     fullName: string;
 
     @ManyToOne(() => School, (school) => school.users)
+    @JoinTable()
     school: School;
 
     @OneToMany(() => RefreshToken, (refresh_token) => refresh_token.user)
