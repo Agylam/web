@@ -4,7 +4,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto.js';
 import { Roles } from '../auth/roles-auth.decorator.js';
 import { RolesGuard } from '../auth/roles.guard.js';
 
-@Controller('schedule')
+@Controller('class_range')
 export class ClassRangeController {
     constructor(private scheduleService: ClassRangeService) {}
 

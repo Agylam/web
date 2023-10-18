@@ -14,6 +14,8 @@ import { UserController } from './user/user.controller.js';
 import { ScheduleModule } from './schedule/schedule.module.js';
 import { ScheduleController } from './schedule/schedule.controller.js';
 import { Role } from './entities/Role.js';
+import { ClassRangeModule } from './classRange/classRange.module.js';
+import { ClassRangeController } from './classRange/classRange.controller.js';
 
 @Module({
     imports: [
@@ -36,9 +38,10 @@ import { Role } from './entities/Role.js';
         }),
         AuthModule,
         ScheduleModule,
+        ClassRangeModule,
     ],
 
-    controllers: [AuthController, UserController, ScheduleController],
+    controllers: [AuthController, UserController, ScheduleController, ClassRangeController],
     providers: [],
 })
 export class AppModule {}
