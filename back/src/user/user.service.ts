@@ -10,16 +10,8 @@ export class UserService {
         private usersRepository: Repository<User>,
     ) {}
 
-    findAll(): Promise<User[]> {
-        return this.usersRepository.find();
-    }
-
-    findOne(uuid: string): Promise<User | null> {
-        return this.usersRepository.findOneBy({ uuid });
-    }
-
-    async remove(uuid: number): Promise<void> {
-        await this.usersRepository.delete(uuid);
+    async findAll(): Promise<User[]> {
+        return [];
     }
 
     async getUserByEmail(email: string) {
