@@ -19,6 +19,16 @@ export class ClassRangeService {
                     uuid: schoolUUID,
                 },
             },
+            select: {
+                uuid: true,
+                name: true,
+                start_sound: {
+                    uuid: true,
+                },
+                end_sound: {
+                    uuid: true,
+                },
+            },
         });
     }
 }

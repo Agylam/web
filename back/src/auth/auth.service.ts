@@ -48,7 +48,6 @@ export class AuthService {
     }
 
     private async generateToken(user: User) {
-        console.log(user.roles);
         const payload = {
             email: user.email,
             uuid: user.uuid,

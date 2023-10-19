@@ -11,4 +11,6 @@ export class ScheduleService {
         @InjectRepository(RefreshToken)
         private refreshTokensRepository: Repository<RefreshToken>,
     ) {}
+
+    async getSchedule() {}
 }

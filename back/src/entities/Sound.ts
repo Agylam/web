@@ -6,7 +6,7 @@ export class Sound extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     uuid: string;
 
-    @ManyToOne(() => School, (school) => school.sounds, { eager: true })
+    @ManyToOne(() => School, (school) => school.sounds)
     school: School;
 
     // @OneToMany(()=>ClassRange, (class_range) => class_range.sound)

@@ -1,5 +1,4 @@
 import {
-    Body,
     CanActivate,
     ExecutionContext,
     HttpException,
@@ -13,8 +12,9 @@ import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from './roles-auth.decorator';
 import { Role } from '../entities/Role';
 import { User } from '../entities/User';
+import { Request } from 'express';
 
-export interface RolesGuardBody extends Body {
+export interface RolesGuardRequest extends Request {
     user: User;
 }
 
@@ -42,7 +42,6 @@ export class RolesGuard implements CanActivate {
 
             const user = this.jwtService.verify(token);
             req.user = user;
-            console.log(user.roles);
             return user.roles.some((role: Role) => requiredRoles.includes(role.name));
         } catch (e) {
             console.log(e);

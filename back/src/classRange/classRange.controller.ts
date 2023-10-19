@@ -1,9 +1,9 @@
-import { Body, Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { ClassRangeService } from './classRange.service.js';
 import { Roles } from '../auth/roles-auth.decorator.js';
-import { RolesGuard, RolesGuardBody } from '../auth/roles.guard.js';
+import { RolesGuard, RolesGuardRequest } from '../auth/roles.guard.js';
 
-interface ClassRangeGetListBody extends RolesGuardBody {}
+interface ClassRangeGetListRequest extends RolesGuardRequest {}
 
 @Controller('class_range')
 export class ClassRangeController {
@@ -12,7 +12,7 @@ export class ClassRangeController {
     @Roles('headteacher')
     @UseGuards(RolesGuard)
     @Get('/')
-    async get(@Body() body: ClassRangeGetListBody) {
-        return await this.classRangeService.getList(body.user.school.uuid);
+    async get(@Req() req: ClassRangeGetListRequest) {
+        return await this.classRangeService.getList(req.user.school.uuid);
     }
 }
