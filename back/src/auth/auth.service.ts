@@ -49,7 +49,14 @@ export class AuthService {
 
     private async generateToken(user: User) {
         console.log(user.roles);
-        const payload = { email: user.email, uuid: user.uuid, roles: user.roles.map((r) => r) };
+        const payload = {
+            email: user.email,
+            uuid: user.uuid,
+            roles: user.roles.map((r) => r),
+            school: {
+                uuid: user.school.uuid,
+            },
+        };
         return this.jwtService.sign(payload);
     }
 

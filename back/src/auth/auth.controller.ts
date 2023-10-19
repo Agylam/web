@@ -13,13 +13,13 @@ export class AuthController {
     async login(@Body() userDto: CreateUserDto, @Res({ passthrough: true }) response: Response) {
         const { accessToken, refreshToken } = await this.authService.login(userDto);
         response.cookie('refreshToken', refreshToken, { httpOnly: true });
-        return { accessToken, refreshToken };
+        return { accessToken };
     }
 
     @Post('/refresh')
     async refresh(@Req() req: Request, @Res({ passthrough: true }) response: Response) {
         const { accessToken, refreshToken } = await this.authService.updateRefreshToken(req.cookies['refreshToken']);
         response.cookie('refreshToken', refreshToken, { httpOnly: true });
-        return { accessToken, refreshToken };
+        return { accessToken };
     }
 }
