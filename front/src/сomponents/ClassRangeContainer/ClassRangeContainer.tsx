@@ -1,22 +1,30 @@
-import "./ClassRangeContainer.css";
 import { IClassRange } from "../../interfaces/IClassRange";
 import { ClassRangeItem } from "../ClassRangeItem/ClassRangeItem";
 import useLocalStorage from "use-local-storage";
+import "./ClassRangeContainer.css";
+import React from "react";
+import { useGetClassRanges } from "../../hooks/useGetClassRanges.js";
 
-interface IClassRangeContainerProps {
-	class_ranges: IClassRange[];
-}
+interface IClassRangeContainerProps {}
 
 export const ClassRangeContainer = (props: IClassRangeContainerProps) => {
-	const [activeClassRange, setActiveClassRange] = useLocalStorage("active_class_range", props.class_ranges[0].uuid);
+    const classRangesApi = useGetClassRanges();
+    const [selectedClassRange, setSelectedClassRange] = useLocalStorage("selected_class_range", "");
 
-
-	return (
-		<div className="class_range_container">
-			{props.class_ranges.map(class_range =>
-				<ClassRangeItem
-					data={{ ...class_range, active: class_range.uuid === activeClassRange }}
-					onUpdateClassRange={(e) => null} />)}
-		</div>
-	);
+    return (
+        <div className="class_range_wrapper">
+            {classRangesApi.error && <p>Ошибка загрузки classRanges</p>}
+            {!classRangesApi.error &&
+                !classRangesApi.isLoading &&
+                classRangesApi.data?.map((cr: IClassRange) => (
+                    <ClassRangeItem
+                        data={{ ...cr, active: cr.uuid === selectedClassRange }}
+                        key={cr.uuid}
+                        onUpdateClassRange={(uuid) => {
+                            setSelectedClassRange(uuid);
+                        }}
+                    />
+                ))}
+        </div>
+    );
 };

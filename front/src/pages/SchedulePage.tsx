@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import "../css/schedule.css";
 
@@ -6,38 +6,21 @@ import DaySchedule from "../сomponents/DaySchedule/DaySchedule";
 import NavbarComponent from "../сomponents/Navbar/Navbar";
 import { useWeekDates } from "./hooks/useWeekDates";
 import { useUserInfo } from "../hooks/useUserInfo";
-import { ClassRangeItem } from "../сomponents/ClassRangeItem/ClassRangeItem";
-import useSWR from "swr";
+import { ClassRangeContainer } from "../сomponents/ClassRangeContainer/ClassRangeContainer.js";
 
 export default function SchedulePage() {
-	//fixme выглядит, как костыль
-	const [days] = useState([[], [], [], [], [], [], []]);
+    const weekDates = useWeekDates();
+    const userInfo = useUserInfo();
 
-	// const [classRanges, setClassRanges] = useState<IClassRangeState[]>([]);
-
-	const weekDates = useWeekDates();
-	const userInfo = useUserInfo();
-
-	// TODO: Добавить выбор class
-	const classRangesApi = useSWR([], (...data) => fetch(data[0], data[1]).then(r => r.json()));
-
-	return (
-		<>
-			<NavbarComponent
-				userInfo={userInfo}
-			/>
-			<div className="class_range_wrapper">
-				{
-					classRanges.map(
-						(e, k) => <ClassRangeItem />
-					)
-				}
-			</div>
-			<div className="days_wrapper" style={{ overflow: "auto" }}>
-				{days.map(
-					(e, k) => <DaySchedule key={k} dow={k} weekDates={weekDates} />
-				)}
-			</div>
-		</>
-	);
+    return (
+        <>
+            <NavbarComponent userInfo={userInfo} />
+            <ClassRangeContainer />
+            <div className="days_wrapper" style={{ overflow: "auto" }}>
+                {Array.from(Array(7).keys()).map((e, k) => (
+                    <DaySchedule key={k} dow={k} weekDates={weekDates} />
+                ))}
+            </div>
+        </>
+    );
 }

@@ -1,0 +1,6 @@
+div.class_range_wrapper {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.78125rem;
+    margin-left: 1.5rem;
+}

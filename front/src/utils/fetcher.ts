@@ -1,7 +1,19 @@
-export const fetcher = (url: string, data?: RequestInit) => {
-	return fetch("/api" + url, data).then(res => res.json());
-};
+export const fetcher = async ([uri, token = ""]: string[]) => {
+    const unparsed_resp = await fetch("/api/" + uri, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
-export const getSchedule = ([class_range, day]: string[]) => {
-	return fetcher(`/schedule/${class_range}/${day}`);
+    if (!unparsed_resp.ok) {
+        throw new Error("An error occurred while fetching the data.");
+    }
+
+    const resp = await unparsed_resp.json();
+
+    if (resp.error !== undefined) {
+        throw new Error(resp.message);
+    }
+
+    return resp.result || resp;
 };

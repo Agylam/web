@@ -42,7 +42,10 @@ export class AuthService {
                 created_at: MoreThan(new Date(new Date().getTime() - 86400000)),
             },
             relations: {
-                user: true,
+                user: {
+                    roles: true,
+                    school: true,
+                },
             },
         });
     }

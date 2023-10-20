@@ -4,6 +4,7 @@
     font-style: normal;
     font-weight: 500;
     font-family: "Inter", sans-serif;
+    color: var(--text-h1);
 }
 
 body {
