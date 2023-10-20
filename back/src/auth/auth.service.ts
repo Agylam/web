@@ -27,7 +27,7 @@ export class AuthService {
     async updateRefreshToken(oldRefreshToken: string) {
         const oldRefreshTokenObj = await this.getRefreshToken(oldRefreshToken);
         if (oldRefreshTokenObj === null) {
-            new UnauthorizedException('Refresh token not found');
+            return null;
         } else {
             const accessToken = await this.generateToken(oldRefreshTokenObj.user);
             const refreshToken = await this.generateRefreshToken(oldRefreshTokenObj.user);

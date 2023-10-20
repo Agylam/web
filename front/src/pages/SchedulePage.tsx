@@ -6,17 +6,20 @@ import DaySchedule from "../сomponents/DaySchedule/DaySchedule";
 import NavbarComponent from "../сomponents/Navbar/Navbar";
 import { useWeekDates } from "./hooks/useWeekDates";
 import { useUserInfo } from "../hooks/useUserInfo";
-import { IClassRangeState } from "../interfaces/IClassRange";
 import { ClassRangeItem } from "../сomponents/ClassRangeItem/ClassRangeItem";
+import useSWR from "swr";
 
 export default function SchedulePage() {
 	//fixme выглядит, как костыль
 	const [days] = useState([[], [], [], [], [], [], []]);
 
-	const [classRanges, setClassRanges] = useState<IClassRangeState[]>([]);
+	// const [classRanges, setClassRanges] = useState<IClassRangeState[]>([]);
 
 	const weekDates = useWeekDates();
 	const userInfo = useUserInfo();
+
+	// TODO: Добавить выбор class
+	const classRangesApi = useSWR([], (...data) => fetch(data[0], data[1]).then(r => r.json()));
 
 	return (
 		<>

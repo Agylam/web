@@ -16,6 +16,7 @@
     "react-jwt": "^1.1.8",
     "react-router-dom": "^6.8.1",
     "react-toastify": "^9.1.1",
+    "swr": "^2.2.4",
     "use-local-storage": "^3.0.0"
   },
   "devDependencies": {

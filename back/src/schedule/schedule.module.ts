@@ -3,12 +3,12 @@ import { ScheduleService } from './schedule.service';
 import { ScheduleController } from './schedule.controller';
 import { UserModule } from '../user/user.module.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RefreshToken } from '../entities/RefreshToken.js';
+import { Lesson } from '../entities/Lesson';
 
 @Module({
     providers: [ScheduleService],
     controllers: [ScheduleController],
-    imports: [forwardRef(() => UserModule), TypeOrmModule.forFeature([RefreshToken])],
+    imports: [forwardRef(() => UserModule), TypeOrmModule.forFeature([Lesson])],
     exports: [ScheduleService],
 })
 export class ScheduleModule {}
