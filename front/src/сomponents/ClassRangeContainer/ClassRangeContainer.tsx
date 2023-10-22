@@ -1,15 +1,16 @@
 import { IClassRange } from "../../interfaces/IClassRange";
 import { ClassRangeItem } from "../ClassRangeItem/ClassRangeItem";
-import useLocalStorage from "use-local-storage";
 import "./ClassRangeContainer.css";
 import React from "react";
 import { useGetClassRanges } from "../../hooks/useGetClassRanges.js";
 
-interface IClassRangeContainerProps {}
+interface IClassRangeContainerProps {
+    selectedClassRange: string;
+    setSelectedClassRange: React.Dispatch<React.SetStateAction<string | undefined>>;
+}
 
-export const ClassRangeContainer = (props: IClassRangeContainerProps) => {
+export const ClassRangeContainer = ({ selectedClassRange, setSelectedClassRange }: IClassRangeContainerProps) => {
     const classRangesApi = useGetClassRanges();
-    const [selectedClassRange, setSelectedClassRange] = useLocalStorage("selected_class_range", "");
 
     return (
         <div className="class_range_wrapper">

@@ -8,24 +8,19 @@ import setDayFetch from "../../fetches/setDayFetch";
 import ILesson from "../../interfaces/ILesson";
 
 import "./DaySchedule.css";
+import { useGetSchedule } from "../../hooks/useGetSchedule.js";
 
-interface IDayParams {
+interface IDayScheduleProps {
     dow: number;
     weekDates: number[];
+    class_range: string;
 }
 
-const weekDays = [
-    "Понедельник",
-    "Вторник",
-    "Среда",
-    "Четверг",
-    "Пятница",
-    "Суббота",
-    "Воскресенье",
-];
+const weekDays = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
 
-export default function DaySchedule({ dow, weekDates }: IDayParams) {
+export default function DaySchedule({ dow, weekDates, class_range }: IDayScheduleProps) {
     const [lessons, setLessons] = useState<ILesson[] | null>([]);
+    const schedule = useGetSchedule(class_range, dow);
 
     useLayoutEffect(() => {
         const dayFetcher = async () => {
@@ -42,11 +37,7 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
 
     const pushToBack = async (less: ILesson[]) => {
         try {
-            const resp: string = await setDayFetch(
-                dow,
-                less,
-        localStorage.getItem("jwt") as string
-            );
+            const resp: string = await setDayFetch(dow, less, localStorage.getItem("jwt") as string);
 
             console.log("sus" + dow, resp);
         } catch (resp) {
@@ -99,10 +90,7 @@ export default function DaySchedule({ dow, weekDates }: IDayParams) {
     const removeLesson = async (order: number) => {
         const awaitedState = await new Promise<ILesson[]>((resolve) => {
             setLessons((prevState: ILesson[] | null) => {
-                const updatedState =
-          prevState == null
-              ? []
-              : prevState.filter((_, index) => index !== order);
+                const updatedState = prevState == null ? [] : prevState.filter((_, index) => index !== order);
 
                 resolve(updatedState);
                 return updatedState;
