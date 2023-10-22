@@ -2,8 +2,6 @@ import React, { useLayoutEffect, useState } from "react";
 
 import plusImg from "../../assets/plus.svg";
 import removeImg from "../../assets/remove.svg";
-
-import dayFetch from "../../fetches/dayFetch";
 import setDayFetch from "../../fetches/setDayFetch";
 import ILesson from "../../interfaces/ILesson";
 
@@ -23,17 +21,10 @@ export default function DaySchedule({ dow, weekDates, class_range }: IDaySchedul
     const schedule = useGetSchedule(class_range, dow);
 
     useLayoutEffect(() => {
-        const dayFetcher = async () => {
-            try {
-                const lessons: ILesson[] = await dayFetch(dow);
-                setLessons(lessons);
-            } catch (resp) {
-                console.log("err" + dow, resp);
-            }
-        };
-
-        dayFetcher();
-    }, [dow]);
+        if (!schedule.error && !schedule.isLoading) {
+            setLessons(schedule.data);
+        }
+    }, [schedule]);
 
     const pushToBack = async (less: ILesson[]) => {
         try {
