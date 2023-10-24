@@ -53,10 +53,7 @@ export const AppRoutes: FunctionComponent<AppRoutesProps> = (
 
             <ThemeSwitcher
                 onChangeTheme={() => {
-                    setIsLightTheme((v) => {
-                        console.log(!v);
-                        return !v;
-                    });
+                    setIsLightTheme((v) => !v);
                 }}
             />
         </div>

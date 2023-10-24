@@ -7,6 +7,7 @@ import ILesson from "../../interfaces/ILesson";
 
 import "./DaySchedule.css";
 import { useGetSchedule } from "../../hooks/useGetSchedule.js";
+import { useJwtContext } from "../../context/jwt-context.js";
 
 interface IDayScheduleProps {
     dow: number;
@@ -19,6 +20,7 @@ const weekDays = ["Понедельник", "Вторник", "Среда", "Ч�
 export default function DaySchedule({ dow, weekDates, class_range }: IDayScheduleProps) {
     const [lessons, setLessons] = useState<ILesson[] | null>([]);
     const schedule = useGetSchedule(class_range, dow);
+    const { jwts } = useJwtContext();
 
     useLayoutEffect(() => {
         if (!schedule.error && !schedule.isLoading) {
@@ -28,11 +30,10 @@ export default function DaySchedule({ dow, weekDates, class_range }: IDaySchedul
 
     const pushToBack = async (less: ILesson[]) => {
         try {
-            const resp: string = await setDayFetch(dow, less, localStorage.getItem("jwt") as string);
-
-            console.log("sus" + dow, resp);
+            const resp = await setDayFetch(class_range, dow, less, jwts.accessToken);
+            await schedule.mutate();
         } catch (resp) {
-            console.log("err" + dow, resp);
+            console.log("err" + dow);
         }
     };
 
@@ -59,7 +60,6 @@ export default function DaySchedule({ dow, weekDates, class_range }: IDaySchedul
         });
 
         await pushToBack(awaitedState);
-        console.log(lessons);
     };
 
     const addLesson = async () => {
@@ -75,7 +75,6 @@ export default function DaySchedule({ dow, weekDates, class_range }: IDaySchedul
             });
         });
         await pushToBack(awaitedState);
-        console.log(lessons);
     };
 
     const removeLesson = async (order: number) => {
@@ -89,64 +88,69 @@ export default function DaySchedule({ dow, weekDates, class_range }: IDaySchedul
         });
 
         await pushToBack(awaitedState);
-        console.log(lessons);
     };
 
     return (
         <div className="daySchedule" id="first-day">
-            <div className="daySchedule_top">
-                <p className="static">Расписание</p>
-                <p className="name">
-                    <span>{weekDays[dow]}</span>
-                    <span>{weekDates[dow]}</span>
-                </p>
-            </div>
-            <div className="daySchedule_items_wrapper">
-                {lessons?.map((obj: ILesson, key) => {
-                    return (
-                        <div className="lesson" key={key}>
-                            <div className="left">
-                                <p className="number">{key + 1}-й</p>
-                            </div>
-                            <div className="right">
-                                <div className="time">
-                                    <input
-                                        type="time"
-                                        className="les_time les_time_left"
-                                        value={lessons[key].start}
-                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                                            changeTime(key, false, event.target.value)
-                                        }
-                                    />
-                                    <p className="wall">:</p>
-                                    <input
-                                        type="time"
-                                        className="les_time les_time_right"
-                                        value={lessons[key].end}
-                                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                                            changeTime(key, true, event.target.value)
-                                        }
-                                    />
+            {schedule.error && <p>Ошибка загрузки</p>}
+            {schedule.isLoading && <p>Загрузка</p>}
+            {!schedule.error && !schedule.isLoading && (
+                <>
+                    <div className="daySchedule_top">
+                        <p className="static">Расписание</p>
+                        <p className="name">
+                            <span>{weekDays[dow]}</span>
+                            <span>{weekDates[dow]}</span>
+                        </p>
+                    </div>
+                    <div className="daySchedule_items_wrapper">
+                        {lessons?.map((obj: ILesson, key) => {
+                            return (
+                                <div className="lesson" key={key}>
+                                    <div className="left">
+                                        <p className="number">{key + 1}-й</p>
+                                    </div>
+                                    <div className="right">
+                                        <div className="time">
+                                            <input
+                                                type="time"
+                                                className="les_time les_time_left"
+                                                value={lessons[key].start}
+                                                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                                                    changeTime(key, false, event.target.value)
+                                                }
+                                            />
+                                            <p className="wall">:</p>
+                                            <input
+                                                type="time"
+                                                className="les_time les_time_right"
+                                                value={lessons[key].end}
+                                                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                                                    changeTime(key, true, event.target.value)
+                                                }
+                                            />
+                                        </div>
+                                        <div className="remove">
+                                            <button
+                                                onClick={() => {
+                                                    removeLesson(key);
+                                                }}
+                                            >
+                                                <img className="remove" src={removeImg} alt="img" />
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="remove">
-                                    <button
-                                        onClick={() => {
-                                            removeLesson(key);
-                                        }}
-                                    >
-                                        <img className="remove" src={removeImg} alt="img" />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-            <div className="add">
-                <button onClick={addLesson}>
-                    <img src={plusImg} className="add" alt="img" />
-                </button>
-            </div>
+                            );
+                        })}
+                    </div>
+                    <div className="add">
+                        <button onClick={addLesson}>
+                            <img src={plusImg} className="add" alt="img" />
+                        </button>
+                    </div>
+                </>
+            )}
         </div>
     );
 }
