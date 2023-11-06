@@ -1,4 +1,5 @@
 export default interface ILesson {
-    start: string;
-    end: string;
+	start: string;
+	end: string;
+	uuid?: string;
 }

@@ -1,15 +1,13 @@
 .time_range {
-  display: flex;
-  width: 85%;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 0.625rem;
 }
 
 .time_range .time_range_wall {
-  margin: 0;
-  height: min-content;
-  font-size: 1.6rem;
-  font-weight: 700;
-  font-family: "Inter", sans-serif;
-  color: var(--blue-light);
+    margin: 0;
+    color: var(--blue-light);
 }
+
+

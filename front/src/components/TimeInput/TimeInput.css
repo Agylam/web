@@ -1,18 +1,21 @@
 .time_input {
-  height: 100%;
-  background: var(--surface-surface-variant);
-  border-radius: 10px;
-  border: none;
-  width: 35%;
-  text-align: center;
-  color: var(--text-variant);
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 3px 6px;
-  font-family: "Inter", sans-serif;
+    background: var(--surface-surface-variant);
+    border-radius: 10px;
+    border: none;
+    width: 4.4375rem;
+    height: 1.9375rem;
+    text-align: center;
+    color: var(--text-variant);
+    font-weight: 600;
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
 }
 
-.time_input:focus {
-  outline: var(--blue-light) solid 3px;
-  color: var(--blue-light);
+
+.daySchedule .lesson .time_input:first-child {
+    margin-right: 0.625rem;
+}
+
+.daySchedule .lesson .time_input:last-child {
+    margin-left: 0.75rem;
 }
