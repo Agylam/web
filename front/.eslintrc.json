@@ -26,10 +26,7 @@
       "error",
       4
     ],
-    "linebreak-style": [
-      "windows",
-      "warn"
-    ],
+    "linebreak-style": 0,
     "quotes": [
       "error",
       "double"
