@@ -1,0 +1,11 @@
+.nav_wrapper ul a {
+    text-decoration: none;
+}
+
+.nav_wrapper .nav_item {
+    color: var(--text-text);
+}
+
+.nav_wrapper .nav_item.active {
+    color: var(--blue-light);
+}

@@ -1,3 +1,4 @@
+import React from "react";
 import "./ClassRangeItem.css";
 import { IClassRangeState } from "../../interfaces/IClassRange";
 
@@ -8,11 +9,11 @@ export interface IClassRangeItemProps {
 
 export const ClassRangeItem = (props: IClassRangeItemProps) => {
     return (
-        <div
+        <button
             className={"class_range" + (props.data.active ? " active" : "")}
             onClick={() => props.onUpdateClassRange(props.data.uuid)}
         >
             <p className={"class_range_name"}>{props.data.name}</p>
-        </div>
+        </button>
     );
 };

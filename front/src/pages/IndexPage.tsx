@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import "../css/index.css";
@@ -29,12 +29,12 @@ export default function IndexPage() {
                     autoClose: 1000,
                     onClose: () => {
                         navigate(PagePath.schedule);
-                    },
+                    }
                 });
             } catch (e) {
                 toast.error("Неверные почта или пароль!", {
                     position: toast.POSITION.BOTTOM_LEFT,
-                    autoClose: 2000,
+                    autoClose: 2000
                 });
             }
         },
@@ -45,7 +45,6 @@ export default function IndexPage() {
     return (
         <div className="auth_container">
             <div className="wrapper">
-                <ToastContainer limit={3} />
                 <form id="auth" onSubmit={auth}>
                     <img src={logoImg} alt="" id="logo" />
                     <div id="auth_inputs">

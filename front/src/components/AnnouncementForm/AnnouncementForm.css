@@ -21,7 +21,6 @@
     height: 100%;
     width: 100%;
     resize: none;
-    background-color: #fff;
     color: var(--text-variant);
 }
 

@@ -2,7 +2,7 @@ import { IClassRange } from "../../interfaces/IClassRange";
 import { ClassRangeItem } from "../ClassRangeItem/ClassRangeItem";
 import "./ClassRangeContainer.css";
 import React from "react";
-import { useGetClassRanges } from "../../hooks/useGetClassRanges.js";
+import { useGetClassRanges } from "../../hooks/useGetClassRanges";
 
 interface IClassRangeContainerProps {
     selectedClassRange: string;

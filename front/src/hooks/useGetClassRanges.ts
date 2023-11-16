@@ -1,6 +1,6 @@
-import { useJwtContext } from "../context/jwt-context.js";
+import { useJwtContext } from "../context/jwt-context";
 import useSWR from "swr";
-import { fetcher } from "../utils/fetcher.js";
+import { fetcher } from "../utils/fetcher";
 
 export const useGetClassRanges = () => {
     const { jwts } = useJwtContext();

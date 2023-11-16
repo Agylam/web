@@ -18,8 +18,7 @@
     background: var(--surface-surface);
 }
 
-.nav_wrapper .left_nav,
-.right_nav {
+.nav_wrapper > div {
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -35,10 +34,17 @@
     padding-left: 3.125rem;
 }
 
-.nav_wrapper .nav_item {
-    color: var(--text-text);
+
+.right_nav .name {
+    padding-right: 0.9375rem;
 }
 
-.nav_wrapper .nav_item.active {
-    color: var(--blue-light);
+.right_nav button {
+    height: 2.0625rem;
+    width: 5.625rem;
+    border: none;
+    border-radius: 11px;
+    padding: 0.4375rem 1.25rem;
+    background-color: var(--red-variant);
+    color: var(--red-red);
 }

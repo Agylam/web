@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "npx vite --host",
-    "build": "npm run lint:fix && npx vite build",
+    "build": "npx vite build",
     "preview": "npx vite preview",
     "lint": "npx eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "npx eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"
