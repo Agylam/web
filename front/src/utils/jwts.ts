@@ -3,24 +3,22 @@ import { JWTs } from "../context/jwt-context";
 const localStorageKey = "jwt";
 
 const parseJwt = (rawJwt: string): JWTs => {
-  const parsed = JSON.parse(rawJwt);
-  if (
-    typeof parsed.accessToken !== "string" ||
-    typeof parsed.refreshToken !== "string"
-  ) {
-    throw new Error("Cannot parse JWTs. Invalid format.");
-  }
-  return parsed;
+    const parsed = JSON.parse(rawJwt);
+    if (typeof parsed.accessToken !== "string") {
+        throw new Error("Cannot parse JWTs. Invalid format.");
+    }
+    return parsed;
 };
 
 export const loadJwts = () => {
-  const rawJwt = localStorage.getItem(localStorageKey);
+    const rawJwt = localStorage.getItem(localStorageKey);
 
-  return rawJwt && parseJwt(rawJwt);
+    return rawJwt && parseJwt(rawJwt);
 };
 
-export const saveJwts = (jwt: JWTs) =>
-  localStorage.setItem(
-    localStorageKey,
-    JSON.stringify(jwt)
-  );
+export const logOut = () => {
+    localStorage.removeItem("jwt");
+    window.location.pathname = "/";
+};
+
+export const saveJwts = (jwt: JWTs) => localStorage.setItem(localStorageKey, JSON.stringify(jwt));

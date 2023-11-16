@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "npx vite --host",
-    "build": "npm run lint:fix && npx vite build",
+    "build": "npx vite build",
     "preview": "npx vite preview",
     "lint": "npx eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "npx eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"
@@ -15,7 +15,9 @@
     "react-dom": "^18.2.0",
     "react-jwt": "^1.1.8",
     "react-router-dom": "^6.8.1",
-    "react-toastify": "^9.1.1"
+    "react-toastify": "^9.1.1",
+    "swr": "^2.2.4",
+    "use-local-storage": "^3.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
@@ -25,7 +27,7 @@
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
     "@vitejs/plugin-react": "^3.1.0",
-    "eslint": "^8.36.0",
+    "eslint": "8.51",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-semistandard": "^17.0.0",
     "eslint-config-standard": "^17.0.0",

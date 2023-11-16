@@ -4,6 +4,7 @@ import 'dotenv/config';
 import * as process from 'process';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 async function runServer() {
     const SERVER_PORT = process.env.BACKEND_PORT || 3000;
@@ -16,7 +17,7 @@ async function runServer() {
         .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('/docs', app, document);
-
+    app.use(cookieParser());
     await app.listen(SERVER_PORT, () => {
         console.log(`Сервер запущен на порту ${SERVER_PORT}`);
     });

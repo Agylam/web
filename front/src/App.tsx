@@ -9,10 +9,8 @@ import { BrowserRouter } from "react-router-dom";
 import { AppRoutes } from "./routes/AppRoutes";
 import { JwtProvider } from "./context/jwt-context";
 
-import "./css/color-light.css";
+import "./css/themes.css";
 import "./css/main.css";
-
-const accessTokenCheckIntervalMs = 5000;
 
 export default function App() {
     return (

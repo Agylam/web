@@ -1,34 +1,38 @@
 name: Lint
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
-    eslint:
-        strategy:
-            matrix:
-                module: [ front, back ]
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v3
-            -   uses: actions/setup-node@v3
-                with:
-                    node-version: 18
-            -   run: npm ci
-                working-directory: ./${{ matrix.module }}
-            -   run: npm run lint
-                working-directory: ./${{ matrix.module }}
+  eslint:
+    strategy:
+      matrix:
+        module: [ front, back ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+          dir: ${{ matrix.module }}
+      - uses: borales/actions-yarn@v4
+        with:
+          cmd: lint
+          dir: ${{ matrix.module }}
 
 
-    helm-check:
-        strategy:
-            matrix:
-                staging: [ dev, stage, prod ]
-        runs-on: ubuntu-latest
-        steps:
-        - uses: actions/checkout@master
+  helm-check:
+    strategy:
+      matrix:
+        staging: [ dev, stage, prod ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
 
-        - name: Install werf
-          uses: werf/actions/install@v1.2
+      - name: Install werf
+        uses: werf/actions/install@v1.2
 
-        - name: Helm lint ${{ matrix.staging }}
-          run: werf helm dependency update .helm/agylam/ && werf helm lint .helm/agylam/ --env=${{ matrix.staging }} -f .helm/agylam/common-values.yaml -f .helm/agylam/${{ matrix.staging }}-values.yaml
+      - name: Helm lint ${{ matrix.staging }}
+        run: werf helm dependency update .helm/agylam/ && werf helm lint .helm/agylam/ --env=${{ matrix.staging }} -f .helm/agylam/common-values.yaml -f .helm/agylam/${{ matrix.staging }}-values.yaml

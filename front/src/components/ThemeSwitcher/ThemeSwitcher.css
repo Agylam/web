@@ -1,0 +1,14 @@
+.theme_switcher {
+  position: fixed;
+  bottom: 2vh;
+  right: 2vw;
+}
+
+#theme_switch_input {
+  display: none;
+}
+
+#theme_icon {
+  width: auto;
+  height: 48px;
+}

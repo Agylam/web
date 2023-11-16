@@ -10,19 +10,47 @@ export class UserService {
         private usersRepository: Repository<User>,
     ) {}
 
-    findAll(): Promise<User[]> {
-        return this.usersRepository.find();
-    }
-
-    findOne(uuid: string): Promise<User | null> {
-        return this.usersRepository.findOneBy({ uuid });
-    }
-
-    async remove(uuid: number): Promise<void> {
-        await this.usersRepository.delete(uuid);
+    async findAll(): Promise<User[]> {
+        return [];
     }
 
     async getUserByEmail(email: string) {
-        return this.usersRepository.findOneBy({ email });
+        return this.usersRepository.findOne({
+            select: {
+                uuid: true,
+                fullName: true,
+                email: true,
+                passwordHash: true,
+                school: {
+                    uuid: true,
+                },
+                roles: {
+                    id: true,
+                    name: true,
+                    description: true,
+                },
+            },
+            where: {
+                email,
+            },
+            relations: {
+                school: true,
+                roles: true,
+            },
+        });
+    }
+
+    async getUserRoles(userUUID: string) {
+        return this.usersRepository.findOne({
+            select: {
+                roles: true,
+            },
+            where: {
+                uuid: userUUID,
+            },
+            relations: {
+                roles: true,
+            },
+        });
     }
 }

@@ -6,6 +6,9 @@ export class Lesson extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     uuid: string;
 
+    @Column()
+    day: number;
+
     // All time in UTC
     @Column()
     start_hour: number;
@@ -19,9 +22,7 @@ export class Lesson extends BaseEntity {
     @Column()
     end_minute: number;
 
-    @ManyToOne(() => ClassRange, (class_range) => class_range.lessons, {
-        eager: true,
-    })
+    @ManyToOne(() => ClassRange, (class_range) => class_range.lessons)
     @JoinColumn()
     class_range: ClassRange;
 
