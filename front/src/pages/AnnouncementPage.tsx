@@ -1,10 +1,10 @@
 import React, { useCallback } from "react";
 
-import NavbarComponent from "../сomponents/Navbar/Navbar";
-import AnnouncementForm from "../сomponents/AnnouncementForm/AnnouncementForm";
+import NavbarComponent from "../components/Navbar/Navbar";
+import AnnouncementForm from "../components/AnnouncementForm/AnnouncementForm";
 import announcementFetch from "../fetches/announcementFetch";
 
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useUserInfo } from "../hooks/useUserInfo";
 
 export default function AnnouncementPage() {
@@ -18,21 +18,20 @@ export default function AnnouncementPage() {
             announcementFetch(text, localStorage.getItem("jwt") as string).then(() => {
                 toast.success("Успешно!", {
                     position: toast.POSITION.BOTTOM_LEFT,
-                    autoClose: 1000,
+                    autoClose: 1000
                 });
             });
         } catch (e) {
             console.error("AnnouncementPage", e);
             toast.error("Неизвестная ошибка", {
                 position: toast.POSITION.BOTTOM_LEFT,
-                autoClose: 2000,
+                autoClose: 2000
             });
         }
     }, []);
     return (
         <>
             <NavbarComponent userInfo={userInfo} />
-            <ToastContainer limit={3} />
             <AnnouncementForm clickHandler={sendAnnouncement} />
         </>
     );

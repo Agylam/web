@@ -1,0 +1,21 @@
+.time_input {
+    background: var(--surface-surface-variant);
+    border-radius: 10px;
+    border: none;
+    width: 4.4375rem;
+    height: 1.9375rem;
+    text-align: center;
+    color: var(--text-variant);
+    font-weight: 600;
+    font-size: 1rem;
+    font-family: "Inter", sans-serif;
+}
+
+
+.daySchedule .lesson .time_input:first-child {
+    margin-right: 0.625rem;
+}
+
+.daySchedule .lesson .time_input:last-child {
+    margin-left: 0.75rem;
+}

@@ -1,0 +1,13 @@
+.time_range {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 0.625rem;
+}
+
+.time_range .time_range_wall {
+    margin: 0;
+    color: var(--blue-light);
+}
+
+

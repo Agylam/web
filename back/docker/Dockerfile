@@ -1,11 +1,12 @@
 FROM node:18-alpine as builder
 WORKDIR /builder
 
-COPY package.json package-lock.json tsconfig.json ./
+RUN npm i yarn
+
+COPY package.json yarn.lock tsconfig.json ./
 COPY src  ./src
 
-RUN npm ci && npm run build
-
+RUN yarn && yarn build
 
 
 FROM node:18-alpine as backend
@@ -18,4 +19,4 @@ COPY --from=builder  builder/package.json builder/package-lock.json builder/tsco
 COPY --from=builder builder/build/ ./build
 COPY --from=builder builder/node_modules/ ./node_modules
 
-CMD ["node","./build/index.js"]
+CMD ["node","./dist/index.js"]

@@ -1,8 +1,10 @@
 @import url("main.css");
+
 * {
     font-style: normal;
     font-weight: 500;
     font-family: "Inter", sans-serif;
+    color: var(--text-h1);
 }
 
 body {
@@ -10,7 +12,14 @@ body {
     justify-content: center;
     align-items: center;
     margin: 0;
+}
+
+
+.main_container {
+    width: 100%;
+    height: 100%;
     background: var(--surface-background);
+    position: absolute;
 }
 
 div.wrapper {
@@ -74,7 +83,7 @@ div.wrapper {
     margin-top: 4.5vh;
 }
 
-button{
+button {
     background: none;
     border: none;
 }
