@@ -18,6 +18,9 @@ export class School extends BaseEntity {
     @Column()
     auth_secret: string;
 
+    @Column({ default: 0 })
+    timezone_offset: number;
+
     @OneToMany(() => ClassRange, (class_range) => class_range.school)
     class_ranges: ClassRange[];
 

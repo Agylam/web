@@ -26,12 +26,37 @@ export class Lesson extends BaseEntity {
     @JoinColumn()
     class_range: ClassRange;
 
-    static async getLessonsByStartTime(hour, minute) {
-        return await this.findBy({ start_hour: hour, start_minute: minute });
+    static async getLessonsByStartTime(hour, minute, day) {
+        return await this.find({
+            where: { start_hour: hour, start_minute: minute, day },
+            relations: {
+                class_range: {
+                    start_sound: {
+                        school: true,
+                    },
+                    end_sound: {
+                        school: true,
+                    },
+                },
+            },
+        });
     }
 
-    static async getLessonsByEndTime(hour, minute) {
-        return await this.findBy({ end_hour: hour, end_minute: minute });
+    static async getLessonsByEndTime(hour, minute, day) {
+        const res = await this.find({
+            where: { end_hour: hour, end_minute: minute, day },
+            relations: {
+                class_range: {
+                    start_sound: {
+                        school: true,
+                    },
+                    end_sound: {
+                        school: true,
+                    },
+                },
+            },
+        });
+        return res;
     }
 
     // static async getClassRange (uuid) {
