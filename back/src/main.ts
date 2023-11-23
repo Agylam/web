@@ -1,20 +1,20 @@
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
-import "dotenv/config";
-import * as process from "process";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { INestApplication } from "@nestjs/common";
-import * as cookieParser from "cookie-parser";
-import { ConnectionManager } from "./classes/ConnectionManager";
-import { Lesson } from "./entities/Lesson";
-import { DataSource } from "typeorm";
-import { School } from "./entities/School";
-import { Sound } from "./entities/Sound";
-import { ClassRange } from "./entities/ClassRange";
-import { NtpTimeSync } from "ntp-time-sync";
-import { User } from "./entities/User";
-import { RefreshToken } from "./entities/RefreshToken";
-import { Role } from "./entities/Role";
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import 'dotenv/config';
+import * as process from 'process';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { INestApplication } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
+import { ConnectionManager } from './classes/ConnectionManager';
+import { Lesson } from './entities/Lesson';
+import { DataSource } from 'typeorm';
+import { School } from './entities/School';
+import { Sound } from './entities/Sound';
+import { ClassRange } from './entities/ClassRange';
+import { NtpTimeSync } from 'ntp-time-sync';
+import { User } from './entities/User';
+import { RefreshToken } from './entities/RefreshToken';
+import { Role } from './entities/Role';
 
 const AppDataSource = new DataSource({
     type: 'postgres',
@@ -105,14 +105,14 @@ async function runServer() {
                     preSounds.map(async (sound) => {
                         try {
                             const school_uuid = sound.school.uuid;
-                            console.log(school_uuid,"WARN "' + sound.uuid);
-                            await connectionManager.sendToSchool(school_uuid,"WARN "' + sound.uuid);
+                            console.log(school_uuid, 'WARN ' + sound.uuid);
+                            await connectionManager.sendToSchool(school_uuid, 'WARN ' + sound.uuid);
                         } catch (e) {
-                            console.error("preSound Error. Sound UUID: ", sound.uuid, "Error:", e);
+                            console.error('preSound Error. Sound UUID: ', sound.uuid, 'Error:', e);
                         }
                     });
                 } catch (e) {
-                    console.error("Check");
+                    console.error('Check');
                 }
             };
 
