@@ -100,7 +100,7 @@ async function runServer() {
                     const preSounds = await getSoundsByTime({
                         hour: time.hour,
                         minute: time.minute + 1,
-                        day: time.day - ,
+                        day: time.day - 1,
                     });
                     preSounds.map(async (sound) => {
                         try {
@@ -108,11 +108,11 @@ async function runServer() {
                             console.log(school_uuid,"WARN "' + sound.uuid);
                             await connectionManager.sendToSchool(school_uuid,"WARN "' + sound.uuid);
                         } catch (e) {
-                            console.error"preSound Error. Sound UUID: "', sound.uuid,"Error:"', e);
+                            console.error("preSound Error. Sound UUID: ", sound.uuid, "Error:", e);
                         }
                     });
                 } catch (e) {
-                    console.error"Check"');
+                    console.error("Check");
                 }
             };
 
