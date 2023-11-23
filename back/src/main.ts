@@ -1,20 +1,20 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import 'dotenv/config';
-import * as process from 'process';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { INestApplication } from '@nestjs/common';
-import * as cookieParser from 'cookie-parser';
-import { ConnectionManager } from './classes/ConnectionManager';
-import { Lesson } from './entities/Lesson';
-import { DataSource } from 'typeorm';
-import { School } from './entities/School';
-import { Sound } from './entities/Sound';
-import { ClassRange } from './entities/ClassRange';
-import { NtpTimeSync } from 'ntp-time-sync';
-import { User } from './entities/User';
-import { RefreshToken } from './entities/RefreshToken';
-import { Role } from './entities/Role';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import "dotenv/config";
+import * as process from "process";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { INestApplication } from "@nestjs/common";
+import * as cookieParser from "cookie-parser";
+import { ConnectionManager } from "./classes/ConnectionManager";
+import { Lesson } from "./entities/Lesson";
+import { DataSource } from "typeorm";
+import { School } from "./entities/School";
+import { Sound } from "./entities/Sound";
+import { ClassRange } from "./entities/ClassRange";
+import { NtpTimeSync } from "ntp-time-sync";
+import { User } from "./entities/User";
+import { RefreshToken } from "./entities/RefreshToken";
+import { Role } from "./entities/Role";
 
 const AppDataSource = new DataSource({
     type: 'postgres',
@@ -81,24 +81,39 @@ async function runServer() {
                 return start_sounds.concat(end_sounds);
             };
             const check = async () => {
-                const time = await getTime();
-                const sounds = await getSoundsByTime(time);
-                sounds.map(async (sound) => {
-                    const school_uuid = sound.school.uuid;
-                    console.log(school_uuid, 'PLAY ' + sound.uuid);
-                    await connectionManager.sendToSchool(school_uuid, 'PLAY ' + sound.uuid);
-                });
+                try {
+                    const time = await getTime();
+                    const sounds = await getSoundsByTime({
+                        ...time,
+                        day: time.day - 1,
+                    });
+                    sounds.map(async (sound) => {
+                        try {
+                            const school_uuid = sound.school.uuid;
+                            console.log(school_uuid, 'PLAY ' + sound.uuid);
+                            await connectionManager.sendToSchool(school_uuid, 'PLAY ' + sound.uuid);
+                        } catch (e) {
+                            console.error('SoundsMap Error. Sound UUID:', sound.uuid, 'Error:', e);
+                        }
+                    });
 
-                const preSounds = await getSoundsByTime({
-                    hour: time.hour,
-                    minute: time.minute + 1,
-                    day: time.day - 1,
-                });
-                preSounds.map(async (sound) => {
-                    const school_uuid = sound.school.uuid;
-                    console.log(school_uuid, 'WARN ' + sound.uuid);
-                    await connectionManager.sendToSchool(school_uuid, 'WARN ' + sound.uuid);
-                });
+                    const preSounds = await getSoundsByTime({
+                        hour: time.hour,
+                        minute: time.minute + 1,
+                        day: time.day - ,
+                    });
+                    preSounds.map(async (sound) => {
+                        try {
+                            const school_uuid = sound.school.uuid;
+                            console.log(school_uuid,"WARN "' + sound.uuid);
+                            await connectionManager.sendToSchool(school_uuid,"WARN "' + sound.uuid);
+                        } catch (e) {
+                            console.error"preSound Error. Sound UUID: "', sound.uuid,"Error:"', e);
+                        }
+                    });
+                } catch (e) {
+                    console.error"Check"');
+                }
             };
 
             const connectionManager = new ConnectionManager(ws_server_properties, () => {

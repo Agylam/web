@@ -12,6 +12,7 @@ export class ClassRange extends BaseEntity {
     name: string;
 
     @ManyToOne(() => School, (school) => school.class_ranges)
+    @JoinColumn()
     school: School;
 
     @OneToMany(() => Lesson, (lesson) => lesson.class_range)

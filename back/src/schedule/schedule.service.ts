@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Lesson } from '../entities/Lesson';
 import { LessonDto } from './dto/lesson.dto.js';
+import { ClassRangeService } from '../classRange/classRange.service';
 
 @Injectable()
 export class ScheduleService {
     constructor(
         @InjectRepository(Lesson)
         private lessonsRepository: Repository<Lesson>,
+        private classRangesService: ClassRangeService,
     ) {}
 
     async getSchedule(classRange: string, dayOfWeek: number) {
@@ -23,21 +25,13 @@ export class ScheduleService {
             },
         });
 
+        const classRangeObj = await this.classRangesService.getByUUID(classRange);
+
         return lessons.map((lesson) => {
             return {
                 ...lesson,
-                start:
-                    (lesson.start_hour < 10 ? '0' : '') +
-                    lesson.start_hour +
-                    ':' +
-                    (lesson.start_minute < 10 ? '0' : '') +
-                    lesson.start_minute,
-                end:
-                    (lesson.end_hour < 10 ? '0' : '') +
-                    lesson.end_hour +
-                    ':' +
-                    (lesson.end_minute < 10 ? '0' : '') +
-                    lesson.end_minute,
+                start: this.timeToLocal(lesson.start_hour, lesson.start_minute, classRangeObj.school.timezone_offset),
+                end: this.timeToLocal(lesson.end_hour, lesson.end_minute, classRangeObj.school.timezone_offset),
             };
         });
     }
@@ -52,6 +46,8 @@ export class ScheduleService {
                 .andWhere('day = :day', { day: Number(dayOfWeek) })
                 .execute();
 
+            const classRangeObj = await this.classRangesService.getByUUID(classRange);
+
             await transManager
                 .createQueryBuilder()
                 .insert()
@@ -64,11 +60,23 @@ export class ScheduleService {
                         if (startAfterRegex === null) throw new BadRequestException('Неверный формат start (HH:MM) ');
                         if (endAfterRegex === null) throw new BadRequestException('Неверный формат end (HH:MM)');
 
+                        const utcStart = this.timeFromLocal(
+                            Number(startAfterRegex[1]),
+                            Number(startAfterRegex[2]),
+                            classRangeObj.school.timezone_offset,
+                        );
+
+                        const utcEnd = this.timeFromLocal(
+                            Number(endAfterRegex[1]),
+                            Number(endAfterRegex[2]),
+                            classRangeObj.school.timezone_offset,
+                        );
+
                         return {
-                            start_hour: Number(startAfterRegex[1]),
-                            start_minute: Number(startAfterRegex[2]),
-                            end_hour: Number(endAfterRegex[1]),
-                            end_minute: Number(endAfterRegex[2]),
+                            start_hour: utcStart[0],
+                            start_minute: utcStart[1],
+                            end_hour: utcEnd[0],
+                            end_minute: utcEnd[1],
                             day: dayOfWeek,
                             class_range: {
                                 uuid: classRange,
@@ -79,5 +87,33 @@ export class ScheduleService {
                 .execute();
             return this.getSchedule(classRange, dayOfWeek);
         });
+    }
+
+    timeFromLocal(localHours: number, localMinutes: number, offset: number) {
+        const localTimeMinutes = localHours * 60 + localMinutes;
+
+        const utcTimeMinutes = localTimeMinutes - offset;
+        let utcHours = Math.floor(utcTimeMinutes / 60);
+        let utcMinutes = utcTimeMinutes % 60;
+
+        utcHours = (utcHours < 0 ? 24 : 0) + utcHours;
+        utcMinutes = (utcMinutes < 0 ? 60 : 0) + utcMinutes;
+
+        return [utcHours, utcMinutes];
+    }
+
+    timeToLocal(utcHours: number, utcMinutes: number, offset: number) {
+        if (typeof utcMinutes != 'number' || typeof utcHours != 'number')
+            throw new Error('Неправильный формат времени');
+
+        const utcTimeMinutes = utcHours * 60 + utcMinutes;
+        const localTimeMinutes = utcTimeMinutes + offset;
+        let localHours = Math.floor(localTimeMinutes / 60);
+        let localMinutes = utcTimeMinutes % 60;
+
+        localHours = (localHours > 23 ? -24 : 0) + localHours;
+        localMinutes = (localMinutes > 60 ? -60 : 0) + localMinutes;
+
+        return (localHours < 10 ? '0' : '') + localHours + ':' + (localMinutes < 10 ? '0' : '') + localMinutes;
     }
 }

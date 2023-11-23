@@ -1,5 +1,5 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ClassRange } from './ClassRange';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { ClassRange } from "./ClassRange";
 
 @Entity()
 export class Lesson extends BaseEntity {
@@ -27,11 +27,38 @@ export class Lesson extends BaseEntity {
     class_range: ClassRange;
 
     static async getLessonsByStartTime(hour, minute, day) {
-        return await this.findBy({ start_hour: hour, start_minute: minute, day });
+        return await this.find({
+            where: { start_hour: hour, start_minute: minute, day },
+            relations: {
+                class_range: {
+                    start_sound: {
+                        school: true,
+                    },
+                    end_sound: {
+                        school: true,
+                    },
+                },
+            },
+        });
     }
 
     static async getLessonsByEndTime(hour, minute, day) {
-        return await this.findBy({ end_hour: hour, end_minute: minute, day });
+        console"Поиск конца урока"рока', hour, minute, day);
+        const res = await this.find({
+            where: { end_hour: hour, end_minute: minute, day },
+            relations: {
+                class_range: {
+                    start_sound: {
+                        school:true,
+                    },
+                    end_sound: {
+                        school:true,
+                   },
+               },
+           },
+        });
+        console"Результат"ьтат', res);
+        return res;
     }
 
     // static async getClassRange (uuid) {

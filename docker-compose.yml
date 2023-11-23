@@ -34,6 +34,8 @@ services:
       WS_SERVER_PORT: ${WS_SERVER_PORT}
     volumes:
       - ./back/src:/app/src
+    ports:
+      - "3001:3001"
     build:
       context: ./back
       dockerfile: ./docker/dev.Dockerfile

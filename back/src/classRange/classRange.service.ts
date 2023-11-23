@@ -9,11 +9,11 @@ export class ClassRangeService {
     constructor(
         private userService: UserService,
         @InjectRepository(ClassRange)
-        private refreshTokensRepository: Repository<ClassRange>,
+        private classRangesRepository: Repository<ClassRange>,
     ) {}
 
     async getList(schoolUUID: string) {
-        return this.refreshTokensRepository.find({
+        return this.classRangesRepository.find({
             where: {
                 school: {
                     uuid: schoolUUID,
@@ -28,6 +28,17 @@ export class ClassRangeService {
                 end_sound: {
                     uuid: true,
                 },
+            },
+        });
+    }
+
+    async getByUUID(uuid: string) {
+        return await this.classRangesRepository.findOne({
+            where: {
+                uuid,
+            },
+            relations: {
+                school: true,
             },
         });
     }
