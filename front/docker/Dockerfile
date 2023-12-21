@@ -1,5 +1,4 @@
 FROM node:18-alpine as builder
-RUN npm i yarn
 COPY package.json yarn.lock ./
 RUN yarn
 COPY src  ./src

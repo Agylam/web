@@ -1,8 +1,6 @@
 FROM node:18-alpine as builder
 WORKDIR /builder
 
-RUN npm i yarn
-
 COPY package.json yarn.lock tsconfig.json ./
 COPY src  ./src
 
