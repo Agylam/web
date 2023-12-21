@@ -1,0 +1,25 @@
+button.class_range {
+    height: min-content;
+    width: max-content;
+    margin: 0 1rem;
+    border: 2px solid var(--surface-surface-stroke);
+    border-radius: 12px;
+    background: var(--surface-surface);
+    cursor: pointer;
+}
+
+button.class_range p.class_range_name {
+    font-size: 1rem;
+    color: var(--text-text);
+    font-weight: 500;
+    margin: 0.375rem 1.5rem;
+}
+
+button.class_range.active {
+    border: 2px solid var(--blue-light);
+    background: var(--blue-light);
+}
+
+button.class_range.active p.class_range_name {
+    color: var(--always-white);
+}

@@ -1,0 +1,10 @@
+{
+    "swagger": "2.0",
+    "host": "localhost:5173",
+    "basePath": "/api",
+    "info": {
+        "version": "1.0.0",
+        "title": "Система автоматизации школьных процессов"
+    },
+    "paths": {}
+}

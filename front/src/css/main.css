@@ -6,6 +6,7 @@
     --red-red: #e21515;
     --red-light-red: #ffcdcd;
     --red-dark-red: rgba(255, 0, 0, 0.15);
+    --always-white: #ffffff;
     color-scheme: dark light;
 }
 
@@ -21,10 +22,9 @@ div#swal2-html-container {
 #root {
     width: 100%;
     height: 100%;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
 }
-body{
+
+
+body {
     height: 100vh;
 }

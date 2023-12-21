@@ -1,41 +1,31 @@
-import React, {useState} from "react";
-import {useJwt} from "react-jwt";
-import {useNavigate} from "react-router-dom";
+import React from "react";
 
 import "../css/schedule.css";
 
-import IUser from "../interfaces/IUser";
-import DaySchedule from "../сomponents/DaySchedule/DaySchedule";
-import NavbarComponent from "../сomponents/Navbar/Navbar";
+import DaySchedule from "../components/DaySchedule/DaySchedule";
+import NavbarComponent from "../components/Navbar/Navbar";
 import { useWeekDates } from "./hooks/useWeekDates";
+import { useUserInfo } from "../hooks/useUserInfo";
+import { ClassRangeContainer } from "../components/ClassRangeContainer/ClassRangeContainer";
+import useLocalStorage from "use-local-storage";
 
 export default function SchedulePage() {
-    //fixme выглядит, как костыль
-    const [days] = useState([[], [], [], [], [], [], []]);
     const weekDates = useWeekDates();
-    const {decodedToken, isExpired} = useJwt<IUser>(
-        localStorage.getItem("jwt") as string
-    );
-    const navigate = useNavigate();
-    const exit = () => {
-        localStorage.removeItem("jwt");
-        navigate("/");
-    };
-    if (isExpired) {
-        exit();
-    }
-    //fixme а зачем?
-    const userInfo = decodedToken;
+    const userInfo = useUserInfo();
+
+    const [selectedClassRange, setSelectedClassRange] = useLocalStorage("selected_class_range", "");
 
     return (
         <>
-            <NavbarComponent
-                userInfo={userInfo}
+            <NavbarComponent userInfo={userInfo} />
+            <ClassRangeContainer
+                selectedClassRange={selectedClassRange}
+                setSelectedClassRange={setSelectedClassRange}
             />
-            <div className="days_wrapper" style={{overflow: "auto"}}>
-                {days.map(
-                    (e, k) =><DaySchedule key={k} dow={k} weekDates={weekDates} />
-                )}
+            <div className="days_wrapper" style={{ overflow: "auto" }}>
+                {Array.from(Array(7).keys()).map((e, k) => (
+                    <DaySchedule key={k} dow={k} weekDates={weekDates} class_range={selectedClassRange} />
+                ))}
             </div>
         </>
     );

@@ -1,7 +1,8 @@
 FROM node:18-alpine
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm i yarn
+COPY package.json yarn.lock ./
+RUN yarn
 COPY src  ./src
 COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.json ./
-CMD npm run dev
+CMD yarn dev

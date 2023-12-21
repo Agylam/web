@@ -1,0 +1,33 @@
+global:
+  project: agylam
+  ref: "dev"
+  isTag: false
+  registry: ""
+
+backend:
+  image: agylam/back
+  replicas: 2
+  port: 81
+
+frontend:
+  image: agylam/front
+  replicas: 2
+  port: 80
+
+ingress:
+  baseDomain: agylam.ru
+  toService: frontend
+
+postgresql:
+  enabled: true
+  fullnameOverride: postgres
+  commonAnnotations:
+    helm.sh/hook: pre-install,pre-upgrade
+  auth:
+    database: agylam
+    username: changeme
+    password: changeme
+
+ENV: {}
+
+SECRETS: {}

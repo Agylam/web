@@ -1,0 +1,35 @@
+name: Converge STAGE
+
+on:
+  push:
+    branches:
+      - 'stage'
+
+jobs:
+  converge:
+    name: converge
+    runs-on: self-hosted
+    environment: stage
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+
+        - name: Inject secrets to yaml files
+          uses: none0nfg/yaml-secrets-injector@v0.0.1
+          with:
+            inject_files: |-
+              .helm/agylam/stage-values.yaml
+            secrets: ${{ toJSON(secrets) }}
+          
+        - name: Install werf
+          uses: werf/actions/install@v1.2
+          
+        - name: Run script
+          run: |
+            . $(werf ci-env github --as-file)
+            docker login -u none0nfg -p ${{ secrets.IGHOR_DK_TOKEN }}
+            werf converge --debug --env=stage --atomic --values .helm/agylam/common-values.yaml --values .helm/agylam/stage-values.yaml --repo none0nfg/agylam --repo-docker-hub-token='${{ secrets.IGHOR_DK_TOKEN }}' --repo-docker-hub-username=none0nfg
+          env:
+            WERF_KUBECONFIG_BASE64: ${{ secrets.KUBE_CONFIG_64 }}

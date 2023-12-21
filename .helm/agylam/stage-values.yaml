@@ -1,0 +1,27 @@
+global:
+  tier: "stage"
+  ref: "stage"
+
+ENV:
+  stage:
+    BURL: http://backend:81
+    FRONTEND_PORT: 80
+    PGPORT: "5432"
+    PGDATABASE: agylam
+    PGHOST: postgres
+    BACKEND_PORT: "81"
+    SESSION_TIME: 1d
+    JWT_EXPIRESIN: 1h
+
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "{{ STAGE_PGPASSWORD }}"
+    username: "{{ STAGE_PGUSER }}"
+    password: "{{ STAGE_PGPASSWORD }}"
+
+SECRETS:
+  stage:
+    JWT_SECRET: "{{ STAGE_JWT_SECRET }}"
+    PGUSER: "{{ STAGE_PGUSER }}"
+    PGPASSWORD: "{{ STAGE_PGPASSWORD }}"

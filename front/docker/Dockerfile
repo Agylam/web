@@ -1,11 +1,12 @@
 FROM node:18-alpine as builder
-COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm i yarn
+COPY package.json yarn.lock ./
+RUN yarn
 COPY src  ./src
 COPY index.html tsconfig.json tsconfig.node.json vite.config.ts .eslintrc.json ./
-RUN npx vite build
+RUN yarn build
 
-FROM nginx:1.24-alpine
+FROM nginx:1.24-alpine as frontend
 WORKDIR /app
 
 ARG ARG_BUILD_VERSION

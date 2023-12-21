@@ -29,3 +29,6 @@ build/*
 dataDB/*
 /back/node_modules/
 /front/node_modules/
+
+# Helm ignoring
+.helm/agylam/charts/
