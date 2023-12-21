@@ -1,4 +1,4 @@
-* text = auto
+* text=auto
 *.ts text eol=crlf
 *.tsx text eol=crlf
 *.lock text eol=crlf
