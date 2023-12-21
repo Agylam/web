@@ -8,7 +8,7 @@ on:
 jobs:
   converge:
     name: converge
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: dev
     steps:
         - name: Checkout code
