@@ -11,7 +11,7 @@ ENV:
     BACKEND_PORT: "81"
     SESSION_TIME: 1d
     JWT_EXPIRESIN: 1h
-
+    WS_SERVER_PORT: 81
 postgresql:
   enabled: true
   auth:
