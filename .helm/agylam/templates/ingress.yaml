@@ -22,7 +22,7 @@ spec:
           service:
             name: {{ $.Values.ingress.toService }}
             port:
-              number: {{ (get $.Values ($.Values.ingress.toService)).port }}
+              number: {{ index 0 (get $.Values ($.Values.ingress.toService)).ports }}
   tls:
   - hosts:
     {{ if $.Values.global.isTag -}}
