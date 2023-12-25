@@ -6,6 +6,10 @@ metadata:
   name: {{ $.Values.global.project }}-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade "websocket";
+      proxy_set_header Connection "Upgrade";
 spec:
   ingressClassName: nginx
   rules:
@@ -16,6 +20,13 @@ spec:
 {{- end }}
     http:
       paths:
+      - path: /ws
+        pathType: Prefix
+        backend:
+          service:
+            name: backend
+            port:
+              number: {{ index (get $.Values.backend).ports 1 }}
       - path: /
         pathType: Prefix
         backend:
