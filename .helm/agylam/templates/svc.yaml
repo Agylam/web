@@ -8,10 +8,12 @@ metadata:
   name: {{ $container }}
 spec:
   ports:
-  - name: http
-    port: {{ $containerSpec.port }}
+  {{- range $p := $containerSpec.ports }}
+  - name: http-{{ $p }}
+    port: {{ $p }}
     protocol: TCP
-    targetPort: {{ $containerSpec.port }}
+    targetPort: {{ $p }}
+  {{- end }}
   selector:
     app: {{ $.Values.global.project }}-{{ $container }}
   type: ClusterIP
