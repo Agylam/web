@@ -26,7 +26,7 @@ spec:
           service:
             name: backend
             port:
-              number: {{ index (get $.Values.backend).ports 1 }}
+              number: {{ index $.Values.backend.ports 1 }}
       - path: /
         pathType: Prefix
         backend:
