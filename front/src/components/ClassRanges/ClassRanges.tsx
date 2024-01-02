@@ -1,6 +1,6 @@
 import { IClassRange } from "../../interfaces/IClassRange";
 import { ClassRangeItem } from "../ClassRangeItem/ClassRangeItem";
-import "./ClassRangeContainer.css";
+import "./ClassRanges.css";
 import React from "react";
 import { useGetClassRanges } from "../../hooks/useGetClassRanges";
 
@@ -9,7 +9,7 @@ interface IClassRangeContainerProps {
     setSelectedClassRange: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
-export const ClassRangeContainer = ({ selectedClassRange, setSelectedClassRange }: IClassRangeContainerProps) => {
+export const ClassRanges = ({ selectedClassRange, setSelectedClassRange }: IClassRangeContainerProps) => {
     const classRangesApi = useGetClassRanges();
 
     return (

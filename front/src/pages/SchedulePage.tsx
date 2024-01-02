@@ -4,9 +4,9 @@ import "../css/schedule.css";
 
 import DaySchedule from "../components/DaySchedule/DaySchedule";
 import NavbarComponent from "../components/Navbar/Navbar";
-import { useWeekDates } from "./hooks/useWeekDates";
+import { useWeekDates } from "../hooks/useWeekDates";
 import { useUserInfo } from "../hooks/useUserInfo";
-import { ClassRangeContainer } from "../components/ClassRangeContainer/ClassRangeContainer";
+import { ClassRanges } from "../components/ClassRanges/ClassRanges";
 import useLocalStorage from "use-local-storage";
 
 export default function SchedulePage() {
@@ -18,7 +18,7 @@ export default function SchedulePage() {
     return (
         <>
             <NavbarComponent userInfo={userInfo} />
-            <ClassRangeContainer
+            <ClassRanges
                 selectedClassRange={selectedClassRange}
                 setSelectedClassRange={setSelectedClassRange}
             />

@@ -1,25 +1,20 @@
-/**
- * @license Agylam
- * App.tsx
- * Facebook, продукт компании Meta, которая признана экстремистской организацией в России
- */
-
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import { AppRoutes } from "./routes/AppRoutes";
 import { JwtProvider } from "./context/jwt-context";
-
 import "./css/themes.css";
 import "./css/main.css";
+import { MainContainer } from "./containers/MainContainer/MainContainer";
 
 export default function App() {
+
     return (
-        <BrowserRouter>
-            <React.StrictMode>
-                <JwtProvider>
+        <React.StrictMode>
+            <JwtProvider>
+                <MainContainer>
                     <AppRoutes />
-                </JwtProvider>
-            </React.StrictMode>
-        </BrowserRouter>
+                </MainContainer>
+            </JwtProvider>
+        </React.StrictMode>
     );
 }
