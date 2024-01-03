@@ -58,6 +58,7 @@ export class AuthService {
             school: {
                 uuid: user.school.uuid,
             },
+            fullname: user.fullName,
         };
         return this.jwtService.sign(payload);
     }

@@ -1,8 +1,8 @@
 export const fetcher = async ([uri, token = ""]: string[]) => {
-    const unparsed_resp = await fetch("/api/" + uri, {
+    const unparsed_resp = await fetch("/api" + uri, {
         headers: {
-            Authorization: `Bearer ${token}`,
-        },
+            Authorization: `Bearer ${token}`
+        }
     });
 
     if (!unparsed_resp.ok) {

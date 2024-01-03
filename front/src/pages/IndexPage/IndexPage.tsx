@@ -8,8 +8,6 @@ export default function IndexPage() {
 
     //fixme выглядит так, что это можно разделить на компоненты сильнее
     return (
-        <div className="index_container">
-            <AuthForm />
-        </div>
+        <AuthForm />
     );
 }

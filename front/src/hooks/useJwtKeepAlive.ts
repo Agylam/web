@@ -6,20 +6,20 @@ import refreshFetch from "../fetches/refreshFetch";
 const accessTokenCheckIntervalMs = 5000;
 
 export const useJwtKeepAlive = () => {
-    const { jwts, setJwts } = useJwtContext();
+    const { accessToken, setAccessToken } = useJwtContext();
 
     useEffect(() => {
         const intervalId = setInterval(async () => {
-            if (!jwts.accessToken || !checkIsExpired(jwts.accessToken)) {
+            if (!accessToken || !checkIsExpired(accessToken)) {
                 return;
             }
 
             try {
                 const newJwt = await refreshFetch();
-                setJwts(newJwt);
+                setAccessToken(newJwt);
             } catch (e) {
                 clearInterval(intervalId);
-                setJwts({ accessToken: "" });
+                setAccessToken("");
                 console.error("Ошибка обновления токена");
             }
             // reEvaluateToken(newJwt && newJwt.accessToken);
@@ -28,5 +28,5 @@ export const useJwtKeepAlive = () => {
         return () => {
             clearInterval(intervalId);
         };
-    }, [jwts, setJwts]);
+    }, [accessToken, setAccessToken]);
 };

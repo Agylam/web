@@ -1,9 +1,9 @@
 import React from "react";
 import "./ClassRangeItem.css";
-import { IClassRangeState } from "../../interfaces/IClassRange";
+import { ClassRangeState } from "../../interfaces/ClassRange";
 
 export interface IClassRangeItemProps {
-    data: IClassRangeState;
+    data: ClassRangeState;
     onUpdateClassRange: (uuid: string) => void;
 }
 

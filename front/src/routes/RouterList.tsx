@@ -5,6 +5,7 @@ import SchedulePage from "../pages/SchedulePage";
 import AnnouncementPage from "../pages/AnnouncementPage";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import type { RouteObject } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 
 export const Routes: Route[] = [
@@ -17,13 +18,13 @@ export const Routes: Route[] = [
         path: PagePath.schedule,
         element: <SchedulePage />,
         protected: true,
-        roles: [Role.director]
+        roles: [Role.headteacher]
     },
     {
         path: PagePath.announcement,
         element: <AnnouncementPage />,
         protected: true,
-        roles: [Role.director]
+        roles: [Role.headteacher]
     }
 ];
 
@@ -35,15 +36,18 @@ interface Route {
 }
 
 export const getRoutes = (roles: Role[], isAuthorized: boolean): RouteObject[] => {
-    return Routes.filter(route => {
-        if (route.protected && !isAuthorized) return false;
-        if (route.roles) {
-            return route.roles.some(role => roles.includes(role));
+    return Routes.map(route => {
+        let element = route.element;
+        if (route.protected && !isAuthorized) {
+            element = <Navigate to="/" />;
         }
-        return true;
-    }).map(route => {
+        if (route.roles && !route.roles.some(role => roles.includes(role))) {
+            element = <Navigate to="/" />;
+        }
+
         return {
             ...route,
+            element: element,
             errorElement: <ErrorPage />
         };
     });

@@ -1,4 +1,4 @@
-import { IClassRange } from "../../interfaces/IClassRange";
+import { ClassRange } from "../../interfaces/ClassRange";
 import { ClassRangeItem } from "../ClassRangeItem/ClassRangeItem";
 import "./ClassRanges.css";
 import React from "react";
@@ -17,7 +17,7 @@ export const ClassRanges = ({ selectedClassRange, setSelectedClassRange }: IClas
             {classRangesApi.error && <p>Ошибка загрузки classRanges</p>}
             {!classRangesApi.error &&
                 !classRangesApi.isLoading &&
-                classRangesApi.data?.map((cr: IClassRange) => (
+                classRangesApi.data?.map((cr: ClassRange) => (
                     <ClassRangeItem
                         data={{ ...cr, active: cr.uuid === selectedClassRange }}
                         key={cr.uuid}

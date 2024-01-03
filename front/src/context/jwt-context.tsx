@@ -1,33 +1,29 @@
 import React, { createContext, useContext } from "react";
 import useLocalStorage from "use-local-storage";
 
-export interface JWTs {
-    accessToken: string;
-}
 
 type JwtContextType = {
-    jwts: JWTs;
-    setJwts: (jwts: JWTs) => void;
+    accessToken: string;
+    setAccessToken: (accessToken: string) => void;
 };
 
 const defaultValue: JwtContextType = {
-    jwts: {
-        accessToken: ""
-    },
-    setJwts: (jwts: JWTs) => {
-        return;
+    accessToken: "",
+    setAccessToken: (accessToken) => {
+        console.log("setAccessTokenUs", accessToken);
+        localStorage.setItem("accessToken", accessToken);
     }
 };
 
 const JwtContext = createContext<JwtContextType>(defaultValue);
 
 export const useJwtContext = () => {
-    const context = useContext(JwtContext);
-    return context;
+    const a = useContext(JwtContext);
+    console.log("fg", a);
+    return a;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const JwtProvider = (props: Record<any, any>) => {
-    const [jwts, setJwts] = useLocalStorage<JWTs>("jwt", defaultValue.jwts);
-    return <JwtContext.Provider value={{ jwts, setJwts }} {...props} />;
+    const [accessToken, setAccessToken] = useLocalStorage("accessToken", defaultValue.accessToken);
+    return <JwtContext.Provider value={{ accessToken, setAccessToken }} {...props} />;
 };

@@ -1,6 +1,4 @@
-import { JWTs } from "../context/jwt-context";
-
-export default async function refreshFetch(): Promise<JWTs> | never {
+export default async function refreshFetch(): Promise<string> | never {
     const resp: Response = await fetch("/api/auth/refresh/", {
         method: "POST",
         headers: {
@@ -15,7 +13,7 @@ export default async function refreshFetch(): Promise<JWTs> | never {
             throw new Error("Invalid response in auth request");
         }
 
-        return respObj;
+        return respObj.accessToken;
     }
 
     throw resp;

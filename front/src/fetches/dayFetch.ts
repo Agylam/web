@@ -1,15 +1,15 @@
-import ILesson from "../interfaces/ILesson";
+import Lesson from "../interfaces/Lesson";
 
-export default async function dayFetch(order: number): Promise<ILesson[]> | never {
+export default async function dayFetch(order: number): Promise<Lesson[]> | never {
     const resp: Response = await fetch(
         `/api/schedule/${order}`,
         {
             method: "get",
             headers: {
                 "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-        },
+                "Content-Type": "application/json"
+            }
+        }
     );
 
     if (resp.ok) {

@@ -28,3 +28,8 @@ div#swal2-html-container {
 body {
     height: 100vh;
 }
+
+button {
+    background: none;
+    border: 0;
+}

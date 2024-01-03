@@ -1,15 +1,12 @@
 import React from "react";
-
-import logoImg from "../../assets/logo.svg";
-
-import IUser from "../../interfaces/IUser";
-
 import "./Navbar.css";
-import { logOut } from "../../utils/jwts";
+import { logOut } from "../../utils/logOut";
 import { NavbarElement } from "../NavbarElement/NavbarElement";
+import logoImg from "../../assets/logo.svg";
+import { User } from "../../interfaces/DecodedToken";
 
 interface INavbarParams {
-    userInfo: IUser | null;
+    userInfo: User | null;
 }
 
 export default function Navbar({ userInfo }: INavbarParams) {

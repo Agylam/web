@@ -1,19 +1,19 @@
-import ILesson from "../interfaces/ILesson";
+import Lesson from "../interfaces/Lesson";
 
 export default async function setDayFetch(
     class_range: string,
     dayOfWeek: number,
-    lessons: ILesson[] | null,
+    lessons: Lesson[] | null,
     jwt: string
 ) {
     const response = await fetch(`/api/schedule/${class_range}/${dayOfWeek}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${jwt}`,
+            Authorization: `Bearer ${jwt}`
         },
         body: JSON.stringify(lessons),
-        redirect: "follow",
+        redirect: "follow"
     });
 
     if (!response.ok) {
