@@ -13,7 +13,6 @@ export const ClassRanges = ({ selectedClassRange, setSelectedClassRange }: IClas
     const classRangesApi = useGetClassRanges();
 
     useLayoutEffect(() => {
-        console.log("gu");
         if (!classRangesApi.error && !classRangesApi.isLoading && classRangesApi.data?.length !== 0 && selectedClassRange.length === 0) {
             setSelectedClassRange(classRangesApi.data?.[0].uuid);
         }

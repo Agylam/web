@@ -24,12 +24,10 @@ export const AuthForm = () => {
             e.preventDefault();
             try {
                 const response = await auth(authData.email, authData.password);
-                console.log(response);
                 setAccessToken(response.accessToken);
-                console.log("SET JWT", response.accessToken);
                 navigate(PagePath.schedule);
             } catch (e) {
-                console.log(e);
+                console.error("AuthFrom error:", e);
             }
         },
         [authData?.email, authData?.password, navigate, setAccessToken]

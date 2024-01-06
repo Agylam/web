@@ -30,8 +30,8 @@ export default function DaySchedule({ dow, weekDate, class_range }: IDaySchedule
         try {
             await updateDaySchedule(class_range, dow, less);
             await schedule.mutate();
-        } catch (resp) {
-            console.log("err" + dow);
+        } catch (err) {
+            console.error("Day error: " + dow, "error:", err);
         }
     };
 

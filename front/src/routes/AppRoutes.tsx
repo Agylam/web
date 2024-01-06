@@ -7,11 +7,10 @@ import { useUserInfo } from "../hooks/useUserInfo";
 export const AppRoutes: FunctionComponent = () => {
     const userInfo = useUserInfo();
     const roles = userInfo?.rolesName || [];
-    console.log("k", userInfo, roles);
 
     const routes = getRoutes(roles, userInfo !== null);
 
-    console.log(routes);
+
     const router = createBrowserRouter(routes);
 
     useJwtKeepAlive();
