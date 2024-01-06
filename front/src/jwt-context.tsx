@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, ProviderProps, useContext } from "react";
 import useLocalStorage from "use-local-storage";
 
 
@@ -10,20 +10,15 @@ type JwtContextType = {
 const defaultValue: JwtContextType = {
     accessToken: "",
     setAccessToken: (accessToken) => {
-        console.log("setAccessTokenUs", accessToken);
         localStorage.setItem("accessToken", accessToken);
     }
 };
 
 const JwtContext = createContext<JwtContextType>(defaultValue);
 
-export const useJwtContext = () => {
-    const a = useContext(JwtContext);
-    console.log("fg", a);
-    return a;
-};
+export const useJwtContext = () => useContext(JwtContext);
 
-export const JwtProvider = (props: Record<any, any>) => {
+export const JwtProvider = (props: ProviderProps<JwtContextType>) => {
     const [accessToken, setAccessToken] = useLocalStorage("accessToken", defaultValue.accessToken);
-    return <JwtContext.Provider value={{ accessToken, setAccessToken }} {...props} />;
+    return <JwtContext.Provider {...props} value={{ accessToken, setAccessToken }} />;
 };

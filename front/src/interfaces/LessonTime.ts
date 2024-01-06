@@ -1,4 +1,4 @@
-export default interface Lesson {
+export default interface LessonTime {
     start: string;
     end: string;
     uuid?: string;

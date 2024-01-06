@@ -1,8 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import "./MainContainer.scss";
 import ThemeSwitcher from "../../components/ThemeSwitcher/ThemeSwitcher";
 import { ToastContainer } from "react-toastify";
 import useLocalStorage from "use-local-storage";
+import { Spinner } from "../../components/Spinner/Spinner";
+import { SWRConfig } from "swr";
 
 interface MainContainerProps {
     children?: React.ReactNode;
@@ -19,15 +21,21 @@ export const MainContainer = (props: MainContainerProps) => {
     };
 
     return (
-        <div className="main_container" data-theme={isLightTheme ? "light" : "dark"}>
-            {props.children}
-            <ThemeSwitcher
-                onChangeTheme={onChangeTheme}
-            />
-            <ToastContainer
-                limit={3}
-                theme={isLightTheme ? "light" : "dark"}
-            />
-        </div>
+        <SWRConfig value={{ suspense: true }}>
+            <div className="main_container" data-theme={isLightTheme ? "light" : "dark"}>
+                <Suspense fallback={<Spinner />}>
+                    {props.children}
+                </Suspense>
+                <ThemeSwitcher
+                    onChangeTheme={onChangeTheme}
+                />
+                <ToastContainer
+                    limit={3}
+                    theme={isLightTheme ? "light" : "dark"}
+                    position="bottom-left"
+                    autoClose={2000}
+                />
+            </div>
+        </SWRConfig>
     );
 };

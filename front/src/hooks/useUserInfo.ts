@@ -1,5 +1,5 @@
 import { decodeToken } from "react-jwt";
-import { useJwtContext } from "../context/jwt-context";
+import { useJwtContext } from "../jwt-context";
 import { DecodedToken, User } from "../interfaces/DecodedToken";
 
 export const useUserInfo = (): User | null => {

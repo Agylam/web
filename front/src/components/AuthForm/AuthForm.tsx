@@ -3,19 +3,15 @@ import "./AuthForm.scss";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 import { useNavigate } from "react-router-dom";
-import { useJwtContext } from "../../context/jwt-context";
-import authFetch from "../../fetches/authFetch";
-import { toast } from "react-toastify";
+import { useJwtContext } from "../../jwt-context";
 import { PagePath } from "../../constants";
 import { FullLogo } from "../UI/FullLogo/FullLogo";
+import { AuthDataDto } from "../../interfaces/AuthData.dto";
+import { auth } from "../../api/auth";
 
-interface AuthData {
-    email: string;
-    password: string;
-}
 
 export const AuthForm = () => {
-    const [authData, setAuthData] = useState<AuthData>({
+    const [authData, setAuthData] = useState<AuthDataDto>({
         email: "",
         password: ""
     });
@@ -23,20 +19,17 @@ export const AuthForm = () => {
     const navigate = useNavigate();
     const { setAccessToken } = useJwtContext();
 
-    //fixme лучше такие штуки выносить из компонентов, много места занимают
-    const auth = useCallback(
+    const onAuthSubmit = useCallback(
         async (e: React.FormEvent) => {
             e.preventDefault();
             try {
-                const accessToken = await authFetch(authData.email, authData.password);
-                setAccessToken(accessToken);
-                console.log("SET JWT", accessToken);
+                const response = await auth(authData.email, authData.password);
+                console.log(response);
+                setAccessToken(response.accessToken);
+                console.log("SET JWT", response.accessToken);
                 navigate(PagePath.schedule);
             } catch (e) {
-                toast.error("Неверные почта или пароль!", {
-                    position: toast.POSITION.BOTTOM_LEFT,
-                    autoClose: 2000
-                });
+                console.log(e);
             }
         },
         [authData?.email, authData?.password, navigate, setAccessToken]
@@ -63,12 +56,12 @@ export const AuthForm = () => {
 
     return (
         <div className="auth_block">
-            <form id="auth" onSubmit={auth}>
+            <form id="auth" onSubmit={onAuthSubmit}>
                 <FullLogo />
                 <div className="auth_inputs">
                     <Input
                         type="email"
-                        required
+                        required={true}
                         placeholder="Почта"
                         value={authData.email}
                         onChange={onChangeEmail}

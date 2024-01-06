@@ -1,32 +1,42 @@
 import { useEffect } from "react";
-import { isExpired as checkIsExpired } from "react-jwt";
-import { useJwtContext } from "../context/jwt-context";
-import refreshFetch from "../fetches/refreshFetch";
+import { isExpired } from "react-jwt";
+import { useJwtContext } from "../jwt-context";
+import { refreshToken } from "../api/refreshToken";
 
-const accessTokenCheckIntervalMs = 5000;
+const accessTokenCheckIntervalMs = 3000;
+
 
 export const useJwtKeepAlive = () => {
     const { accessToken, setAccessToken } = useJwtContext();
 
     useEffect(() => {
-        const intervalId = setInterval(async () => {
-            if (!accessToken || !checkIsExpired(accessToken)) {
+        let updateInterval = -1;
+        const updateAccessToken = async () => {
+            if (!accessToken || !isExpired(accessToken)) {
+                return;
+            }
+            if (!accessToken || isExpired(accessToken)) {
+                clearInterval(updateInterval);
+                setAccessToken("");
+                console.error("Ошибка обновления токена");
                 return;
             }
 
             try {
-                const newJwt = await refreshFetch();
-                setAccessToken(newJwt);
+                const { accessToken } = await refreshToken();
+                setAccessToken(accessToken);
             } catch (e) {
-                clearInterval(intervalId);
+                clearInterval(updateInterval);
                 setAccessToken("");
                 console.error("Ошибка обновления токена");
             }
-            // reEvaluateToken(newJwt && newJwt.accessToken);
-        }, accessTokenCheckIntervalMs);
-
-        return () => {
-            clearInterval(intervalId);
         };
+
+        if (accessToken && !isExpired(accessToken)) {
+            updateInterval = setInterval(updateAccessToken, accessTokenCheckIntervalMs);
+            return () => {
+                clearInterval(updateInterval);
+            };
+        }
     }, [accessToken, setAccessToken]);
 };

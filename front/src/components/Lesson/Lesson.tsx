@@ -2,21 +2,21 @@ import React from "react";
 
 import removeImg from "../../assets/remove.svg";
 
-import Lesson from "../../interfaces/Lesson";
+import LessonTime from "../../interfaces/LessonTime";
 import TimeRangeComponent from "../TimeRange/TimeRange";
 
-import "./DayScheduleItem.css";
+import "./Lesson.scss";
 
-interface LessonComponentParams {
+interface LessonComponentProps {
     index: number;
-    lesson: Lesson;
+    lesson: LessonTime;
     timeManage: {
         set: (key: number, type: boolean, time: string) => void;
         remove: (key: number) => void;
     };
 }
 
-export default function DayScheduleItem({ index, lesson, timeManage }: LessonComponentParams) {
+export default function Lesson({ index, lesson, timeManage }: LessonComponentProps) {
     return (
         <div className="lesson" key={index}>
             <div className="left">

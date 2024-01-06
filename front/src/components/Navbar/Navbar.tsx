@@ -1,15 +1,14 @@
 import React from "react";
-import "./Navbar.css";
+import "./Navbar.scss";
 import { logOut } from "../../utils/logOut";
-import { NavbarElement } from "../NavbarElement/NavbarElement";
+import { NavbarLink } from "../NavbarLink/NavbarLink";
 import logoImg from "../../assets/logo.svg";
-import { User } from "../../interfaces/DecodedToken";
+import { useUserInfo } from "../../hooks/useUserInfo";
 
-interface INavbarParams {
-    userInfo: User | null;
-}
 
-export default function Navbar({ userInfo }: INavbarParams) {
+export default function Navbar() {
+    const userInfo = useUserInfo();
+
     return (
         <div className="nav_wrapper">
             <div className="left_nav">
@@ -20,10 +19,10 @@ export default function Navbar({ userInfo }: INavbarParams) {
                 />
                 <nav>
                     <ul>
-                        <NavbarElement name="Расписание" uri="/schedule" />
-                        <NavbarElement name="Объявления" uri="/announcement" />
-                        <NavbarElement name="Пользователи" uri="" />
-                        <NavbarElement name="Файл" uri="" />
+                        <NavbarLink name="Расписание" uri="/schedule" />
+                        <NavbarLink name="Объявления" uri="/announcement" />
+                        <NavbarLink name="Пользователи" uri="" />
+                        <NavbarLink name="Файл" uri="" />
                     </ul>
                 </nav>
             </div>

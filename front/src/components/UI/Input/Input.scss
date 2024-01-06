@@ -15,4 +15,8 @@ input.input {
     &:focus-visible {
         outline: solid 3px var(--blue-light);
     }
+
+    &.input_invalid {
+        outline: solid 3px var(--red-red);
+    }
 }

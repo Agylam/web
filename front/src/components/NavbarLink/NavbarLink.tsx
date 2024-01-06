@@ -1,4 +1,4 @@
-import "./NavbarElement.css";
+import "./NavbarLink.scss";
 import { Link } from "react-router-dom";
 import React from "react";
 
@@ -7,7 +7,7 @@ interface INavbarElementProps {
     uri: string;
 }
 
-export const NavbarElement = (props: INavbarElementProps) => {
+export const NavbarLink = (props: INavbarElementProps) => {
 
     return (
         <Link to={props.uri}>

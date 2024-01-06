@@ -21,7 +21,7 @@ export class AuthController {
         const newTokens = await this.authService.updateRefreshToken(req.cookies['refreshToken']);
         if (newTokens === null) {
             response.cookie('refreshToken', '', { httpOnly: true });
-            throw new UnauthorizedException('Refresh token not found');
+            throw new UnauthorizedException('Не найден refresh токен');
         }
         response.cookie('refreshToken', newTokens.refreshToken, { httpOnly: true });
         return { accessToken: newTokens.accessToken };

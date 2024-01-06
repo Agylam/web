@@ -7,13 +7,14 @@ interface InputProps {
     value: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     isDisabled?: boolean;
+    isInvalid?: boolean;
     required?: boolean;
 }
 
 const Input = (props: InputProps) => {
     let inputClass = "input";
-    if (props.isDisabled) {
-        inputClass += " input_disabled";
+    if (props.isInvalid) {
+        inputClass += " input_invalid";
     }
 
     return (
