@@ -1,5 +1,5 @@
 export const timeFromLocal = (time: string) => {
-    const formattedTime = /(\d{2})\:(\d{2})/gm.exec(time);
+    const formattedTime = (/(\d{2}):(\d{2})/gm).exec(time);
     if (formattedTime === null) throw new Error("Неправильный формат времени");
 
     const localTimeMinutes = Number(formattedTime[1]) * 60 + Number(formattedTime[2]);

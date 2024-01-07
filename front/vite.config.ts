@@ -41,9 +41,6 @@ export default defineConfig({
                 rewrite: (path) => path.replace(/^\/ws/, "")
             }
         },
-        watch: {
-            usePolling: true
-        },
         host: true
     }
 });

@@ -1,10 +1,11 @@
-import { useJwtContext } from "../context/jwt-context";
+import { useJwtContext } from "../jwt-context";
 import useSWR from "swr";
 import { fetcher } from "../utils/fetcher";
+import { ClassRange } from "../interfaces/ClassRange";
 
 export const useGetClassRanges = () => {
-    const { jwts } = useJwtContext();
-    const classRanges = useSWR(["/class_range", jwts.accessToken], fetcher);
+    const { accessToken } = useJwtContext();
+    const classRanges = useSWR(["/class_range", accessToken], fetcher<ClassRange[]>);
     if (classRanges.error) {
         console.error(classRanges.error);
     }

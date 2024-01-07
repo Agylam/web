@@ -1,0 +1,17 @@
+button.button {
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 20px;
+    padding: 12px;
+    background: var(--blue-light);
+    transition: background 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--blue-dark);
+    }
+  
+}

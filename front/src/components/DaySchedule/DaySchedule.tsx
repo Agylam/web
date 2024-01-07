@@ -1,46 +1,44 @@
 import React, { useLayoutEffect, useState } from "react";
 
 import plusImg from "../../assets/plus.svg";
-import setDayFetch from "../../fetches/setDayFetch";
-import ILesson from "../../interfaces/ILesson";
+import type LessonTime from "../../interfaces/LessonTime";
 
-import "./DaySchedule.css";
+import "./DaySchedule.scss";
 import { useGetSchedule } from "../../hooks/useGetSchedule";
-import { useJwtContext } from "../../context/jwt-context";
-import DayScheduleItem from "../DayScheduleItem/DayScheduleItem";
+import Lesson from "../Lesson/Lesson";
+import { updateDaySchedule } from "../../api/updateDaySchedule";
 
 interface IDayScheduleProps {
     dow: number;
-    weekDates: number[];
+    weekDate: number;
     class_range: string;
 }
 
 const weekDays = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"];
 
-export default function DaySchedule({ dow, weekDates, class_range }: IDayScheduleProps) {
-    const [lessons, setLessons] = useState<ILesson[] | null>([]);
+export default function DaySchedule({ dow, weekDate, class_range }: IDayScheduleProps) {
+    const [lessons, setLessons] = useState<LessonTime[]>([]);
     const schedule = useGetSchedule(class_range, dow);
-    const { jwts } = useJwtContext();
 
     useLayoutEffect(() => {
-        if (!schedule.error && !schedule.isLoading) {
+        if (!schedule.error && !schedule.isLoading && schedule.data) {
             setLessons(schedule.data);
         }
     }, [schedule]);
 
-    const pushToBack = async (less: ILesson[]) => {
+    const pushToBack = async (less: LessonTime[]) => {
         try {
-            await setDayFetch(class_range, dow, less, jwts.accessToken);
+            await updateDaySchedule(class_range, dow, less);
             await schedule.mutate();
-        } catch (resp) {
-            console.log("err" + dow);
+        } catch (err) {
+            console.error("Day error: " + dow, "error:", err);
         }
     };
 
     const changeTime = async (order: number, type: boolean, time: string) => {
-        const awaitedState = await new Promise<ILesson[]>((resolve) => {
-            setLessons((prevState: ILesson[] | null) => {
-                let updatedState: ILesson[] = [];
+        const awaitedState = await new Promise<LessonTime[]>((resolve) => {
+            setLessons((prevState: LessonTime[] | null) => {
+                let updatedState: LessonTime[] = [];
                 if (prevState != null) {
                     updatedState = prevState.map((v, k) => {
                         if (k == order) {
@@ -63,8 +61,8 @@ export default function DaySchedule({ dow, weekDates, class_range }: IDaySchedul
     };
 
     const addLesson = async () => {
-        const awaitedState = await new Promise<ILesson[]>((resolve) => {
-            setLessons((prevState: ILesson[] | null) => {
+        const awaitedState = await new Promise<LessonTime[]>((resolve) => {
+            setLessons((prevState: LessonTime[] | null) => {
                 const updatedState = prevState == null ? [] : [...prevState];
                 updatedState.push({
                     start: "10:00",
@@ -78,8 +76,8 @@ export default function DaySchedule({ dow, weekDates, class_range }: IDaySchedul
     };
 
     const removeLesson = async (order: number) => {
-        const awaitedState = await new Promise<ILesson[]>((resolve) => {
-            setLessons((prevState: ILesson[] | null) => {
+        const awaitedState = await new Promise<LessonTime[]>((resolve) => {
+            setLessons((prevState: LessonTime[] | null) => {
                 const updatedState = prevState == null ? [] : prevState.filter((_, index) => index !== order);
 
                 resolve(updatedState);
@@ -100,12 +98,12 @@ export default function DaySchedule({ dow, weekDates, class_range }: IDaySchedul
                         <p className="static">Расписание</p>
                         <p className="name">
                             <span>{weekDays[dow]}</span>
-                            <span>{weekDates[dow]}</span>
+                            <span>{weekDate}</span>
                         </p>
                     </div>
                     <div className="daySchedule_items_wrapper">
-                        {lessons?.map((les: ILesson, key) =>
-                            <DayScheduleItem
+                        {lessons?.map((les: LessonTime, key) =>
+                            <Lesson
                                 key={les.uuid || key}
                                 index={key}
                                 lesson={les}

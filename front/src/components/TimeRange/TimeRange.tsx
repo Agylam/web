@@ -1,15 +1,15 @@
 import React from "react";
 
-import TimeInput from "../TimeInput/TimeInput";
+import TimeInput from "../UI/TimeInput/TimeInput";
 
-import "./TimeRange.css";
+import "./TimeRange.scss";
 
 interface TimeRangeComponentParams {
-	timeRange: {
-		start: string;
-		end: string;
-	};
-	changeTime: (type: boolean, time: string) => void;
+    timeRange: {
+        start: string;
+        end: string;
+    };
+    changeTime: (type: boolean, time: string) => void;
 }
 
 export default function TimeRangeComponent({ timeRange, changeTime }: TimeRangeComponentParams) {

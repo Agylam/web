@@ -1,0 +1,60 @@
+.days_wrapper {
+    display: flex;
+    overflow: auto;
+}
+
+p.static {
+    font-size: 1rem;
+    color: var(--text-text);
+    font-weight: 400;
+    margin: 0;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+}
+
+p.number {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-text);
+}
+
+div.remove {
+    display: flex;
+    align-items: center;
+}
+
+div.remove button {
+    width: 100%;
+    cursor: pointer;
+}
+
+img.remove {
+    width: auto;
+}
+
+div.add {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border: 2px solid var(--surface-surface-stroke);
+    border-radius: 10px;
+}
+
+div.add button {
+    width: 100%;
+    cursor: pointer;
+    padding: 0.28125rem 0rem;
+}
+
+img.add {
+    width: auto;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    background: none;
+    width: 0;
+    display: none;
+}
