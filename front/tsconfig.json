@@ -31,5 +31,14 @@
         {
             "path": "./tsconfig.node.json"
         }
-    ]
+    ],
+    "watchOptions": {
+        "fallbackPolling": "dynamicPriority",
+        "watchFile": "useFsEvents",
+        "excludeDirectories": [
+            "node_modules",
+            "dist",
+            ".git"
+        ]
+    }
 }
