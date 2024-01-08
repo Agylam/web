@@ -3,11 +3,14 @@ import "./TimeInput.scss";
 
 interface TimeInputComponentParams {
     value: string;
-    onUpdateValue: (event: string) => void;
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onUpdateValue?: (event: string) => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function TimeInput({ value, onUpdateValue, onChange }: TimeInputComponentParams) {
+export default function TimeInput({
+    value, onUpdateValue, onChange = () => {
+    }
+}: TimeInputComponentParams) {
     const [timeValue, setTimeValue] = useState("10:00");
 
     useEffect(() => {
@@ -20,7 +23,9 @@ export default function TimeInput({ value, onUpdateValue, onChange }: TimeInputC
     };
 
     const onBlur = () => {
-        onUpdateValue(timeValue);
+        if (onUpdateValue) {
+            onUpdateValue(timeValue);
+        }
     };
 
     return (

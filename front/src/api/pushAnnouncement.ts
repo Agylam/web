@@ -1,4 +1,5 @@
-import { fetcher, HttpMethod } from "../utils/fetcher";
+import { HttpMethod } from "../utils/fetcher";
+import { apiFetcher } from "./apiFetcher";
 
 interface AnnouncementTime {
     hours: number;
@@ -19,8 +20,8 @@ interface PushAnnouncementResponse {
 }
 
 export const pushAnnouncement = async (text: string, time?: AnnouncementTime) => {
-    const response = await fetcher<PushAnnouncementResponse>(
-        ["/notification", localStorage.accessToken], { text, time }, HttpMethod.POST
+    const response = await apiFetcher<PushAnnouncementResponse>(
+        "/notification", { text, time }, HttpMethod.POST
     );
     return response.result;
 };
