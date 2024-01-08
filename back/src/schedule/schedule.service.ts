@@ -114,6 +114,10 @@ export class ScheduleService {
         localHours = (localHours > 23 ? -24 : 0) + localHours;
         localMinutes = (localMinutes > 60 ? -60 : 0) + localMinutes;
 
-        return (localHours < 10 ? '0' : '') + localHours + ':' + (localMinutes < 10 ? '0' : '') + localMinutes;
+        return this.pad2num(localHours) + ':' + this.pad2num(localMinutes);
+    }
+
+    pad2num(num: number) {
+        return (num < 10 ? '0' : '') + num;
     }
 }

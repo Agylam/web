@@ -7,8 +7,8 @@ interface AuthResponse {
 }
 
 export const auth = async (email: string, password: string) => {
-    const authResponse = await fetcher<AuthResponse>(
-        ["/auth/login"], { email, password }, HttpMethod.POST
+    const authResponse = await fetcher()<AuthResponse>(
+        "/auth/login", { email, password }, HttpMethod.POST
     );
     if (!authResponse)
         throw new Error("Ошибка: Пустой ответ от /auth/login. Сообщение от API:" + (authResponse || ""));

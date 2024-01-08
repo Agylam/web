@@ -1,23 +1,33 @@
 import { decodeToken } from "react-jwt";
-import { useJwtContext } from "../jwt-context";
+import { useAccessToken } from "./useAccessToken";
 import { DecodedToken, User } from "../interfaces/DecodedToken";
+import { useMemo } from "react";
 
 export const useUserInfo = (): User | null => {
-    const { accessToken } = useJwtContext();
+    const { accessToken, setAccessToken } = useAccessToken();
 
-    const decodedToken = decodeToken<DecodedToken>(accessToken);
+    const decodedToken = useMemo(() => {
+        try {
+            if (!accessToken)
+                return null;
+            return decodeToken<DecodedToken>(accessToken);
+        } catch (e) {
+            console.error("Ошибка декода токена:", e);
+            return null;
+        }
+    }, [decodeToken, accessToken]);
 
 
     if (!decodedToken)
         return null;
     if (typeof decodedToken.email !== "string")
-        return null;
+        throw new Error("Отсутствует email в JWT токене");
     if (typeof decodedToken.fullname !== "string")
-        return null;
+        throw new Error("Отсутствует ФИО в JWT токене");
     if (!Array.isArray(decodedToken.roles))
-        return null;
+        throw new Error("Отсутствуют роли в JWT токене");
     if (decodedToken.school.uuid === undefined)
-        return null;
+        throw new Error("Отсутствует UUID школы в JWT токене");
 
     return {
         ...decodedToken,

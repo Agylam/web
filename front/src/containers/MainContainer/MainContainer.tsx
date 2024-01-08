@@ -5,6 +5,8 @@ import { ToastContainer } from "react-toastify";
 import useLocalStorage from "use-local-storage";
 import { Spinner } from "../../components/Spinner/Spinner";
 import { SWRConfig } from "swr";
+import { fetcher } from "../../utils/fetcher";
+import { useAccessToken } from "../../hooks/useAccessToken";
 
 interface MainContainerProps {
     children?: React.ReactNode;
@@ -15,13 +17,14 @@ export const MainContainer = (props: MainContainerProps) => {
         "isLightTheme",
         !(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
     );
+    const { accessToken } = useAccessToken();
 
     const onChangeTheme = () => {
         setIsLightTheme(v => !v);
     };
 
     return (
-        <SWRConfig value={{ suspense: true }}>
+        <SWRConfig value={{ suspense: true, fetcher: fetcher(accessToken) }}>
             <div className="main_container" data-theme={isLightTheme ? "light" : "dark"}>
                 <Suspense fallback={<Spinner />}>
                     {props.children}

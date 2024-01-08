@@ -1,13 +1,13 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import "./AuthForm.scss";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 import { useNavigate } from "react-router-dom";
-import { useJwtContext } from "../../jwt-context";
-import { PagePath } from "../../constants";
+import { useAccessToken } from "../../hooks/useAccessToken";
 import { FullLogo } from "../UI/FullLogo/FullLogo";
 import { AuthDataDto } from "../../interfaces/AuthData.dto";
 import { auth } from "../../api/auth";
+import { PagePath } from "../../constants";
 
 
 export const AuthForm = () => {
@@ -17,39 +17,39 @@ export const AuthForm = () => {
     });
 
     const navigate = useNavigate();
-    const { setAccessToken } = useJwtContext();
+    const { accessToken, setAccessToken } = useAccessToken();
 
-    const onAuthSubmit = useCallback(
-        async (e: React.FormEvent) => {
-            e.preventDefault();
-            try {
-                const response = await auth(authData.email, authData.password);
-                setAccessToken(response.accessToken);
-                navigate(PagePath.schedule);
-            } catch (e) {
-                console.error("AuthFrom error:", e);
-            }
-        },
-        [authData?.email, authData?.password, navigate, setAccessToken]
-    );
+    const onAuthSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const response = await auth(authData.email, authData.password);
+            localStorage.accessToken = JSON.stringify(response.accessToken);
+            // setTimeout(() => {
+            navigate(PagePath.schedule);
+            //     console.log("TM", localStorage.accessToken);
+            // }, 1000);
+        } catch (e) {
+            console.error("AuthFrom error:", e);
+        }
+    };
 
-    const onChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAuthData(prev => {
             return {
                 ...prev,
                 email: e.target.value
             };
         });
-    }, []);
+    };
 
-    const onChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAuthData(prev => {
             return {
                 ...prev,
                 password: e.target.value
             };
         });
-    }, []);
+    };
 
 
     return (
