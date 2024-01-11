@@ -1,36 +1,36 @@
-{ { define "ingress_app" } }
-  { { - $ := index . 0 - } }
+{{ define "ingress_app" }}
+{{- $ := index . 0 -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: { { $.Values.global.project } }-ingress
+  name: {{ $.Values.global.project }}-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
   rules:
-  { { if $.Values.global.isTag - } }
-  - host: { { $.Values.ingress.baseDomain } }
-  { { - else - } }
-- host: { { $.Values.global.ref } }.{{ $.Values.ingress.baseDomain }}
-  { { - end } }
-http:
-  paths:
-    - path: /
-      pathType: Prefix
-      backend:
-        service:
-          name: { { $.Values.ingress.toService } }
-          port:
-            number: { { index (get $.Values ($.Values.ingress.toService)).ports 0 } }
-tls:
-  - hosts:
-    { { if $.Values.global.isTag - } }
-    - { { $.Values.ingress.baseDomain } }
-  { { - else - } }
-- { { $.Values.global.ref } }.{{ $.Values.ingress.baseDomain }}
+  {{ if $.Values.global.isTag -}}
+    - host: {{ $.Values.ingress.baseDomain }}
+{{- else -}}
+    - host: {{ $.Values.global.ref }}.{{ $.Values.ingress.baseDomain }}
+{{- end }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Values.ingress.toService }}
+                port:
+                  number: {{ index (get $.Values ($.Values.ingress.toService)).ports 0 }}
+  tls:
+    - hosts:
+    {{ if $.Values.global.isTag -}}
+        - {{ $.Values.ingress.baseDomain }}
+  {{- else -}}
+        - {{ $.Values.global.ref }}.{{ $.Values.ingress.baseDomain }}
   {{- end }}
-secretName: { { $.Values.global.project } }-{{ $.Values.werf.env }}-cert
-  { { end } }
-  
-  { { include "ingress_app" (list $) } }
+      secretName: {{ $.Values.global.project }}-{{ $.Values.werf.env }}-cert
+{{ end }}
+
+{{ include "ingress_app" (list $) }}
