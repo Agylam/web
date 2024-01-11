@@ -9,10 +9,10 @@ metadata:
 spec:
   ports:
   {{- range $p := $containerSpec.ports }}
-  - name: http-{{ $p }}
-    port: {{ $p }}
-    protocol: TCP
-    targetPort: {{ $p }}
+    - name: http-{{ $p }}
+      port: {{ $p }}
+      protocol: TCP
+      targetPort: {{ $p }}
   {{- end }}
   selector:
     app: {{ $.Values.global.project }}-{{ $container }}

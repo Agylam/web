@@ -19,16 +19,16 @@ spec:
         app: {{ $.Values.global.project }}-{{ $container }}
     spec:
       containers:
-      - name: {{ $.Values.global.project }}-{{ $container }}
-        image: {{ index $.Values.werf.image $container }}
-        envFrom:
-          - configMapRef:
-              name: {{ $.Values.global.project }}-configmap
-          - secretRef:
-              name: {{ $.Values.global.project }}-secret
-        ports:
+        - name: {{ $.Values.global.project }}-{{ $container }}
+          image: {{ index $.Values.werf.image $container }}
+          envFrom:
+            - configMapRef:
+                name: {{ $.Values.global.project }}-configmap
+            - secretRef:
+                name: {{ $.Values.global.project }}-secret
+          ports:
         {{- range $p := $containerSpec.ports }}
-        - containerPort: {{ $p }}
+            - containerPort: {{ $p }}
         {{- end }}
 {{ end }}
 
