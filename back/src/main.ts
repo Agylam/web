@@ -30,7 +30,9 @@ async function runServer() {
 
     await AppDataSource.initialize().catch(console.error);
 
-    const observer = new Observer(); // Запуск Observerа для проверки времени и отправки звуков
+    const observer = new Observer(); // Запуск Observer для проверки времени и отправки звуков
 }
 
-runServer();
+runServer()
+    .then(() => console.log('Успешный запуск'))
+    .catch((e) => console.error('Ошибка запуска:', e));
