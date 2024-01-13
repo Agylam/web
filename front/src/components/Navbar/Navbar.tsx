@@ -5,18 +5,13 @@ import { NavbarLink } from "../NavbarLink/NavbarLink";
 import logoImg from "../../assets/logo.svg";
 import { useUserInfo } from "../../hooks/useUserInfo";
 
-
-export default function Navbar() {
+export const Navbar = () => {
     const userInfo = useUserInfo();
 
     return (
         <div className="nav_wrapper">
             <div className="left_nav">
-                <img
-                    src={logoImg}
-                    alt=""
-                    id="nav_logo"
-                />
+                <img src={logoImg} alt="" id="nav_logo" />
                 <nav>
                     <ul>
                         <NavbarLink name="Расписание" uri="/schedule" />
@@ -28,12 +23,10 @@ export default function Navbar() {
             </div>
             <div className="right_nav">
                 <p className="name">{userInfo?.fullname}</p>
-                <button
-                    id="exit"
-                    onClick={logOut}>
+                <button id="exit" onClick={logOut}>
                     Выйти
                 </button>
             </div>
         </div>
     );
-}
+};

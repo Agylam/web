@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { pushAnnouncement } from "../../api/pushAnnouncement";
 import "./AnnouncementPage.scss";
 
-export default function AnnouncementPage() {
+export const AnnouncementPage = () => {
     const [textAreaValue, setTextAreaValue] = useState("");
     const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTextAreaValue(e.target.value);
@@ -25,7 +25,6 @@ export default function AnnouncementPage() {
         }
     };
 
-
     return (
         <div className="announcement_wrapper">
             <form className="announcement_form" onSubmit={submit}>
@@ -35,11 +34,12 @@ export default function AnnouncementPage() {
                     id="message"
                     placeholder="Введите текст"
                     value={textAreaValue}
+                    maxLength={2000}
                     required={true}
                 ></textarea>
                 <button type="submit">Отправить</button>
             </form>
         </div>
     );
-}
+};
 
