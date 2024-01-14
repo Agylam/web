@@ -1,4 +1,4 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { School } from './School.js';
 
 export enum AnnouncementState {
@@ -24,6 +24,5 @@ export class Announcement extends BaseEntity {
     created_at: Date;
 
     @ManyToOne(() => School, (school) => school.announcements)
-    @JoinColumn()
     school: School;
 }
