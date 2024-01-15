@@ -30,6 +30,7 @@
     "@nestjs/typeorm": "^10.0.0",
     "@types/bcrypt": "^5.0.2",
     "@types/ws": "^8.5.9",
+    "aws-sdk": "^2.1536.0",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",

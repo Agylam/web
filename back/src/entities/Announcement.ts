@@ -7,6 +7,7 @@ export enum AnnouncementState {
     PLAYING,
     PLAYED,
     ERROR,
+    SAVED,
 }
 
 export enum SpeechModel {

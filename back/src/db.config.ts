@@ -17,7 +17,7 @@ export const typeOrmConfig: DataSourceOptions = {
     password: process.env.PGPASSWORD || 'postgres',
     database: process.env.PGDATABASE || 'postgres',
     synchronize: true,
-    logging: false,
+    logging: true,
     entities: [School, Lesson, Sound, ClassRange, User, RefreshToken, Role, Announcement],
     migrations: [],
     subscribers: [],

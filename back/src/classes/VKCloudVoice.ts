@@ -1,20 +1,51 @@
 import * as fs from 'fs';
+import { Readable } from 'node:stream';
+import { SpeechModel } from '../entities/Announcement.js';
 
 export class VKCloudVoice {
     readonly CLOUD_VOICE_ENDPOINT = 'https://voice.mcs.mail.ru/tts';
     private readonly __CLOUD_VOICE_API_KEY = process.env.CLOUD_VOICE_API_KEY;
-    private readonly __TEMP_FOLDER = '../temp/';
 
-    constructor() {}
+    constructor() {
+        if (!this.__CLOUD_VOICE_API_KEY) {
+            throw new Error('CLOUD_VOICE_API_KEY is not defined');
+        }
+        console.log('VKCloudVoice started');
+    }
 
     // get mp3 from text (TTS by VK Cloud) and download it to temp folder
-    async saveTTS(text: string, name: string) {
-        var fileName = this.__TEMP_FOLDER + name + '.mp3';
-        request
-            .get('http://foo.com/bar.mp3')
-            .on('error', function (err) {
-                // handle error
-            })
-            .pipe(fs.createWriteStream('2.mp3'));
+    async saveTTS(
+        text: string,
+        fileName: string,
+        model_name: SpeechModel = SpeechModel.PAVEL_HIFIGAN,
+        tempo: number = 1,
+    ) {
+        console.log('Starting TTS:', fileName);
+
+        const urlKeys = new URLSearchParams({
+            model_name,
+            tempo: tempo.toString(),
+            encoder: 'mp3',
+        }).toString();
+        const url = this.CLOUD_VOICE_ENDPOINT + '?' + urlKeys;
+
+        const resp = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain',
+                Authorization: 'Bearer ' + this.__CLOUD_VOICE_API_KEY,
+            },
+            body: text,
+            redirect: 'follow',
+        });
+        if (resp.ok && resp.body) {
+            console.log('Writing to file:', fileName);
+            let writer = fs.createWriteStream(fileName);
+            // @ts-ignore
+            Readable.fromWeb(resp.body).pipe(writer);
+        } else {
+            console.error('Error while TTS:', resp.status, resp.statusText);
+        }
+        return fileName;
     }
 }
