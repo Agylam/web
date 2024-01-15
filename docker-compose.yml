@@ -21,7 +21,6 @@ services:
       retries: 3
       start_period: 30s
   backend:
-    image: agylam/back:${BRANCH}
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
       JWT_SECRET: ${JWT_SECRET}
@@ -43,7 +42,6 @@ services:
       postgres:
         condition: service_healthy
   frontend:
-    image: agylam/front:${BRANCH}
     environment:
       BURL: "http://backend:${BACKEND_PORT}"
     ports:

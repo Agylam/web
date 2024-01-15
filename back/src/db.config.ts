@@ -6,7 +6,7 @@ import { ClassRange } from './entities/ClassRange';
 import { User } from './entities/User';
 import { RefreshToken } from './entities/RefreshToken';
 import { Role } from './entities/Role';
-import { DataSourceOptions } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { Announcement } from './entities/Announcement.js';
 
 export const typeOrmConfig: DataSourceOptions = {
@@ -22,3 +22,4 @@ export const typeOrmConfig: DataSourceOptions = {
     migrations: [],
     subscribers: [],
 };
+export const dataSource = new DataSource(typeOrmConfig);
