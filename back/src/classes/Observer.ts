@@ -1,6 +1,9 @@
 import { NtpTimeSync } from 'ntp-time-sync';
 import { Lesson } from '../entities/Lesson';
 import { ConnectionManager } from './ConnectionManager';
+import { dataSource } from '../db.config';
+import { Announcement, AnnouncementState } from '../entities/Announcement';
+import { Sound } from '../entities/Sound';
 
 export class Observer {
     timeSync: NtpTimeSync;
@@ -12,12 +15,12 @@ export class Observer {
         const ws_serv_settings = { port: process.env.WS_SERVER_PORT };
 
         this.connectionManager = new ConnectionManager(ws_serv_settings, () => {
-            this.getTime().then(({ seconds }) => {
+            this.__getTime().then(({ seconds }) => {
                 setTimeout(
                     () => {
                         console.log('Успешный запуск');
-                        this.check();
-                        setInterval(() => this.check(), 60000);
+                        this.__superCheck();
+                        setInterval(() => this.__superCheck(), 60000);
                     },
                     seconds == 0 ? 1 : (60 - seconds) * 1000,
                 );
@@ -25,7 +28,7 @@ export class Observer {
         });
     }
 
-    async getTime() {
+    async __getTime() {
         let now = new Date();
         try {
             const ntpTime = await this.timeSync.getTime();
@@ -42,7 +45,7 @@ export class Observer {
         return { hour, minute, seconds, day };
     }
 
-    async getSoundsByTime({ hour, minute, day }) {
+    async __getSoundsByTime({ hour, minute, day }) {
         const start_lessons = await Lesson.getLessonsByStartTime(hour, minute, day);
         const end_lessons = await Lesson.getLessonsByEndTime(hour, minute, day);
 
@@ -54,39 +57,56 @@ export class Observer {
         return start_sounds.concat(end_sounds);
     }
 
-    async check() {
+    async __getAnnouncements() {
+        return await dataSource.getRepository(Announcement).find({
+            where: {
+                state: AnnouncementState.PUSHED,
+            },
+            select: {
+                uuid: true,
+                school: {
+                    uuid: true,
+                },
+            },
+            relations: {
+                school: true,
+            },
+        });
+    }
+
+    async __superCheck() {
         try {
-            const time = await this.getTime();
-            const sounds = await this.getSoundsByTime({
+            const time = await this.__getTime();
+
+            const sounds = await this.__getSoundsByTime({
                 ...time,
                 day: time.day - 1,
             });
-            sounds.map(async (sound) => {
-                try {
-                    const school_uuid = sound.school.uuid;
-                    console.log(school_uuid, 'PLAY ' + sound.uuid);
-                    await this.connectionManager.sendToSchool(school_uuid, 'PLAY ' + sound.uuid);
-                } catch (e) {
-                    console.error('SoundsMap Error. Sound UUID:', sound.uuid, 'Error:', e);
-                }
-            });
+            this.__mapSender(sounds, 'PLAY');
 
-            const preSounds = await this.getSoundsByTime({
+            const preSounds = await this.__getSoundsByTime({
                 hour: time.hour,
                 minute: time.minute + 1,
                 day: time.day - 1,
             });
-            preSounds.map(async (sound) => {
-                try {
-                    const school_uuid = sound.school.uuid;
-                    console.log(school_uuid, 'WARN ' + sound.uuid);
-                    await this.connectionManager.sendToSchool(school_uuid, 'WARN ' + sound.uuid);
-                } catch (e) {
-                    console.error('preSound Error. Sound UUID: ', sound.uuid, 'Error:', e);
-                }
-            });
+            this.__mapSender(preSounds, 'WARN');
+
+            const announcements = await this.__getAnnouncements();
+            this.__mapSender(announcements, 'ANNOUNCEMENT');
         } catch (e) {
             console.error('Check error:', e);
         }
+    }
+
+    __mapSender(list: (Sound | Announcement)[], prefix: string) {
+        list.map(async (obj) => {
+            try {
+                const school_uuid = obj.school.uuid;
+                console.log(school_uuid, prefix + ' ' + obj.uuid);
+                await this.connectionManager.sendToSchool(school_uuid, prefix + ' ' + obj.uuid);
+            } catch (e) {
+                console.error(prefix + ' Error. ' + prefix + ' UUID: ', obj.uuid, 'Error:', e);
+            }
+        });
     }
 }

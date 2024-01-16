@@ -35,8 +35,9 @@ export class AnnouncementPusher {
         }
 
         try {
-            this.__timer_id = setInterval(() => this.__check(), 1000);
+            this.__timer_id = setInterval(() => this.__check(), 3000);
             this.__vkCloudVoice = new VKCloudVoice();
+
             this.__s3 = new S3({
                 accessKeyId: process.env.S3_ACCESS_KEY_ID,
                 secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
@@ -57,24 +58,21 @@ export class AnnouncementPusher {
 
     // Я не понимаю, почему нет нормального API для S3
     __uploadFile(filePath: string, savePath: string) {
-        console.log('Uploading file:', filePath, 'to', savePath, 'step 1');
         return new Promise((resolve, reject) => {
             try {
+                const fileStream = fs.createReadStream(filePath);
                 const params = {
-                    localFile: filePath,
-                    s3Params: {
-                        Bucket: process.env.S3_BUCKET,
-                        Key: savePath,
-                    },
+                    Body: fileStream,
+                    Bucket: process.env.S3_BUCKET,
+                    Key: savePath,
                 };
-                console.log('Setting Params');
-                this.__s3.uploadFile(params, (err, data) => {
-                    console.log('Uploading file step 3', err, data);
+                this.__s3.upload(params, (err, data) => {
+                    console.log('Успешно загружен файл по S3');
                     if (err) reject(err);
                     resolve(data);
                 });
             } catch (err) {
-                console.error("Can't upload file:", err);
+                console.error('Невозможно загрузить файл. Ошика:', err);
                 reject(err);
             }
         });
@@ -99,34 +97,37 @@ export class AnnouncementPusher {
 
         announcements.map(async (announcement) => {
             const { uuid, text, school } = announcement;
-            const filePath = '/announcements/' + school.uuid + '/';
+            const filePath = 'announcements/' + school.uuid + '/';
             const fileName = uuid + '.mp3';
+            const fullFilePath = './' + this.__TEMP_FOLDER + '/' + filePath + fileName;
 
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath, { recursive: true });
             }
 
             try {
-                await this.__vkCloudVoice.saveTTS(text, filePath + fileName, announcement.speech_model);
+                await this.__vkCloudVoice.saveTTS(text, fullFilePath, announcement.speech_model);
                 announcement.state = AnnouncementState.SAVED;
                 await this.__announcementRepository.save(announcement);
-                console.log('TTS saved:', fileName);
+                console.log('TTS файл сохранён:', filePath + fileName);
             } catch (e) {
-                console.error('TTS save error:', e);
+                console.error('TTS ошибка сохранения:', e);
                 announcement.state = AnnouncementState.ERROR;
                 await this.__announcementRepository.save(announcement);
             }
 
             try {
-                await this.__uploadFile('./' + this.__TEMP_FOLDER + filePath + fileName, filePath + fileName);
+                await this.__uploadFile(fullFilePath, filePath + fileName);
                 announcement.state = AnnouncementState.PUSHED;
                 await this.__announcementRepository.save(announcement);
-                console.log('Announcement uploaded:', uuid);
+                console.log('Объявление загружено по S3 с UUID:', uuid);
             } catch (err) {
-                console.error('unable to upload:', err);
+                console.error('Невозможно загрузить Объявление по S3. Ошибка:', err);
                 announcement.state = AnnouncementState.ERROR;
                 await this.__announcementRepository.save(announcement);
             }
+
+            // TODO: Delete files
         });
     }
 }
