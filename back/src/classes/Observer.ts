@@ -93,6 +93,9 @@ export class Observer {
 
             const announcements = await this.__getAnnouncements();
             this.__mapSender(announcements, 'ANNOUNCEMENT');
+            announcements.map((announcement) => {
+                announcement.state = AnnouncementState.PLAYING;
+            });
         } catch (e) {
             console.error('Check error:', e);
         }

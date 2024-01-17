@@ -14,11 +14,12 @@ export const AnnouncementPage = () => {
         try {
             const announcement = await pushAnnouncement(textAreaValue);
             if (!announcement) {
-                toast.error("Неизвестная ошибка");
+                toast.error("Неизвестная ошибка1");
                 return;
             }
-            const anTime = announcement.time;
-            toast.success(`Успешно создано объявление в ${anTime.hours}:${anTime.minutes}`);
+            // const anTime = announcement.time;
+            // toast.success(`Успешно создано объявление в ${anTime.hours}:${anTime.minutes}`);
+            toast.success("Успешно создано объявление");
         } catch (e) {
             console.error("AnnouncementPage", e);
             toast.error("Неизвестная ошибка");

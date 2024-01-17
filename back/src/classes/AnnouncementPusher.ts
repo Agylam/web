@@ -1,9 +1,9 @@
-import { dataSource } from '../db.config.js';
-import { Announcement, AnnouncementState } from '../entities/Announcement.js';
-import { VKCloudVoice } from './VKCloudVoice.js';
-import * as process from 'process';
-import * as fs from 'fs';
-import { S3 } from 'aws-sdk';
+import { dataSource } from "../db.config.js";
+import { Announcement, AnnouncementState } from "../entities/Announcement.js";
+import { VKCloudVoice } from "./VKCloudVoice.js";
+import * as process from "process";
+import * as fs from "fs";
+import { S3 } from "aws-sdk";
 
 export class AnnouncementPusher {
     private __timer_id: NodeJS.Timeout;
@@ -35,7 +35,8 @@ export class AnnouncementPusher {
         }
 
         try {
-            this.__timer_id = setInterval(() => this.__check(), 3000);
+            // this.__timer_id = setInterval(async () => await this.__check(), 10000);
+            this.__startObserver();
             this.__vkCloudVoice = new VKCloudVoice();
 
             this.__s3 = new S3({
@@ -53,8 +54,22 @@ export class AnnouncementPusher {
         // vkCloudVoice.saveTTS('Привет, мир!', 'test');
     }
 
+    async __startObserver() {
+        while (true) {
+            this.__check();
+            await this.delay(3000);
+        }
+    }
+
     // Лютый говногод
     // TODO: Рефактор
+    delay(t) {
+        return new Promise<void>(function (resolve) {
+            setTimeout(function () {
+                resolve();
+            }, t);
+        });
+    }
 
     // Я не понимаю, почему нет нормального API для S3
     __uploadFile(filePath: string, savePath: string) {
@@ -66,9 +81,9 @@ export class AnnouncementPusher {
                     Bucket: process.env.S3_BUCKET,
                     Key: savePath,
                 };
-                this.__s3.upload(params, (err, data) => {
-                    console.log('Успешно загружен файл по S3');
+                this.__s3.upload(params).send((err, data) => {
                     if (err) reject(err);
+                    console.log('Успешно загружен файл по S3');
                     resolve(data);
                 });
             } catch (err) {
@@ -104,9 +119,9 @@ export class AnnouncementPusher {
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath, { recursive: true });
             }
-
+            let announcementBuffer: ArrayBuffer | string;
             try {
-                await this.__vkCloudVoice.saveTTS(text, fullFilePath, announcement.speech_model);
+                announcementBuffer = await this.__vkCloudVoice.streamTTS(text, fullFilePath, announcement.speech_model);
                 announcement.state = AnnouncementState.SAVED;
                 await this.__announcementRepository.save(announcement);
                 console.log('TTS файл сохранён:', filePath + fileName);
@@ -117,7 +132,7 @@ export class AnnouncementPusher {
             }
 
             try {
-                await this.__uploadFile(fullFilePath, filePath + fileName);
+                await this.__uploadFile(, filePath + fileName);
                 announcement.state = AnnouncementState.PUSHED;
                 await this.__announcementRepository.save(announcement);
                 console.log('Объявление загружено по S3 с UUID:', uuid);

@@ -13,6 +13,12 @@ export class AnnouncementController {
     @UseGuards(RolesGuard)
     @Post('/new')
     async update(@Req() req: AnnouncementCreateRequest) {
-        return this.announcementService.createAnnouncement({ ...req.body, schoolUuid: req.user.school.uuid });
+        const announcement = await this.announcementService.createAnnouncement({
+            ...req.body,
+            schoolUuid: req.user.school.uuid,
+        });
+        return {
+            result: announcement,
+        };
     }
 }

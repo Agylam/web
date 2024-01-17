@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import { Readable } from 'node:stream';
 import { SpeechModel } from '../entities/Announcement.js';
 
 export class VKCloudVoice {
@@ -14,7 +12,7 @@ export class VKCloudVoice {
     }
 
     // get mp3 from text (TTS by VK Cloud) and download it to temp folder
-    async saveTTS(
+    async streamTTS(
         text: string,
         fileName: string,
         model_name: SpeechModel = SpeechModel.PAVEL_HIFIGAN,
@@ -40,9 +38,10 @@ export class VKCloudVoice {
         });
         if (resp.ok && resp.body) {
             console.log('Writing to file:', fileName);
-            let writer = fs.createWriteStream(fileName);
+            // let writer = fs.createWriteStream(fileName);
             // @ts-ignore
-            Readable.fromWeb(resp.body).pipe(writer);
+            // Readable.fromWeb(resp.body).pipe(writer);
+            return await resp.arrayBuffer();
         } else {
             console.error('Error while TTS:', resp.status, resp.statusText);
         }
