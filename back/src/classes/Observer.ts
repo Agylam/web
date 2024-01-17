@@ -15,14 +15,14 @@ export class Observer {
         const ws_serv_settings = { port: process.env.WS_SERVER_PORT };
 
         this.connectionManager = new ConnectionManager(ws_serv_settings, () => {
-            this.__getTime().then(({ seconds }) => {
+            this.__getTime().then(({ second }) => {
                 setTimeout(
                     () => {
                         console.log('Успешный запуск');
                         this.__superCheck();
                         setInterval(() => this.__superCheck(), 60000);
                     },
-                    seconds == 0 ? 1 : (60 - seconds) * 1000,
+                    second == 0 ? 1 : (60 - second) * 1000,
                 );
             });
         });
@@ -38,18 +38,16 @@ export class Observer {
         }
         const hour = now.getHours();
         const minute = now.getMinutes();
-        const seconds = now.getSeconds();
+        const second = now.getSeconds();
         const day = now.getDay();
 
-        console.log({ hour, minute, seconds, day });
-        return { hour, minute, seconds, day };
+        console.log(`Проверка на время ${hour}:${minute}:${second}`);
+        return { hour, minute, second, day };
     }
 
     async __getSoundsByTime({ hour, minute, day }) {
         const start_lessons = await Lesson.getLessonsByStartTime(hour, minute, day);
         const end_lessons = await Lesson.getLessonsByEndTime(hour, minute, day);
-
-        console.log('lessons', start_lessons, end_lessons);
 
         const start_sounds = start_lessons.map((l) => l.class_range.start_sound);
         const end_sounds = end_lessons.map((l) => l.class_range.end_sound);

@@ -18,8 +18,6 @@ export class VKCloudVoice {
         model_name: SpeechModel = SpeechModel.PAVEL_HIFIGAN,
         tempo: number = 1,
     ) {
-        console.log('Starting TTS:', fileName);
-
         const urlKeys = new URLSearchParams({
             model_name,
             tempo: tempo.toString(),
@@ -37,7 +35,7 @@ export class VKCloudVoice {
             redirect: 'follow',
         });
         if (resp.ok && resp.body) {
-            console.log('Writing to file:', fileName);
+            // console.log('Writing to file:', fileName);
             // let writer = fs.createWriteStream(fileName);
             // @ts-ignore
             // Readable.fromWeb(resp.body).pipe(writer);
@@ -45,6 +43,6 @@ export class VKCloudVoice {
         } else {
             console.error('Error while TTS:', resp.status, resp.statusText);
         }
-        return fileName;
+        // return fileName;
     }
 }

@@ -1,16 +1,15 @@
-import { dataSource } from "../db.config.js";
-import { Announcement, AnnouncementState } from "../entities/Announcement.js";
-import { VKCloudVoice } from "./VKCloudVoice.js";
-import * as process from "process";
-import * as fs from "fs";
-import { S3 } from "aws-sdk";
+import { dataSource } from '../db.config.js';
+import { Announcement, AnnouncementState } from '../entities/Announcement.js';
+import { VKCloudVoice } from './VKCloudVoice.js';
+import * as process from 'process';
+import * as fs from 'fs';
+import { S3 } from 'aws-sdk';
 
 export class AnnouncementPusher {
     private __timer_id: NodeJS.Timeout;
     private __vkCloudVoice: VKCloudVoice;
     private __s3;
 
-    private readonly __TEMP_FOLDER = 'temp';
     private readonly __announcementRepository = dataSource.getRepository(Announcement);
 
     constructor() {
@@ -30,13 +29,8 @@ export class AnnouncementPusher {
             throw new Error('S3_ENDPOINT is not defined');
         }
 
-        if (!fs.existsSync(this.__TEMP_FOLDER)) {
-            fs.mkdirSync(this.__TEMP_FOLDER);
-        }
-
         try {
-            // this.__timer_id = setInterval(async () => await this.__check(), 10000);
-            this.__startObserver();
+            this.__timer_id = setInterval(async () => await this.__check(), 10000);
             this.__vkCloudVoice = new VKCloudVoice();
 
             this.__s3 = new S3({
@@ -50,34 +44,13 @@ export class AnnouncementPusher {
         } catch (e) {
             console.error('AnnouncementPusherInit error:', e);
         }
-
-        // vkCloudVoice.saveTTS('Привет, мир!', 'test');
     }
 
-    async __startObserver() {
-        while (true) {
-            this.__check();
-            await this.delay(3000);
-        }
-    }
-
-    // Лютый говногод
-    // TODO: Рефактор
-    delay(t) {
-        return new Promise<void>(function (resolve) {
-            setTimeout(function () {
-                resolve();
-            }, t);
-        });
-    }
-
-    // Я не понимаю, почему нет нормального API для S3
-    __uploadFile(filePath: string, savePath: string) {
+    __uploadFile(buffer: ArrayBuffer, savePath: string) {
         return new Promise((resolve, reject) => {
             try {
-                const fileStream = fs.createReadStream(filePath);
                 const params = {
-                    Body: fileStream,
+                    Body: new Uint8Array(buffer),
                     Bucket: process.env.S3_BUCKET,
                     Key: savePath,
                 };
@@ -114,14 +87,13 @@ export class AnnouncementPusher {
             const { uuid, text, school } = announcement;
             const filePath = 'announcements/' + school.uuid + '/';
             const fileName = uuid + '.mp3';
-            const fullFilePath = './' + this.__TEMP_FOLDER + '/' + filePath + fileName;
 
             if (!fs.existsSync(filePath)) {
                 fs.mkdirSync(filePath, { recursive: true });
             }
-            let announcementBuffer: ArrayBuffer | string;
+            let announcementBuffer: ArrayBuffer;
             try {
-                announcementBuffer = await this.__vkCloudVoice.streamTTS(text, fullFilePath, announcement.speech_model);
+                announcementBuffer = await this.__vkCloudVoice.streamTTS(text, announcement.speech_model);
                 announcement.state = AnnouncementState.SAVED;
                 await this.__announcementRepository.save(announcement);
                 console.log('TTS файл сохранён:', filePath + fileName);
@@ -132,7 +104,7 @@ export class AnnouncementPusher {
             }
 
             try {
-                await this.__uploadFile(, filePath + fileName);
+                await this.__uploadFile(announcementBuffer, filePath + fileName);
                 announcement.state = AnnouncementState.PUSHED;
                 await this.__announcementRepository.save(announcement);
                 console.log('Объявление загружено по S3 с UUID:', uuid);
@@ -141,8 +113,6 @@ export class AnnouncementPusher {
                 announcement.state = AnnouncementState.ERROR;
                 await this.__announcementRepository.save(announcement);
             }
-
-            // TODO: Delete files
         });
     }
 }
