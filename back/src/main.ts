@@ -22,7 +22,7 @@ async function runServer() {
     SwaggerModule.setup('/docs', app, document);
     app.use(cookieParser());
 
-    await app.listen(SERVER_PORT, '127.0.0.1', () => {
+    await app.listen(SERVER_PORT, () => {
         console.log(`HTTP Сервер запущен на порту ${SERVER_PORT}`);
     });
 
