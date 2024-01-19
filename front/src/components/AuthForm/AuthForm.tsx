@@ -9,11 +9,10 @@ import { AuthDataDto } from "../../interfaces/AuthData.dto";
 import { auth } from "../../api/auth";
 import { PagePath } from "../../constants";
 
-
 export const AuthForm = () => {
     const [authData, setAuthData] = useState<AuthDataDto>({
         email: "",
-        password: ""
+        password: "",
     });
 
     const navigate = useNavigate();
@@ -34,23 +33,22 @@ export const AuthForm = () => {
     };
 
     const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAuthData(prev => {
+        setAuthData((prev) => {
             return {
                 ...prev,
-                email: e.target.value
+                email: e.target.value,
             };
         });
     };
 
     const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAuthData(prev => {
+        setAuthData((prev) => {
             return {
                 ...prev,
-                password: e.target.value
+                password: e.target.value,
             };
         });
     };
-
 
     return (
         <div className="auth_block">
@@ -71,13 +69,10 @@ export const AuthForm = () => {
                         value={authData.password}
                         onChange={onChangePassword}
                     />
-                    <Button type="submit">
-                        Войти
-                    </Button>
+                    <Button type="submit">Войти</Button>
                 </div>
                 <p className="conditions">
-                    Нажимая кнопку «Войти», вы соглашаетесь с
-                    <a href="/rules">правилами пользования</a>
+                    Нажимая кнопку «Войти», вы соглашаетесь с<a href="/rules"> правилами использования </a>
                     сайтом
                 </p>
             </form>
