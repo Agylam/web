@@ -1,0 +1,58 @@
+div.auth_block {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    form#auth {
+        height: 53vh;
+        width: 44vw;
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 400px;
+        align-content: space-between;
+        justify-content: center;
+        padding: 6vh 6vw;
+        border-radius: 5vh;
+        background: var(--surface-surface);
+        border: solid 3px var(--surface-surface-stroke);
+        max-height: 370px;
+
+        #logo {
+            width: auto;
+            height: 57px;
+        }
+
+        div.auth_inputs {
+            width: 100%;
+
+            input {
+                width: 90%;
+                margin: 3% 0;
+                height: 4vh;
+            }
+
+            input:first-child {
+                margin-top: 4.5vh;
+            }
+
+            button {
+                border: none;
+                margin: 3% 0;
+            }
+        }
+
+
+        p.conditions {
+            font-size: 12px;
+            color: var(--text-text);
+            text-align: center;
+
+            a {
+                color: var(--blue-light);
+            }
+        }
+    }
+}

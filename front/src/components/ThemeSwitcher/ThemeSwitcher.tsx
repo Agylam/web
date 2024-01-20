@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./ThemeSwitcher.css";
+import "./ThemeSwitcher.scss";
 
 import sun from "../../assets/sun.svg";
 

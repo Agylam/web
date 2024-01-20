@@ -1,32 +1,36 @@
 import { useEffect } from "react";
-import { isExpired as checkIsExpired } from "react-jwt";
-import { useJwtContext } from "../context/jwt-context";
-import refreshFetch from "../fetches/refreshFetch";
+import { isExpired } from "react-jwt";
+import { useAccessToken } from "./useAccessToken";
+import { refreshToken } from "../api/refreshToken";
 
-const accessTokenCheckIntervalMs = 5000;
+const accessTokenCheckIntervalMs = 3000;
+
 
 export const useJwtKeepAlive = () => {
-    const { jwts, setJwts } = useJwtContext();
+    const { accessToken, setAccessToken } = useAccessToken();
 
     useEffect(() => {
-        const intervalId = setInterval(async () => {
-            if (!jwts.accessToken || !checkIsExpired(jwts.accessToken)) {
+        let updateInterval = -1;
+        const updateAccessToken = async () => {
+            if (!accessToken || !isExpired(accessToken)) {
                 return;
             }
 
             try {
-                const newJwt = await refreshFetch();
-                setJwts(newJwt);
+                const { accessToken } = await refreshToken();
+                setAccessToken(accessToken);
             } catch (e) {
-                clearInterval(intervalId);
-                setJwts({ accessToken: "" });
+                clearInterval(updateInterval);
+                setAccessToken("");
                 console.error("Ошибка обновления токена");
             }
-            // reEvaluateToken(newJwt && newJwt.accessToken);
-        }, accessTokenCheckIntervalMs);
-
-        return () => {
-            clearInterval(intervalId);
         };
-    }, [jwts, setJwts]);
+
+        if (accessToken && !isExpired(accessToken)) {
+            updateInterval = setInterval(updateAccessToken, accessTokenCheckIntervalMs);
+            return () => {
+                clearInterval(updateInterval);
+            };
+        }
+    }, [accessToken, setAccessToken]);
 };

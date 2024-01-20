@@ -1,43 +1,32 @@
 import React from "react";
-
+import "./Navbar.scss";
+import { logOut } from "../../utils/logOut";
+import { NavbarLink } from "../NavbarLink/NavbarLink";
 import logoImg from "../../assets/logo.svg";
+import { useUserInfo } from "../../hooks/useUserInfo";
 
-import IUser from "../../interfaces/IUser";
+export const Navbar = () => {
+    const userInfo = useUserInfo();
 
-import "./Navbar.css";
-import { logOut } from "../../utils/jwts";
-import { NavbarElement } from "../NavbarElement/NavbarElement";
-
-interface INavbarParams {
-    userInfo: IUser | null;
-}
-
-export default function Navbar({ userInfo }: INavbarParams) {
     return (
         <div className="nav_wrapper">
             <div className="left_nav">
-                <img
-                    src={logoImg}
-                    alt=""
-                    id="nav_logo"
-                />
+                <img src={logoImg} alt="" id="nav_logo" />
                 <nav>
                     <ul>
-                        <NavbarElement name="Расписание" uri="/schedule" />
-                        <NavbarElement name="Объявления" uri="/announcement" />
-                        <NavbarElement name="Пользователи" uri="" />
-                        <NavbarElement name="Файл" uri="" />
+                        <NavbarLink name="Расписание" uri="/schedule" />
+                        <NavbarLink name="Объявления" uri="/announcement" />
+                        <NavbarLink name="Пользователи" uri="" />
+                        <NavbarLink name="Файл" uri="" />
                     </ul>
                 </nav>
             </div>
             <div className="right_nav">
                 <p className="name">{userInfo?.fullname}</p>
-                <button
-                    id="exit"
-                    onClick={logOut}>
+                <button id="exit" onClick={logOut}>
                     Выйти
                 </button>
             </div>
         </div>
     );
-}
+};

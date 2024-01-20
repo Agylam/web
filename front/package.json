@@ -10,7 +10,6 @@
     "lint:fix": "npx eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"
   },
   "dependencies": {
-    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-jwt": "^1.1.8",
@@ -37,19 +36,20 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "sass": "^1.69.6",
     "typescript": "^4.9.3",
     "vite": "^4.4.3"
   },
-  "main": "src/index.js",
+  "main": "src/main.tsx",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mimbol228/agylamwebfront.git"
+    "url": "git+https://github.com/agylam/web.git"
   },
-  "author": "MIMBOL228",
+  "author": "Agylam",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/mimbol228/agylamwebfront/issues"
+    "url": "https://github.com/agylam/web/issues"
   },
-  "homepage": "https://github.com/mimbol228/agylamwebfront#readme",
+  "homepage": "https://github.com/agylam/web#readme",
   "description": ""
 }

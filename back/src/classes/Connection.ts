@@ -1,21 +1,24 @@
 import WebSocket from 'ws';
 import { v4 as genUUID } from 'uuid';
 import { School } from '../entities/School';
+import { Announcement, AnnouncementState } from '../entities/Announcement';
+import { dataSource } from '../db.config';
 
 export class Connection {
     public uuid: string;
     public school_uuid: string;
     public authorized = false;
 
-    private auth_random: string;
-    private connection: WebSocket;
+    private __auth_random: string;
+    private __connection: WebSocket;
+    private __announcementRepository = dataSource.getRepository(Announcement);
 
     constructor(connection) {
         this.uuid = genUUID();
-        this.auth_random = genUUID();
-        this.connection = connection;
+        this.__auth_random = genUUID();
+        this.__connection = connection;
 
-        this.connection.on('message', (buf) => {
+        this.__connection.on('message', (buf) => {
             const msg = buf.toString('utf8');
             this.msgHandler(msg).then((response) => {
                 this.send(response);
@@ -47,7 +50,7 @@ export class Connection {
                 }
                 this.school_uuid = args[0];
 
-                const authorized = await School.authorizate(this.school_uuid, this.auth_random, args[1]);
+                const authorized = await School.authorizate(this.school_uuid, this.__auth_random, args[1]);
 
                 if (authorized) {
                     this.authorized = true;
@@ -56,24 +59,36 @@ export class Connection {
                     await this.close('Invalid authorization data. Bye bye');
                 }
                 break;
+            case 'PLAYED_ANNOUNCEMENT':
+                if (args[0] === undefined) {
+                    return 'ERROR announcement UUID is empty';
+                }
+
+                const announcement = await this.__announcementRepository.findOneBy({
+                    uuid: args[0],
+                });
+                announcement.state = AnnouncementState.PLAYED;
+                await announcement.save();
+                return 'OK';
+                break;
             default:
                 return 'ERROR Unknown command';
         }
     }
 
     async authRequest() {
-        await this.send('AUTH_REQUEST ' + this.auth_random);
+        await this.send('AUTH_REQUEST ' + this.__auth_random);
         setTimeout(() => {
             if (this.authorized !== true) this.close('Auth timeout');
         }, 30000);
     }
 
     async send(msg) {
-        this.connection.send(msg);
+        this.__connection.send(msg);
     }
 
     async close(err: string | null) {
         if (err !== null) await this.send('ERROR ' + err);
-        this.connection.close();
+        this.__connection.close();
     }
 }

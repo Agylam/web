@@ -17,6 +17,7 @@ export class ConnectionManager {
                 delete this.connections[connection_uuid];
             });
         });
+        console.log('WebSocket сервер успешно запущен на порту ', server_properties.port);
     }
 
     newConnection(con: WebSocket) {

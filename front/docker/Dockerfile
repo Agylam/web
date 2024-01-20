@@ -1,5 +1,4 @@
 FROM node:18-alpine as builder
-RUN npm i yarn
 COPY package.json yarn.lock ./
 RUN yarn
 COPY src  ./src
@@ -14,4 +13,4 @@ ENV BUILD_VERSION=ARG_BUILD_VERSION
 
 COPY --from=builder dist ./dist
 COPY nginx/default.conf /etc/nginx/nginx.conf.template
-CMD /bin/sh -c "envsubst '\$BURL' < /etc/nginx/nginx.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+CMD /bin/sh -c "envsubst '\$BURL,\$WS_SERVER_PORT' < /etc/nginx/nginx.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
