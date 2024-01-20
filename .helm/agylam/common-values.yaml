@@ -7,14 +7,14 @@ global:
 backend:
   image: agylam/back
   replicas: 2
-  ports: 
-    - 81
+  ports:
+    - 3000
     - 8080
 
 frontend:
   image: agylam/front
   replicas: 2
-  ports: 
+  ports:
     - 80
 
 ingress:
@@ -31,6 +31,6 @@ postgresql:
     username: changeme
     password: changeme
 
-ENV: {}
+ENV: { }
 
-SECRETS: {}
+SECRETS: { }

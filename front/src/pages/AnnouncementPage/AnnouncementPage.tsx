@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { pushAnnouncement } from "../../api/pushAnnouncement";
 import "./AnnouncementPage.scss";
 
-export default function AnnouncementPage() {
+export const AnnouncementPage = () => {
     const [textAreaValue, setTextAreaValue] = useState("");
     const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTextAreaValue(e.target.value);
@@ -14,17 +14,17 @@ export default function AnnouncementPage() {
         try {
             const announcement = await pushAnnouncement(textAreaValue);
             if (!announcement) {
-                toast.error("Неизвестная ошибка");
+                toast.error("Неизвестная ошибка1");
                 return;
             }
-            const anTime = announcement.time;
-            toast.success(`Успешно создано объявление в ${anTime.hours}:${anTime.minutes}`);
+            // const anTime = announcement.time;
+            // toast.success(`Успешно создано объявление в ${anTime.hours}:${anTime.minutes}`);
+            toast.success("Успешно создано объявление");
         } catch (e) {
             console.error("AnnouncementPage", e);
             toast.error("Неизвестная ошибка");
         }
     };
-
 
     return (
         <div className="announcement_wrapper">
@@ -35,11 +35,12 @@ export default function AnnouncementPage() {
                     id="message"
                     placeholder="Введите текст"
                     value={textAreaValue}
+                    maxLength={2000}
                     required={true}
                 ></textarea>
                 <button type="submit">Отправить</button>
             </form>
         </div>
     );
-}
+};
 

@@ -1,26 +1,8 @@
 version: "3.9"
 services:
-  postgres:
-    image: postgres:13.3
-    environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_DB: ${PGDATABASE}
-      POSTGRES_USER: ${PGUSER}
-      POSTGRES_PASSWORD: ${PGPASSWORD}
-      POSTGRES_PORT: ${PGPORT}
-      POSTGRES_DATA: ${PGDATA}
-    ports:
-      - "${PGPORT}:${PGPORT}"
-    volumes:
-      - ./dataDB:/var/lib/postgresql/data
-    user: root
-    healthcheck:
-      test: [ "CMD", "/usr/bin/pg_isready", "-U", "${PGUSER}" ]
-      interval: 10s
-      timeout: 1s
-      retries: 3
-      start_period: 30s
   backend:
+    image: agylam/back:emerg
+    platform: linux/amd64
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
       JWT_SECRET: ${JWT_SECRET}
@@ -45,11 +27,10 @@ services:
       - "3001:3001"
     build:
       context: ./back
-      dockerfile: ./docker/dev.Dockerfile
-    depends_on:
-      postgres:
-        condition: service_healthy
+      dockerfile: ./docker/Dockerfile
   frontend:
+    platform: linux/amd64
+    image: agylam/front:emerg
     environment:
       BURL: "http://backend:${BACKEND_PORT}"
     ports:

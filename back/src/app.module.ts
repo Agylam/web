@@ -10,6 +10,8 @@ import { ScheduleController } from './schedule/schedule.controller.js';
 import { ClassRangeModule } from './classRange/classRange.module.js';
 import { ClassRangeController } from './classRange/classRange.controller.js';
 import { typeOrmConfig } from './db.config';
+import { AnnouncementController } from './announcement/announcement.controller';
+import { AnnouncementModule } from './announcement/announcement.module';
 
 @Module({
     imports: [
@@ -21,9 +23,10 @@ import { typeOrmConfig } from './db.config';
         AuthModule,
         ScheduleModule,
         ClassRangeModule,
+        AnnouncementModule,
     ],
 
-    controllers: [AuthController, UserController, ScheduleController, ClassRangeController],
+    controllers: [AuthController, UserController, ScheduleController, ClassRangeController, AnnouncementController],
     providers: [],
 })
 export class AppModule {}

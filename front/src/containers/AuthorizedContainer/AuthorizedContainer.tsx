@@ -1,6 +1,6 @@
 import React from "react";
 import "./AuthorizedContainer.scss";
-import NavbarComponent from "../../components/Navbar/Navbar";
+import { Navbar } from "../../components/Navbar/Navbar";
 
 interface AuthorizedContainerProps {
     children: React.ReactNode;
@@ -9,7 +9,7 @@ interface AuthorizedContainerProps {
 export const AuthorizedContainer = (props: AuthorizedContainerProps) => {
     return (
         <>
-            <NavbarComponent />
+            <Navbar />
             {props.children}
         </>
     );

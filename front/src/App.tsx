@@ -3,8 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AppRoutes } from "./routes/AppRoutes";
 import { MainContainer } from "./containers/MainContainer/MainContainer";
 
-export default function App() {
-
+export const App = () => {
     return (
         <React.StrictMode>
             <MainContainer>
@@ -12,4 +11,4 @@ export default function App() {
             </MainContainer>
         </React.StrictMode>
     );
-}
+};

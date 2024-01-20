@@ -3,6 +3,7 @@ import { createHash } from 'crypto';
 import { Sound } from './Sound';
 import { ClassRange } from './ClassRange';
 import { User } from './User.js';
+import { Announcement } from './Announcement.js';
 
 @Entity()
 export class School extends BaseEntity {
@@ -23,6 +24,9 @@ export class School extends BaseEntity {
 
     @OneToMany(() => ClassRange, (class_range) => class_range.school)
     class_ranges: ClassRange[];
+
+    @OneToMany(() => Announcement, (announcement) => announcement.school)
+    announcements: Announcement[];
 
     @OneToMany(() => Sound, (sound) => sound.school)
     sounds: Sound[];
