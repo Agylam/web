@@ -20,7 +20,8 @@
     },
     "watchOptions": {
         "fallbackPolling": "dynamicPriority",
-        "watchFile": "useFsEvents",
+        "watchFile": "priorityPollingInterval",
+        "watchDirectory": "fixedPollingInterval",
         "excludeDirectories": [
             "node_modules",
             "dist",

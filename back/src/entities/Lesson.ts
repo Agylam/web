@@ -58,24 +58,4 @@ export class Lesson extends BaseEntity {
         });
         return res;
     }
-
-    // static async getClassRange (uuid) {
-    //     return await Lesson.createQueryBuilder("lesson")
-    //         .leftJoinAndSelect("lesson.class_range", "class_range")
-    //         .where("lesson.uuid = :uuid", { this })
-    //         .getMany();
-    // }
-    //
-    // getStartSound () {
-    //     Lesson.getClassRange().then(console.log)
-    //     return new Sound()//this.getClassRange()
-    // }
-    //
-    // getEndSound () {
-    //     return this.class_range.end_sound
-    // }
-    //
-    // getSchool = () => {
-    //     return this.class_range.school
-    // }
 }

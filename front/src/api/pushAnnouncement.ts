@@ -20,8 +20,6 @@ interface PushAnnouncementResponse {
 }
 
 export const pushAnnouncement = async (text: string, time?: AnnouncementTime) => {
-    const response = await apiFetcher<PushAnnouncementResponse>(
-        "/notification", { text, time }, HttpMethod.POST
-    );
+    const response = await apiFetcher()<PushAnnouncementResponse>("/announcement/new", { text, time }, HttpMethod.POST);
     return response.result;
 };

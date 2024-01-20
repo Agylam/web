@@ -5,11 +5,9 @@ import * as process from 'process';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
-import { DataSource } from 'typeorm';
-import { typeOrmConfig } from './db.config';
 import { Observer } from './classes/Observer';
-
-const AppDataSource = new DataSource(typeOrmConfig);
+import { AnnouncementPusher } from './classes/AnnouncementPusher.js';
+import { dataSource } from './db.config.js';
 
 async function runServer() {
     const SERVER_PORT = process.env.BACKEND_PORT || 3000;
@@ -28,9 +26,12 @@ async function runServer() {
         console.log(`HTTP Сервер запущен на порту ${SERVER_PORT}`);
     });
 
-    await AppDataSource.initialize().catch(console.error);
+    await dataSource.initialize().catch(console.error);
 
-    const observer = new Observer(); // Запуск Observerа для проверки времени и отправки звуков
+    const observer = new Observer(); // Запуск Observer для проверки времени и отправки звуков
+    const announcementPusher = new AnnouncementPusher(); // Запуск AnnouncementPusher для отправки объявлений
 }
 
-runServer();
+runServer()
+    .then(() => console.log('Успешный запуск'))
+    .catch((e) => console.error('Ошибка запуска:', e));

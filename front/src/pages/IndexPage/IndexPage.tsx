@@ -6,7 +6,7 @@ import { useUserInfo } from "../../hooks/useUserInfo";
 import { useNavigate } from "react-router-dom";
 import { PagePath } from "../../constants";
 
-export default function IndexPage() {
+export const IndexPage = () => {
     const user = useUserInfo();
     const navigate = useNavigate();
 
@@ -16,7 +16,5 @@ export default function IndexPage() {
         }
     }, [user, navigate, PagePath.schedule]);
 
-    return (
-        <AuthForm />
-    );
-}
+    return <AuthForm />;
+};

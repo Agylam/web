@@ -32,3 +32,5 @@ dataDB/*
 
 # Helm ignoring
 .helm/agylam/charts/
+
+.env
