@@ -2,7 +2,6 @@ import { dataSource } from '../db.config.js';
 import { Announcement, AnnouncementState } from '../entities/Announcement.js';
 import { VKCloudVoice } from './VKCloudVoice.js';
 import * as process from 'process';
-import * as fs from 'fs';
 import { S3 } from 'aws-sdk';
 
 export class AnnouncementPusher {
@@ -88,9 +87,6 @@ export class AnnouncementPusher {
             const filePath = 'schools/' + school.uuid + '/announcements/';
             const fileName = uuid + '.mp3';
 
-            if (!fs.existsSync(filePath)) {
-                fs.mkdirSync(filePath, { recursive: true });
-            }
             let announcementBuffer: ArrayBuffer;
             try {
                 announcementBuffer = await this.__vkCloudVoice.streamTTS(text, announcement.speech_model);
