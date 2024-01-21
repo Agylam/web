@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         module: [ front, back ]
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Node installation

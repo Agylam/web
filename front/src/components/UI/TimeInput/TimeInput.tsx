@@ -7,10 +7,7 @@ interface TimeInputComponentParams {
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function TimeInput({
-    value, onUpdateValue, onChange = () => {
-    }
-}: TimeInputComponentParams) {
+export default function TimeInput({ value, onUpdateValue, onChange }: TimeInputComponentParams) {
     const [timeValue, setTimeValue] = useState("10:00");
 
     useEffect(() => {
@@ -19,7 +16,9 @@ export default function TimeInput({
 
     const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTimeValue(e.target.value);
-        onChange(e);
+        if (onChange) {
+            onChange(e);
+        }
     };
 
     const onBlur = () => {
@@ -28,13 +27,5 @@ export default function TimeInput({
         }
     };
 
-    return (
-        <input
-            type="time"
-            className="time_input"
-            value={timeValue}
-            onChange={onChangeInput}
-            onBlur={onBlur}
-        />
-    );
+    return <input type="time" className="time_input" value={timeValue} onChange={onChangeInput} onBlur={onBlur} />;
 }
