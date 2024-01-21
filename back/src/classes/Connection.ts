@@ -25,6 +25,7 @@ export class Connection {
             });
         });
 
+        console.log('WS UUID:', this.uuid, 'Новое подключение');
         this.authRequest();
     }
 
@@ -39,6 +40,7 @@ export class Connection {
 
         switch (cmd) {
             case 'AUTH':
+                console.log('WS UUID:', this.uuid, 'Отправил авторизационные данные. Проверяю...');
                 if (args[0] === undefined) {
                     return 'ERROR school UUID is empty';
                 }
@@ -55,8 +57,10 @@ export class Connection {
                 if (authorized) {
                     this.authorized = true;
 
+                    console.log('WS UUID:', this.uuid, 'Проверил авторизационные данные. Успешно');
                     return 'AUTHORIZED';
                 } else {
+                    console.log('WS UUID:', this.uuid, 'Неверные авторизационные данные');
                     await this.close('Invalid authorization data. Bye bye');
                 }
                 break;
@@ -65,13 +69,12 @@ export class Connection {
                     return 'ERROR announcement UUID is empty';
                 }
 
-                const announcement = await this.__announcementRepository.findOneBy({
+                const announcement = await this.__announcementRepository.findOneByOrFail({
                     uuid: args[0],
                 });
                 announcement.state = AnnouncementState.PLAYED;
                 await announcement.save();
                 return 'OK';
-                break;
             default:
                 return 'ERROR Unknown command';
         }
@@ -79,6 +82,7 @@ export class Connection {
 
     async authRequest() {
         await this.send('AUTH_REQUEST ' + this.__auth_random);
+        console.log('WS UUID:', this.uuid, 'Отправил авторизационные данные');
         setTimeout(() => {
             if (this.authorized !== true) this.close('Auth timeout');
         }, 30000);
