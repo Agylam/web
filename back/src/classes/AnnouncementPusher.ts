@@ -85,7 +85,7 @@ export class AnnouncementPusher {
 
         announcements.map(async (announcement) => {
             const { uuid, text, school } = announcement;
-            const filePath = 'announcements/' + school.uuid + '/';
+            const filePath = school.uuid + '/announcements/';
             const fileName = uuid + '.mp3';
 
             if (!fs.existsSync(filePath)) {
