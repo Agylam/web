@@ -7,6 +7,7 @@ on:
 
 jobs:
   converge:
+    if: "!contains(github.event.commits[0].message, '[skip stage_push]')"
     name: converge
     runs-on: self-hosted
     environment: stage
@@ -22,10 +23,10 @@ jobs:
             inject_files: |-
               .helm/agylam/stage-values.yaml
             secrets: ${{ toJSON(secrets) }}
-          
+
         - name: Install werf
           uses: werf/actions/install@v1.2
-          
+
         - name: Run script
           run: |
             . $(werf ci-env github --as-file)

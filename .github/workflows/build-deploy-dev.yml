@@ -7,6 +7,7 @@ on:
 
 jobs:
   converge:
+    if: "!contains(github.event.commits[0].message, '[skip dev_push]')"
     name: converge
     runs-on: self-hosted
     environment: dev
@@ -20,12 +21,12 @@ jobs:
             inject_files: |-
               .helm/agylam/dev-values.yaml
             secrets: ${{ toJSON(secrets) }}
-          
+
         - name: Install werf
           uses: werf/actions/install@v1.2
           with:
             channel: stable
-          
+
         - name: Run script
           run: |
             . $(werf ci-env github --as-file)
@@ -85,7 +86,7 @@ jobs:
 #           secrets: ${{ toJSON(secrets) }}
 #           value-files: >-
 #             [
-#               ".helm/agylam/common-values.yaml", 
+#               ".helm/agylam/common-values.yaml",
 #               ".helm/agylam/dev-values.yaml"
 #             ]
 #         env:
