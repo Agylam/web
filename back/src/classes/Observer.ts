@@ -41,7 +41,7 @@ export class Observer {
         const second = now.getSeconds();
         const day = now.getDay();
 
-        console.log(`Проверка на время ${hour}:${minute}:${second}`);
+        console.log(`Проверка на время ${hour}:${minute}:${second}. День: ${day}`);
         return { hour, minute, second, day };
     }
 
@@ -80,6 +80,7 @@ export class Observer {
                 ...time,
                 day: time.day - 1,
             });
+            console.log('Уроки в это время:', sounds);
             this.__mapSender(sounds, 'PLAY');
 
             const preSounds = await this.__getSoundsByTime({
@@ -87,9 +88,11 @@ export class Observer {
                 minute: time.minute + 1,
                 day: time.day - 1,
             });
+            console.log('Уроки через минуту:', preSounds);
             this.__mapSender(preSounds, 'WARN');
 
             const announcements = await this.__getAnnouncements();
+            console.log('Уведомления в это время', preSounds);
             this.__mapSender(announcements, 'ANNOUNCEMENT');
             announcements.map((announcement) => {
                 announcement.state = AnnouncementState.PLAYING;
