@@ -30,8 +30,8 @@ jobs:
         - name: Run script
           run: |
             . $(werf ci-env github --as-file)
-            docker login -u none0nfg -p ${{ secrets.IGHOR_DK_TOKEN }}
-            werf converge --debug --env=dev --atomic --values .helm/agylam/common-values.yaml --values .helm/agylam/dev-values.yaml --repo none0nfg/agylam --repo-docker-hub-token='${{ secrets.IGHOR_DK_TOKEN }}' --repo-docker-hub-username=none0nfg
+            docker login -u agylam -p ${{ secrets.DK_TOKEN }}
+            werf converge --debug --env=dev --atomic --values .helm/agylam/common-values.yaml --values .helm/agylam/dev-values.yaml --repo agylam/web --repo-docker-hub-token='${{ secrets.DK_TOKEN }}' --repo-docker-hub-username=agylam
           env:
             WERF_KUBECONFIG_BASE64: ${{ secrets.KUBE_CONFIG_64 }}
 
