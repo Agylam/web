@@ -3,7 +3,6 @@ import "./AuthForm.scss";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 import { useNavigate } from "react-router-dom";
-import { useAccessToken } from "../../hooks/useAccessToken";
 import { FullLogo } from "../UI/FullLogo/FullLogo";
 import { AuthDataDto } from "../../interfaces/AuthData.dto";
 import { auth } from "../../api/auth";
@@ -16,8 +15,6 @@ export const AuthForm = () => {
     });
 
     const navigate = useNavigate();
-    const { accessToken, setAccessToken } = useAccessToken();
-
     const onAuthSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {

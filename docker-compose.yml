@@ -42,7 +42,7 @@ services:
       - ./back/src:/app/src
       - ./back/temp:/app/temp
     ports:
-      - "3001:3001"
+      - "3000:3000"
     build:
       context: ./back
       dockerfile: ./docker/dev.Dockerfile

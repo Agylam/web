@@ -28,8 +28,8 @@ async function runServer() {
 
     await dataSource.initialize().catch(console.error);
 
-    const observer = new Observer(); // Запуск Observer для проверки времени и отправки звуков
-    const announcementPusher = new AnnouncementPusher(); // Запуск AnnouncementPusher для отправки объявлений
+    new Observer(); // Запуск Observer для проверки времени и отправки звуков
+    new AnnouncementPusher(); // Запуск AnnouncementPusher для отправки объявлений
 }
 
 runServer()

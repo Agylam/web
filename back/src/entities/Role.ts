@@ -2,11 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User.js';
 
-interface RoleCreationAttrs {
-    value: string;
-    description: string;
-}
-
 @Entity()
 export class Role extends BaseEntity {
     @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })

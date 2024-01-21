@@ -54,6 +54,7 @@ export class Connection {
 
                 if (authorized) {
                     this.authorized = true;
+
                     return 'AUTHORIZED';
                 } else {
                     await this.close('Invalid authorization data. Bye bye');

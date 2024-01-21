@@ -12,12 +12,7 @@ export class VKCloudVoice {
     }
 
     // get mp3 from text (TTS by VK Cloud) and download it to temp folder
-    async streamTTS(
-        text: string,
-        fileName: string,
-        model_name: SpeechModel = SpeechModel.PAVEL_HIFIGAN,
-        tempo: number = 1,
-    ) {
+    async streamTTS(text: string, model_name: SpeechModel = SpeechModel.PAVEL_HIFIGAN, tempo: number = 1) {
         const urlKeys = new URLSearchParams({
             model_name,
             tempo: tempo.toString(),
@@ -35,14 +30,9 @@ export class VKCloudVoice {
             redirect: 'follow',
         });
         if (resp.ok && resp.body) {
-            // console.log('Writing to file:', fileName);
-            // let writer = fs.createWriteStream(fileName);
-            // @ts-ignore
-            // Readable.fromWeb(resp.body).pipe(writer);
             return await resp.arrayBuffer();
         } else {
             console.error('Error while TTS:', resp.status, resp.statusText);
         }
-        // return fileName;
     }
 }
