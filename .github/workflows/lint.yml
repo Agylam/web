@@ -10,19 +10,24 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Node installation
+        uses: actions/setup-node@v3
         with:
           node-version: 18
-      - uses: borales/actions-yarn@v4
+
+      - name: Dependencies installation
+        uses: borales/actions-yarn@v4
         with:
           cmd: install
           dir: ${{ matrix.module }}
-      - uses: borales/actions-yarn@v4
+
+      - name: Lint
+        uses: borales/actions-yarn@v4
         with:
           cmd: lint
           dir: ${{ matrix.module }}
         env:
-          NODE_OPTIONS: --max-old-space-size=4096
+          NODE_OPTIONS: --max-old-space-size=16384
 
 
   helm-check:
