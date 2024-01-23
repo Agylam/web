@@ -5,16 +5,18 @@ interface Connections {
     [key: string]: Connection;
 }
 
+export enum ServerCommands {}
+
 export class ConnectionManager {
     private wsServer: WebSocketServer;
     private connections: Connections = {};
 
     constructor(server_properties, callback = () => {}) {
         this.wsServer = new WebSocketServer(server_properties, callback);
-        this.wsServer.on('connection', (connection) => {
-            const connection_uuid = this.newConnection(connection);
-            connection.on('close', () => {
-                delete this.connections[connection_uuid];
+        this.wsServer.on('connection', (ws_connection) => {
+            const connection = this.newConnection(ws_connection);
+            ws_connection.on('close', () => {
+                delete this.connections[connection.uuid];
             });
         });
         console.log('WebSocket сервер успешно запущен на порту ', server_properties.port);
@@ -23,7 +25,7 @@ export class ConnectionManager {
     newConnection(con: WebSocket) {
         const created_connection = new Connection(con);
         this.connections[created_connection.uuid] = created_connection;
-        return created_connection.uuid;
+        return created_connection;
     }
 
     getConnectionBySchoolUUID(uuid: string) {

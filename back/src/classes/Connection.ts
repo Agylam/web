@@ -25,6 +25,10 @@ export class Connection {
             });
         });
 
+        this.__connection.on('close', () => {
+            console.log('WS UUID:', this.uuid, 'Подключение закрыто');
+        });
+
         console.log('WS UUID:', this.uuid, 'Новое подключение');
         this.authRequest();
     }

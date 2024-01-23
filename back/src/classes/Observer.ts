@@ -94,7 +94,7 @@ export class Observer {
             this.__mapSender(preSounds, 'WARN');
 
             const announcements = await this.__getAnnouncements();
-            console.log('Уведомления в это время', preSounds);
+            console.log('Уведомления в это время', announcements);
             this.__mapSender(announcements, 'ANNOUNCEMENT');
             announcements.map((announcement) => {
                 announcement.state = AnnouncementState.PLAYING;
