@@ -16,10 +16,12 @@ export const typeOrmConfig: DataSourceOptions = {
     username: process.env.PGUSER || 'postgres',
     password: process.env.PGPASSWORD || 'postgres',
     database: process.env.PGDATABASE || 'postgres',
-    synchronize: true,
+    synchronize: false,
+    migrations: ['/migrations/*{.ts,.js}'],
+    migrationsTableName: '_migrations',
+    migrationsRun: true, // Auto-run migrations
     logging: false,
     entities: [School, Lesson, Sound, ClassRange, User, RefreshToken, Role, Announcement],
-    migrations: [],
     subscribers: [],
 };
 export const dataSource = new DataSource(typeOrmConfig);

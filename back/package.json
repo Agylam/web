@@ -18,7 +18,12 @@
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-        "test:e2e": "jest --config ./test/jest-e2e.json"
+        "test:e2e": "jest --config ./test/jest-e2e.json",
+        "typeorm": "ts-node ./node_modules/typeorm/cli",
+        "typeorm:run-migrations": "npm run typeorm migration:run -- -d ./src/db.config.ts",
+        "typeorm:generate-migration": "npm run typeorm -- -d ./src/db.config.ts migration:generate ./migrations/$npm_config_name",
+        "typeorm:create-migration": "npm run typeorm -- migration:create ./migrations/$npm_config_name",
+        "typeorm:revert-migration": "npm run typeorm -- -d ./src/db.config.ts migration:revert"
     },
     "dependencies": {
         "@aws-sdk/client-s3": "^3.490.0",
@@ -65,7 +70,7 @@
         "supertest": "^6.3.3",
         "ts-jest": "^29.1.0",
         "ts-loader": "^9.4.3",
-        "ts-node": "^10.9.1",
+        "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.2.0",
         "typescript": "^5.1.3"
     },

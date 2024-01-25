@@ -12,7 +12,7 @@ services:
     ports:
       - "${PGPORT}:${PGPORT}"
     volumes:
-      - ./dataDB:/var/lib/postgresql/data
+      - ./dataDB2:/var/lib/postgresql/data
     user: root
     healthcheck:
       test: [ "CMD", "/usr/bin/pg_isready", "-U", "${PGUSER}" ]
