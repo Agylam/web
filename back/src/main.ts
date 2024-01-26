@@ -27,7 +27,7 @@ async function runServer() {
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: true,
     });
-    
+
     await app.listen(SERVER_PORT, () => {
         console.log(`HTTP Сервер запущен на порту ${SERVER_PORT}`);
     });
