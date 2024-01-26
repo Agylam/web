@@ -23,7 +23,7 @@ async function runServer() {
     app.use(cookieParser());
 
     app.enableCors({
-        origin: true,
+        origin: '*',
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: true,
     });
