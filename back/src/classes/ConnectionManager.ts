@@ -6,28 +6,24 @@ interface Connections {
 }
 
 export class ConnectionManager {
-    private wsServer: WebSocketServer;
-    private connections: Connections = {};
+    private __wsServer: WebSocketServer;
+    private __connections: Connections = {};
 
-    constructor(server_properties, callback = () => {}) {
-        this.wsServer = new WebSocketServer(server_properties, callback);
-        this.wsServer.on('connection', (connection) => {
-            const connection_uuid = this.newConnection(connection);
-            connection.on('close', () => {
-                delete this.connections[connection_uuid];
+    constructor(ws_server: WebSocketServer) {
+        this.__wsServer = ws_server;
+        this.__wsServer.on('connection', (ws_connection) => {
+            const connection = this.__newConnection(ws_connection);
+            connection.onAuthorized(() => {
+                this.__connections[connection.uuid];
+            });
+            ws_connection.on('close', () => {
+                delete this.__connections[connection.uuid];
             });
         });
-        console.log('WebSocket сервер успешно запущен на порту ', server_properties.port);
-    }
-
-    newConnection(con: WebSocket) {
-        const created_connection = new Connection(con);
-        this.connections[created_connection.uuid] = created_connection;
-        return created_connection.uuid;
     }
 
     getConnectionBySchoolUUID(uuid: string) {
-        return Object.values(this.connections).find((e) => e.school_uuid === uuid && e.authorized);
+        return Object.values(this.__connections).find((e) => e.school_uuid === uuid && e.isAuthorized);
     }
 
     async sendToSchool(uuid: string, msg: string) {
@@ -37,5 +33,11 @@ export class ConnectionManager {
         }
         await school.send(msg);
         return true;
+    }
+
+    private __newConnection(con: WebSocket) {
+        const created_connection = new Connection(con);
+        this.__connections[created_connection.uuid] = created_connection;
+        return created_connection;
     }
 }
