@@ -35,7 +35,7 @@ redis:
   enabled: true
   fullnameOverride: redis
   replica:
-    replicaCount: 2
+    replicaCount: 0
     persistence:
       enabled: false
   master:
