@@ -17,9 +17,7 @@ frontend:
   ports:
     - 80
 
-ingress:
-  baseDomain: agylam.ru
-  toService: frontend
+ingress: {}
 
 postgresql:
   enabled: true
@@ -30,6 +28,17 @@ postgresql:
     database: agylam
     username: changeme
     password: changeme
+
+redis:
+  enabled: true
+  fullnameOverride: redis
+  replica:
+    replicaCount: 2
+    persistence:
+      enabled: false
+  master:
+    persistence:
+      enabled: false
 
 ENV: { }
 
