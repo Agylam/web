@@ -12,6 +12,7 @@ export class Connection {
     private __connection: WebSocket;
     private readonly __auth_random: string;
     private readonly __connectionTimeout = 50000;
+    private __onAuthorized: (deviceUUID: string) => void;
 
     constructor(connection: WebSocket) {
         this.uuid = genUUID();
@@ -107,6 +108,4 @@ export class Connection {
     onAuthorized(callback: (device_id: string) => void | Promise<void>) {
         this.__onAuthorized = callback;
     }
-
-    private __onAuthorized = (device_id: string) => {};
 }
