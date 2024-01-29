@@ -1,6 +1,16 @@
 import { ConnectionManager } from './ConnectionManager';
-import { createCluster } from 'redis';
 import { WebSocketServer } from 'ws';
+import { createClient } from 'redis';
+
+export enum RedidUpdateMessageType {
+    SCHEDULE = 'SCHEDULE',
+    CLASS_RANGE = 'CLASS_RANGE',
+}
+
+export interface RedisUpdateMessage {
+    school_uuid: string;
+    type: RedidUpdateMessageType;
+}
 
 export class Observer {
     private __wsServer: WebSocketServer;
@@ -15,7 +25,8 @@ export class Observer {
 
             this.__createWSServer();
             this.__initConnectionManager();
-            this.__initRedisClient();
+            this.__initRedisClient().then(() => console.log('Успешное подключение к кластеру Redis'));
+            this.__subscribe().then(() => console.log('Успешная подписка на события Redis'));
         } catch (e) {
             console.error('Ошибка Observer:', e);
         }
@@ -37,18 +48,27 @@ export class Observer {
     }
 
     private async __initRedisClient() {
-        this.__redisClient = createCluster({
-            rootNodes: process.env.REDIS_CLUSTER_NODES.split(',').map((url) => {
-                return {
-                    url,
-                };
-            }),
+        this.__redisClient = createClient({
+            url: process.env.REDIS_URL,
         });
 
         this.__redisClient.on('error', (err) => console.log('Ошибка Observer: Ошибка Redis кластера:', err));
         await this.__redisClient.connect();
-        console.log('Успешное подключение к кластеру Redis');
     }
 
-    private __subscribe() {}
+    private async __subscribe() {
+        await this.__redisClient.subscribe('UPDATE', (unparsed_message: string) => {
+            let response = '';
+            const message: RedisUpdateMessage = JSON.parse(unparsed_message);
+            switch (message.type) {
+                case RedidUpdateMessageType.CLASS_RANGE:
+                    response = 'UPDATE_CLASS_RANGES';
+                    break;
+                case RedidUpdateMessageType.SCHEDULE:
+                    response = 'UPDATE_SCHEDULE';
+                    break;
+            }
+            this.__connectionManager.sendToSchool(message.school_uuid, response);
+        });
+    }
 }

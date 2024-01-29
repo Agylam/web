@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Lesson } from '../entities/Lesson';
 import { LessonDto } from './dto/lesson.dto.js';
 import { ClassRangeService } from '../classRange/classRange.service';
+import { RedisService } from '../redis/redis.service';
+import { RedidUpdateMessageType } from '../classes/Observer';
 
 @Injectable()
 export class ScheduleService {
@@ -11,6 +13,7 @@ export class ScheduleService {
         @InjectRepository(Lesson)
         private lessonsRepository: Repository<Lesson>,
         private classRangesService: ClassRangeService,
+        private redisService: RedisService,
     ) {}
 
     async getSchedule(classRange: string, dayOfWeek: number) {
@@ -36,7 +39,10 @@ export class ScheduleService {
         });
     }
 
+    // dow = (date.getDate() || 7) - 1
+    // Пн - 0 Вс - 6
     async updateSchedule(classRange: string, dayOfWeek: number, newSchedule: LessonDto[]) {
+        if (dayOfWeek < 0 || dayOfWeek > 6) throw new BadRequestException('dayOfWeek must be from 0 yo 6');
         return await this.lessonsRepository.manager.transaction(async (transManager) => {
             await transManager
                 .createQueryBuilder()
@@ -85,6 +91,12 @@ export class ScheduleService {
                     }),
                 )
                 .execute();
+
+            this.redisService.pubUpdate({
+                type: RedidUpdateMessageType.SCHEDULE,
+                school_uuid: classRangeObj.school.uuid,
+            });
+
             return this.getSchedule(classRange, dayOfWeek);
         });
     }

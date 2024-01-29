@@ -13,8 +13,18 @@ export class ConnectionManager {
         this.__wsServer = ws_server;
         this.__wsServer.on('connection', (ws_connection) => {
             const connection = this.__newConnection(ws_connection);
-            connection.onAuthorized(() => {
-                this.__connections[connection.uuid];
+            connection.onAuthorized((device_uuid) => {
+                const con_uuids = Object.keys(this.__connections);
+
+                // Закрытие уже существующих подключений
+                Object.values(this.__connections)
+                    .map((con, key) => {
+                        return con.device_uuid === device_uuid && con_uuids[key] !== connection.uuid ? key : -1;
+                    })
+                    .filter((index) => index !== -1)
+                    .map((index) => {
+                        this.__connections[con_uuids[index]].close('ERROR Another connection. Bye bye');
+                    });
             });
             ws_connection.on('close', () => {
                 delete this.__connections[connection.uuid];
@@ -23,15 +33,16 @@ export class ConnectionManager {
     }
 
     getConnectionBySchoolUUID(uuid: string) {
-        return Object.values(this.__connections).find((e) => e.school_uuid === uuid && e.isAuthorized);
+        return Object.values(this.__connections).filter((e) => e.school_uuid === uuid && e.isAuthorized);
     }
 
     async sendToSchool(uuid: string, msg: string) {
-        const school = this.getConnectionBySchoolUUID(uuid);
-        if (school === undefined) {
+        const schools = this.getConnectionBySchoolUUID(uuid);
+        if (schools === undefined) {
             return false;
         }
-        await school.send(msg);
+
+        schools.map((school) => school.send(msg));
         return true;
     }
 

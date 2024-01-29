@@ -38,6 +38,9 @@ export class Device extends BaseEntity {
                     uuid: true,
                 },
             },
+            relations: {
+                school: true,
+            },
         });
         if (device === null) return false;
 

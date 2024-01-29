@@ -11,7 +11,7 @@ export class Connection {
 
     private __connection: WebSocket;
     private readonly __auth_random: string;
-    private readonly __connectionTimeout = 5000;
+    private readonly __connectionTimeout = 50000;
 
     constructor(connection: WebSocket) {
         this.uuid = genUUID();
