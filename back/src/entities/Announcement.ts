@@ -38,4 +38,10 @@ export class Announcement extends BaseEntity {
 
     @ManyToOne(() => School, (school) => school.announcements)
     school: School;
+
+    static async getByUUID(uuid: string) {
+        return await this.findOneBy({
+            uuid,
+        });
+    }
 }
