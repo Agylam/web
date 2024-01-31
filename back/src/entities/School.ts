@@ -1,5 +1,4 @@
 import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { createHash } from 'crypto';
 import { Sound } from './Sound';
 import { ClassRange } from './ClassRange';
 import { User } from './User.js';
@@ -33,15 +32,4 @@ export class School extends BaseEntity {
 
     @OneToMany(() => User, (user) => user.school)
     users: User[];
-
-    // sha256(UUID+SECRET+random)
-    static async authorizate(uuid: string, random: string, token: string): Promise<boolean> {
-        const school = await this.findOneBy({ uuid: uuid });
-
-        if (school === null) return false;
-
-        const unhash = school.uuid + school.auth_secret + random;
-        const hash = createHash('sha256').update(unhash).digest('hex');
-        return hash === token;
-    }
 }

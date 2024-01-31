@@ -8,6 +8,7 @@ import { RefreshToken } from './entities/RefreshToken';
 import { Role } from './entities/Role';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Announcement } from './entities/Announcement.js';
+import { Device } from './entities/Device';
 
 export const typeOrmConfig: DataSourceOptions = {
     type: 'postgres',
@@ -18,7 +19,7 @@ export const typeOrmConfig: DataSourceOptions = {
     database: process.env.PGDATABASE || 'postgres',
     synchronize: true,
     logging: false,
-    entities: [School, Lesson, Sound, ClassRange, User, RefreshToken, Role, Announcement],
+    entities: [School, Lesson, Sound, ClassRange, User, RefreshToken, Role, Announcement, Device],
     migrations: [],
     subscribers: [],
 };

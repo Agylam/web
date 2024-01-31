@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Lesson } from '../entities/Lesson';
 import { AuthModule } from '../auth/auth.module.js';
 import { ClassRangeModule } from '../classRange/classRange.module';
+import { RedisService } from '../redis/redis.service';
 
 @Module({
-    providers: [ScheduleService],
+    providers: [ScheduleService, RedisService],
     controllers: [ScheduleController],
     imports: [
         forwardRef(() => UserModule),

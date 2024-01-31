@@ -25,7 +25,6 @@ import { AnnouncementModule } from './announcement/announcement.module';
         ClassRangeModule,
         AnnouncementModule,
     ],
-
     controllers: [AuthController, UserController, ScheduleController, ClassRangeController, AnnouncementController],
     providers: [],
 })
