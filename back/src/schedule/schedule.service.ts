@@ -5,7 +5,7 @@ import { Lesson } from '../entities/Lesson';
 import { LessonDto } from './dto/lesson.dto.js';
 import { ClassRangeService } from '../classRange/classRange.service';
 import { RedisService } from '../redis/redis.service';
-import { RedidUpdateMessageType } from '../classes/Observer';
+import { RedisMessageChannel, RedisMessageType } from '../classes/Observer';
 
 @Injectable()
 export class ScheduleService {
@@ -92,8 +92,8 @@ export class ScheduleService {
                 )
                 .execute();
 
-            this.redisService.pubUpdate({
-                type: RedidUpdateMessageType.SCHEDULE,
+            await this.redisService.pubUpdate(RedisMessageChannel.FOR_SCHOOL, {
+                type: RedisMessageType.UPDATE_CONFIG,
                 school_uuid: classRangeObj.school.uuid,
             });
 

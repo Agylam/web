@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { createClient, RedisClientType } from 'redis';
-import { RedisUpdateMessage } from '../classes/Observer';
+import { RedisMessage, RedisMessageChannel } from '../classes/Observer';
 
 @Injectable()
 export class RedisService {
@@ -15,7 +15,7 @@ export class RedisService {
         this.__cluster.connect().then(() => console.log('Успешное подключение к кластеру Redis'));
     }
 
-    pubUpdate(message: RedisUpdateMessage) {
-        this.__cluster.publish('UPDATE', JSON.stringify(message));
+    pubUpdate(channel: RedisMessageChannel, message: RedisMessage) {
+        return this.__cluster.publish(channel, JSON.stringify(message));
     }
 }

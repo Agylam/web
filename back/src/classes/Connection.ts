@@ -2,6 +2,7 @@ import WebSocket from 'ws';
 import { v4 as genUUID } from 'uuid';
 import { Announcement, AnnouncementState } from '../entities/Announcement';
 import { Device } from '../entities/Device';
+import { School } from '../entities/School';
 
 export class Connection {
     public uuid: string;
@@ -22,7 +23,7 @@ export class Connection {
         this.__connection.on('message', async (buf) => {
             try {
                 const msg = buf.toString('utf8');
-                const response = await this.msgHandler(msg);
+                const response = await this.__msgHandler(msg);
                 await this.send(response);
             } catch (e) {
                 console.error('Ошибка в отправке сообщения:', e, 'DeviceUUID:', this.device_uuid);
@@ -31,7 +32,7 @@ export class Connection {
         });
 
         console.log('WS UUID:', this.uuid, 'Новое подключение');
-        this.authRequest()
+        this.__authRequest()
             .then(() => console.log('WS UUID:', this.uuid, 'Отправил авторизационные данные'))
             .catch(async (e) => {
                 console.error('Ошибка в отправке сообщения:', e, 'DeviceUUID:', this.device_uuid);
@@ -39,7 +40,20 @@ export class Connection {
             });
     }
 
-    async msgHandler(msg: string): Promise<string> {
+    onAuthorized(callback: (device_id: string) => void | Promise<void>) {
+        this.__onAuthorized = callback;
+    }
+
+    async close(err: string | null) {
+        if (err !== null) await this.send('ERROR ' + err);
+        this.__connection.close();
+    }
+
+    async send(msg: string) {
+        this.__connection.send(msg);
+    }
+
+    private async __msgHandler(msg: string): Promise<string> {
         const msg_sliced = msg.split(' ');
         if (msg_sliced.length === 0) return 'ERROR empty request';
         const cmd = msg_sliced[0];
@@ -49,7 +63,10 @@ export class Connection {
 
         switch (cmd) {
             case 'AUTH':
-                return await this.onAuth(args);
+                return await this.__onAuth(args);
+
+            case 'GET_CONFIG':
+                return await this.__getConfig();
 
             case 'PLAYED_ANNOUNCEMENT':
                 if (args[0] === undefined) return 'ERROR announcement UUID is empty';
@@ -66,7 +83,7 @@ export class Connection {
         }
     }
 
-    async onAuth(args: string[]) {
+    private async __onAuth(args: string[]) {
         console.log('WS UUID:', this.uuid, 'Отправил авторизационные данные. Проверяю...');
 
         if (args[0] === undefined) return 'ERROR DEVICE_UUID is empty';
@@ -89,23 +106,19 @@ export class Connection {
         }
     }
 
-    async authRequest() {
+    private async __authRequest() {
         await this.send('AUTH_REQUEST ' + this.__auth_random);
         setTimeout(() => {
             if (!this.isAuthorized) this.close('Auth timeout');
         }, this.__connectionTimeout);
     }
 
-    async send(msg) {
-        this.__connection.send(msg);
-    }
-
-    async close(err: string | null) {
-        if (err !== null) await this.send('ERROR ' + err);
-        this.__connection.close();
-    }
-
-    onAuthorized(callback: (device_id: string) => void | Promise<void>) {
-        this.__onAuthorized = callback;
+    private async __getConfig() {
+        try {
+            const config = await School.getConfig(this.school_uuid);
+            return 'SET_CONFIG ' + JSON.stringify(config);
+        } catch (e) {
+            console.error('Ошибка отправки конфига:', e);
+        }
     }
 }

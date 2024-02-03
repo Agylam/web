@@ -6,7 +6,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { Observer } from './classes/Observer';
-import { AnnouncementPusher } from './classes/AnnouncementPusher.js';
 import { dataSource } from './db.config.js';
 
 async function runServer() {
@@ -34,8 +33,11 @@ async function runServer() {
 
     await dataSource.initialize().catch(console.error);
 
-    new Observer(); // Запуск Observer для проверки времени и отправки звуков
-    new AnnouncementPusher(); // Запуск AnnouncementPusher для отправки объявлений
+    try {
+        new Observer();
+    } catch (e) {
+        console.error('Ошибка Observer:', e);
+    }
 }
 
 runServer()

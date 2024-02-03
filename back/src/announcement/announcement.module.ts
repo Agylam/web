@@ -6,9 +6,10 @@ import { Announcement } from '../entities/Announcement.js';
 import { UserModule } from '../user/user.module.js';
 import { AuthModule } from '../auth/auth.module.js';
 import { School } from '../entities/School.js';
+import { RedisService } from '../redis/redis.service';
 
 @Module({
-    providers: [AnnouncementService],
+    providers: [AnnouncementService, RedisService],
     controllers: [AnnouncementController],
     imports: [
         forwardRef(() => UserModule),
