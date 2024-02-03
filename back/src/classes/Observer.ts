@@ -58,7 +58,7 @@ export class Observer {
 
     private async __initRedisClient() {
         this.__redisClient = createClient({
-            url: process.env.REDIS_URL,
+            url: 'redis://' + process.env.REDIS_URL,
         });
 
         this.__redisClient.on('error', (err) => console.log('Ошибка Observer: Ошибка Redis кластера:', err));

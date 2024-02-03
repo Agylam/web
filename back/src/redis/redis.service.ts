@@ -8,7 +8,7 @@ export class RedisService {
 
     constructor() {
         this.__cluster = createClient({
-            url: process.env.REDIS_URL,
+            url: 'redis://' + process.env.REDIS_URL,
         });
 
         this.__cluster.on('error', (err) => console.log('Ошибка Redis кластера:', err));
