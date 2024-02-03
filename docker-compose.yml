@@ -57,6 +57,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_started
   frontend:
     environment:
       BURL: "http://backend:${BACKEND_PORT}"
