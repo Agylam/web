@@ -38,6 +38,8 @@ redis:
     replicaCount: 0
     persistence:
       enabled: false
+  auth:
+    enabled: false
   master:
     persistence:
       enabled: false
