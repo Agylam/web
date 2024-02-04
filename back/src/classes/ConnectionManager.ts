@@ -23,7 +23,7 @@ export class ConnectionManager {
                     })
                     .filter((index) => index !== -1)
                     .map((index) => {
-                        this.__connections[con_uuids[index]].close('ERROR Another connection. Bye bye');
+                        this.__connections[con_uuids[index]].close('Another connection. Bye bye');
                     });
             });
             ws_connection.on('close', () => {

@@ -24,10 +24,16 @@ export class Connection {
             try {
                 const msg = buf.toString('utf8');
                 const response = await this.__msgHandler(msg);
-                await this.send(response);
+                if (response) {
+                    if (response.length > 1) {
+                        await this.send(response[0], response[1]);
+                    } else {
+                        await this.send(response[0]);
+                    }
+                }
             } catch (e) {
                 console.error('Ошибка в отправке сообщения:', e, 'DeviceUUID:', this.device_uuid);
-                await this.send('ERROR Internal error, see console');
+                await this.__error('Internal error, see console');
             }
         });
 
@@ -36,7 +42,7 @@ export class Connection {
             .then(() => console.log('WS UUID:', this.uuid, 'Отправил авторизационные данные'))
             .catch(async (e) => {
                 console.error('Ошибка в отправке сообщения:', e, 'DeviceUUID:', this.device_uuid);
-                await this.send('ERROR Internal error, see console');
+                await this.__error('Internal error, see console');
             });
     }
 
@@ -45,50 +51,79 @@ export class Connection {
     }
 
     async close(err: string | null) {
-        if (err !== null) await this.send('ERROR ' + err);
+        if (err !== null) await this.__error(err);
         this.__connection.close();
     }
 
-    async send(msg: string) {
+    async send(cmd: string, args?: any[]) {
+        const msg = JSON.stringify({ cmd, args });
         this.__connection.send(msg);
     }
 
-    private async __msgHandler(msg: string): Promise<string> {
-        const msg_sliced = msg.split(' ');
-        if (msg_sliced.length === 0) return 'ERROR empty request';
-        const cmd = msg_sliced[0];
-        const args = msg_sliced.slice(1);
+    private async __error(err: string) {
+        await this.send('ERROR', [err]);
+    }
 
-        if (!cmd) return 'ERROR empty request';
+    private async __msgHandler(msg: string): Promise<[string, string[]] | [string]> {
+        try {
+            const msg_parsed = JSON.parse(msg);
+            const cmd = msg_parsed?.cmd;
+            const args = msg_parsed?.args;
 
-        switch (cmd) {
-            case 'AUTH':
-                return await this.__onAuth(args);
+            if (!cmd) {
+                await this.__error('Empty request');
+                return;
+            }
 
-            case 'GET_CONFIG':
-                return await this.__getConfig();
+            switch (cmd) {
+                case 'AUTH':
+                    return await this.__onAuth(args);
 
-            case 'PLAYED_ANNOUNCEMENT':
-                if (args[0] === undefined) return 'ERROR announcement UUID is empty';
+                case 'GET_CONFIG':
+                    const config = await this.__getConfig();
+                    return ['SET_CONFIG', [config]];
 
-                const announcement = await Announcement.getByUUID(args[0]);
-                if (announcement === null) return 'ERROR Announcement not found';
+                case 'PLAYED_ANNOUNCEMENT':
+                    if (!args[0]) {
+                        await this.__error('Announcement UUID is empty');
+                        return;
+                    }
 
-                announcement.state = AnnouncementState.PLAYED;
-                await announcement.save();
-                return 'OK';
+                    const announcement = await Announcement.getByUUID(args[0]);
+                    if (!announcement) {
+                        await this.__error('Announcement not found');
+                        return;
+                    }
 
-            default:
-                return 'ERROR Unknown command';
+                    announcement.state = AnnouncementState.PLAYED;
+                    await announcement.save();
+                    return ['OK'];
+
+                default:
+                    await this.__error('ERROR Unknown command');
+                    return;
+            }
+        } catch (e) {
+            this.__error('Internal server error. Connect with admins');
+            console.error('Connection error: ', e);
         }
     }
 
-    private async __onAuth(args: string[]) {
+    private async __onAuth(args: string[]): Promise<[string]> {
         console.log('WS UUID:', this.uuid, 'Отправил авторизационные данные. Проверяю...');
 
-        if (args[0] === undefined) return 'ERROR DEVICE_UUID is empty';
-        if (args[1] === undefined) return 'ERROR auth token is empty';
-        if (this.school_uuid !== undefined) return 'ERROR already authorized';
+        if (args[0] === undefined) {
+            await this.__error('DEVICE_UUID is empty');
+            return;
+        }
+        if (args[1] === undefined) {
+            await this.__error('auth token is empty');
+            return;
+        }
+        if (this.school_uuid !== undefined) {
+            await this.__error('already authorized');
+            return;
+        }
 
         const device = await Device.authorize(args[0], this.__auth_random, args[1]);
 
@@ -99,7 +134,7 @@ export class Connection {
             this.__onAuthorized(args[0]);
 
             console.log('WS UUID:', this.uuid, 'Проверил авторизационные данные. Успешно');
-            return 'AUTHORIZED';
+            return ['AUTHORIZED'];
         } else {
             console.log('WS UUID:', this.uuid, 'Неверные авторизационные данные');
             await this.close('Invalid authorization data. Bye bye');
@@ -107,7 +142,7 @@ export class Connection {
     }
 
     private async __authRequest() {
-        await this.send('AUTH_REQUEST ' + this.__auth_random);
+        await this.send('AUTH_REQUEST ', [this.__auth_random]);
         setTimeout(() => {
             if (!this.isAuthorized) this.close('Auth timeout');
         }, this.__connectionTimeout);
@@ -116,7 +151,7 @@ export class Connection {
     private async __getConfig() {
         try {
             const config = await School.getConfig(this.school_uuid);
-            return 'SET_CONFIG ' + JSON.stringify(config);
+            return JSON.stringify(config);
         } catch (e) {
             console.error('Ошибка отправки конфига:', e);
         }
