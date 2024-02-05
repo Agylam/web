@@ -142,7 +142,7 @@ export class Connection {
     }
 
     private async __authRequest() {
-        await this.send('AUTH_REQUEST ', [this.__auth_random]);
+        await this.send('AUTH_REQUEST', [this.__auth_random]);
         setTimeout(() => {
             if (!this.isAuthorized) this.close('Auth timeout');
         }, this.__connectionTimeout);
