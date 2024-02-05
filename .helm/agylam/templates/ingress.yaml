@@ -6,15 +6,14 @@ metadata:
   name: {{ $.Values.global.project }}-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS
+    nginx.ingress.kubernetes.io/cors-allow-origin: '*'
+    nginx.ingress.kubernetes.io/enable-cors: "true"
 spec:
   ingressClassName: nginx
   rules:
-  {{ if $.Values.global.isTag -}}
-  - host: {{ $.Values.ingress.baseDomain }}
-{{- else -}}
-  - host: {{ $.Values.global.ref }}.{{ $.Values.ingress.baseDomain }}
-{{- end }}
-    http:
+  - http:
       paths:
         - path: /
           pathType: Prefix
@@ -24,12 +23,7 @@ spec:
               port:
                 number: {{ index (get $.Values ($.Values.ingress.toService)).ports 0 }}
   tls:
-  - hosts:
-    {{ if $.Values.global.isTag -}}
-    - {{ $.Values.ingress.baseDomain }}
-  {{- else -}}
-    - {{ $.Values.global.ref }}.{{ $.Values.ingress.baseDomain }}
-  {{- end }}
+  - hosts: {{ $.Values.ingress.baseDomain }}
     secretName: {{ $.Values.global.project }}-{{ $.Values.werf.env }}-cert
 {{ end }}
 

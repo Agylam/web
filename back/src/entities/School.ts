@@ -12,12 +12,6 @@ export class School extends BaseEntity {
     @Column()
     name: string;
 
-    @Column()
-    director_id: number;
-
-    @Column()
-    auth_secret: string;
-
     @Column({ default: 0 })
     timezone_offset: number;
 
@@ -32,4 +26,38 @@ export class School extends BaseEntity {
 
     @OneToMany(() => User, (user) => user.school)
     users: User[];
+
+    static async getConfig(uuid: string) {
+        return await this.findOneOrFail({
+            where: { uuid },
+            select: {
+                uuid: true,
+                name: true,
+                timezone_offset: true,
+                class_ranges: {
+                    uuid: true,
+                    start_sound: {
+                        uuid: true,
+                    },
+                    end_sound: {
+                        uuid: true,
+                    },
+                    lessons: {
+                        day: true,
+                        start_hour: true,
+                        start_minute: true,
+                        end_hour: true,
+                        end_minute: true,
+                    },
+                },
+            },
+            relations: {
+                class_ranges: {
+                    start_sound: true,
+                    end_sound: true,
+                    lessons: true,
+                },
+            },
+        });
+    }
 }

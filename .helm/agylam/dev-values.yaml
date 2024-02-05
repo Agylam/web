@@ -13,6 +13,10 @@ ENV:
     JWT_EXPIRESIN: 1h
     WS_SERVER_PORT: 8080
 
+ingress:
+  baseDomain: ["dev.agylam.online"]
+  toService: frontend
+
 postgresql:
   enabled: true
   auth:
@@ -31,3 +35,4 @@ SECRETS:
     S3_BUCKET: "{{ DEV_S3_BUCKET }}"
     S3_ACCESS_KEY_ID: "{{ DEV_S3_ACCESS_KEY_ID }}"
     S3_SECRET_ACCESS_KEY: "{{ DEV_S3_SECRET_ACCESS_KEY }}"
+    REDIS_URL: redis-master:6379

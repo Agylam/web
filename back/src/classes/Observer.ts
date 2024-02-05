@@ -1,35 +1,40 @@
 import { ConnectionManager } from './ConnectionManager';
 import { WebSocketServer } from 'ws';
 import { createClient } from 'redis';
+import { AnnouncementPusher } from './AnnouncementPusher';
 
-export enum RedidUpdateMessageType {
-    SCHEDULE = 'SCHEDULE',
-    CLASS_RANGE = 'CLASS_RANGE',
+export enum RedisMessageChannel {
+    FOR_SCHOOL = 'FOR_SCHOOL',
+    FOR_BACKEND = 'FOR_BACKEND',
 }
 
-export interface RedisUpdateMessage {
+export enum RedisMessageType {
+    UPDATE_CONFIG = 'UPDATE_CONFIG',
+    NEW_ANNOUNCEMENT = 'NEW_ANNOUNCEMENT',
+}
+
+export interface RedisMessage {
     school_uuid: string;
-    type: RedidUpdateMessageType;
+    type: RedisMessageType;
+    payload?: any;
 }
 
 export class Observer {
     private __wsServer: WebSocketServer;
     private __connectionManager: ConnectionManager;
     private __redisClient;
+    private __s3;
+    private __announcementPusher: AnnouncementPusher;
 
     constructor() {
-        try {
-            if (process.env.WS_SERVER_PORT == '') {
-                throw new Error('WS_SERVER_PORT не указан');
-            }
-
-            this.__createWSServer();
-            this.__initConnectionManager();
-            this.__initRedisClient().then(() => console.log('Успешное подключение к кластеру Redis'));
-            this.__subscribe().then(() => console.log('Успешная подписка на события Redis'));
-        } catch (e) {
-            console.error('Ошибка Observer:', e);
+        if (process.env.WS_SERVER_PORT == '') {
+            throw new Error('WS_SERVER_PORT не указан');
         }
+
+        this.__createWSServer();
+        this.__initConnectionManager();
+        this.__initRedisClient().then(() => console.log('Успешное подключение к кластеру Redis'));
+        this.__subscribe().then(() => console.log('Успешная подписка на события Redis'));
     }
 
     private __createWSServer() {
@@ -47,9 +52,13 @@ export class Observer {
         this.__connectionManager = new ConnectionManager(this.__wsServer);
     }
 
+    private __initAnnouncementPusher() {
+        this.__announcementPusher = new AnnouncementPusher();
+    }
+
     private async __initRedisClient() {
         this.__redisClient = createClient({
-            url: process.env.REDIS_URL,
+            url: 'redis://' + process.env.REDIS_URL,
         });
 
         this.__redisClient.on('error', (err) => console.log('Ошибка Observer: Ошибка Redis кластера:', err));
@@ -57,18 +66,21 @@ export class Observer {
     }
 
     private async __subscribe() {
-        await this.__redisClient.subscribe('UPDATE', (unparsed_message: string) => {
-            let response = '';
-            const message: RedisUpdateMessage = JSON.parse(unparsed_message);
+        await this.__redisClient.subscribe(RedisMessageChannel.FOR_SCHOOL, (unparsed_message: string) => {
+            const message: RedisMessage = JSON.parse(unparsed_message);
+            this.__connectionManager.sendToSchool(message.school_uuid, message.type);
+        });
+        await this.__redisClient.subscribe(RedisMessageChannel.FOR_BACKEND, async (unparsed_message: string) => {
+            const message: RedisMessage = JSON.parse(unparsed_message);
             switch (message.type) {
-                case RedidUpdateMessageType.CLASS_RANGE:
-                    response = 'UPDATE_CLASS_RANGES';
-                    break;
-                case RedidUpdateMessageType.SCHEDULE:
-                    response = 'UPDATE_SCHEDULE';
+                case RedisMessageType.NEW_ANNOUNCEMENT:
+                    if (!message.payload || !message.payload.announcementUUID) {
+                        console.error('Ошибка: AnnouncementUUID путое');
+                    }
+                    await this.__announcementPusher.push(message.payload.announcementUUID);
+                    await this.__connectionManager.sendToSchool(message.school_uuid, message.type);
                     break;
             }
-            this.__connectionManager.sendToSchool(message.school_uuid, response);
         });
     }
 }

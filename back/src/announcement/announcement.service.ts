@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Announcement } from '../entities/Announcement.js';
 import { CreateAnnouncementDto } from './dto/create.announcement.dto.js';
 import { School } from '../entities/School.js';
+import { RedisService } from '../redis/redis.service';
 
 @Injectable()
 export class AnnouncementService {
@@ -12,6 +13,7 @@ export class AnnouncementService {
         private announcementRepository: Repository<Announcement>,
         @InjectRepository(School)
         private schoolRepository: Repository<School>,
+        private redisService: RedisService,
     ) {}
 
     async createAnnouncement(announcement: CreateAnnouncementDto) {

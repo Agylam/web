@@ -17,19 +17,32 @@ frontend:
   ports:
     - 80
 
-ingress:
-  baseDomain: agylam.ru
-  toService: frontend
+ingress: {}
 
 postgresql:
   enabled: true
   fullnameOverride: postgres
+  image:
+    tag: 15.5.0-debian-11-r22
   commonAnnotations:
     helm.sh/hook: pre-install,pre-upgrade
   auth:
     database: agylam
     username: changeme
     password: changeme
+
+redis:
+  enabled: true
+  fullnameOverride: redis
+  replica:
+    replicaCount: 0
+    persistence:
+      enabled: false
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: false
 
 ENV: { }
 
